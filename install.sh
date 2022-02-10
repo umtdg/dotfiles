@@ -119,13 +119,21 @@ install () {
 
     unset packages
     unset aur_packages
+
+    echo
 }
 
 copy () {
+    echo "Copying files"
+    echo "Files: ${config_files[*]}"
+    echo "Destination: ${destination}"
+    echo "rsync ${rsync_opts[@]} ${config_files[@]} ${destination}"
     rsync "${rsync_opts[@]}" "${config_files[@]}" "${destination}"
 
     unset config_files
     unset destination
+
+    echo
 }
 
 # Install requirements to run this script
@@ -137,7 +145,7 @@ do_req () {
     # If use_yay, then check if yay is installed
     # If not, install yay using git and makepkg
     if [ "${use_yay}" = "yes" ]; then
-        if ! pacman -Qi yay; then
+        if ! pacman -Qi yay >/dev/null 2>&1; then
             aur_install yay
         fi
     fi
