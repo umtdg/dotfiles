@@ -255,4 +255,14 @@ if [ "${dry_run}" = "yes" ]; then
     rsync_opts+=("-n")
 fi
 
+do_req
+[[ "${install_utils}" = "yes" ]] && do_utils
+[[ "${install_fonts}" = "yes" ]] && do_fonts
+[[ "${install_vim}" = "yes" ]]  && do_vim
+[[ "${install_zsh}" = "yes" ]] && do_zsh
+[[ "${install_alacritty}" = "yes" ]] && do_alacritty
+[[ "${install_picom}" = "yes" ]] && do_picom
+[[ "${install_rofi}" = "yes" ]] && do_rofi
+[[ "${install_polybar}" = "yes" ]] && do_polybar
+[[ "${install_i3}" = "yes" ]] && do_i3
 
