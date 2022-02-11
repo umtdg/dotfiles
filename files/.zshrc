@@ -108,21 +108,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-append_path () {
-	case ":$PATH:" in
-		*:"$1":*)
-			;;
-		*)
-			PATH="${PATH:+$PATH:}$1"
-	esac
-}
-
-append_path '/usr/local/bin'
-append_path '/usr/bin'
-append_path '$HOME/bin'
-append_path '$HOME/.cargo/bin'
-append_path '$HOME/.local/bin'
-append_path '$HOME/go/bin'
+PATH="${PATH}:$HOME/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/local/bin:$HOME/go/bin"
 
 export PATH
 export EDITOR=vim
