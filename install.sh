@@ -173,7 +173,7 @@ do_vim () {
 
     if [ "${dry_run}" = "no" ]; then
         # Install vim-plug
-        curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+        curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs \
             https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     elif [ "${dry_run}" = "yes" ]; then
         echo "Download plugged to $HOME/.vim/autoload/plug.vim"
@@ -200,9 +200,13 @@ do_zsh () {
         echo "Clone powerlevel10k"
         echo "Clone zsh-autosuggestions"
         echo "Clone zsh-syntax-highlighting"
+
+        [[ -d $HOME/.oh-my-zsh ]] && echo "oh-my-zsh is already installed"
+
         echo
     elif [ "${dry_run}" = "no" ]; then
         # Install oh-my-zsh
+        [[ -d $HOME/.oh-my-zsh ]] && rm -rf $HOME/.oh-my-zsh
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
         # Install powerlevel10k
