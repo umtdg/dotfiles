@@ -108,13 +108,11 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-PATH="${PATH}:$HOME/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/local/bin:$HOME/go/bin"
-
-export PATH
+export PATH="$PATH:$HOME/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin"
 export EDITOR=vim
 export LESS='-R --use-color -Dd+r$Du+b'
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
-export TODO_DB_PATH='$HOME/localdisk/MEGA/todo.json'
+export TODO_DB_PATH="${HOME}/localdisk/MEGA/todo.json"
 
 ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
 if [[ ! -d $ZSH_CACHE_DIR ]]; then
