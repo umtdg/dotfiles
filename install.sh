@@ -138,7 +138,7 @@ copy () {
 
 # Install requirements to run this script
 do_req () {
-    packages=("base-devel" "rsync" "curl" "wget" "git" "makepkg")
+    packages=("base-devel" "rsync" "curl" "wget" "git")
     aur_packages=()
     install
 
