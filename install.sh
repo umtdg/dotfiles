@@ -207,7 +207,7 @@ do_zsh () {
     elif [ "${dry_run}" = "no" ]; then
         # Install oh-my-zsh
         [[ -d $HOME/.oh-my-zsh ]] && rm -rf $HOME/.oh-my-zsh
-        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
         # Install powerlevel10k
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
