@@ -231,7 +231,7 @@ do_rofi () {
     aur_packages=()
     install
 
-    config_files=("files/rofi")
+    config_files=("files/.config/rofi")
     destination="$HOME/.config/"
     copy
 }
