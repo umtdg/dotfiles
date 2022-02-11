@@ -142,11 +142,13 @@ do_req () {
     aur_packages=()
     install
 
-    # If use_yay, then check if yay is installed
-    # If not, install yay using git and makepkg
-    if [ "${use_yay}" = "yes" ]; then
-        if ! pacman -Qi yay >/dev/null 2>&1; then
-            aur_install yay
+    if [ "${dry_run}" = "no" ]; then
+        # If use_yay, then check if yay is installed
+        # If not, install yay using git and makepkg
+        if [ "${use_yay}" = "yes" ]; then
+            if ! pacman -Qi yay >/dev/null 2>&1; then
+                aur_install yay
+            fi
         fi
     fi
 }
@@ -169,15 +171,23 @@ do_vim () {
     aur_packages=()
     install
 
-    # Install vim-plug
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    if [ "${dry_run}" = "no" ]; then
+        # Install vim-plug
+        curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+            https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    elif [ "${dry_run}" = "yes" ]; then
+        echo "Download plugged to $HOME/.vim/autoload/plug.vim"
+    fi
 
     config_files=("files/.vimrc")
     destination="$HOME/"
     copy
 
-    vim +PlugInstall +qa
+    if [ "${dry_run}" = "no" ]; then
+        vim +PlugInstall +qa
+    elif [ "${dry_run}" = "yes" ]; then
+        echo "vim +PlugInstall +qa"
+    fi
 }
 
 do_zsh () {
@@ -185,18 +195,26 @@ do_zsh () {
     aur_packages=()
     install
 
-    # Install oh-my-zsh
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    if [ "${dry_run}" = "yes" ]; then
+        echo "Install oh-my-zsh"
+        echo "Clone powerlevel10k"
+        echo "Clone zsh-autosuggestions"
+        echo "Clone zsh-syntax-highlighting"
+        echo
+    elif [ "${dry_run}" = "no" ]; then
+        # Install oh-my-zsh
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-    # Install powerlevel10k
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
-        "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+        # Install powerlevel10k
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+            "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 
-    # Clone zsh-autosuggestions and zsh-syntax-highlighting
-    git clone https://github.com/zsh-users/zsh-autosuggestions \
-        "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting \
-        "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+        # Clone zsh-autosuggestions and zsh-syntax-highlighting
+        git clone https://github.com/zsh-users/zsh-autosuggestions \
+            "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting \
+            "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+    fi
 
     # Copy configuration files
     config_files=("files/.zshrc" "files/.p10k.zsh")
