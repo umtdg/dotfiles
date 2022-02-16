@@ -10,8 +10,6 @@
 + .config/polybar/**
 + .config/rofi/
 + .config/rofi/**
-+ .config/spicetify/
-+ .config/spicetify/**
 + .p10k.zsh
 + .vimrc
 + .zshrc
