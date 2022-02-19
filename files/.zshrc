@@ -10,7 +10,13 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # zsh plugins
-plugins=(git)
+plugins=(
+    git
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
+
+fpath+="${ZSH_CUSTOM:-${ZSH:-$HOME/.oh-my-zsh}/custom}/plugins/zsh-completions/src"
 
 # Source oh-my-zsh and p10k
 source $ZSH/oh-my-zsh.sh
@@ -20,7 +26,8 @@ source $ZSH/oh-my-zsh.sh
 export PATH="$PATH:$HOME/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin"
 export EDITOR=vim
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
-export TODO_DB_PATH="${HOME}/localdisk/MEGA/todo.json"
+export MEGA_PATH="$HOME/localdisk/MEGA"
+export TODO_DB_PATH="$MEGA_PATH/todo.json"
 
 # Less colors
 export LESS='-R --use-color -Dd+r$Du+b'
@@ -182,11 +189,11 @@ alias history="history 0"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Auto suggestions
-source $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#999'
 
 # Syntax highlighting
-source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_STYLES[default]=none

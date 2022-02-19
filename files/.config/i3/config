@@ -188,7 +188,7 @@ bindsym $mod+r mode "resize"
 bindsym $mod+p exec --no-startup-id i3lock-fancy-multimonitor --blur=0x16
 
 # Screenshot selected area
-bindsym $mod+Shift+s exec flameshot gui -p $HOME/Images/screenshots
+bindsym $mod+Shift+s exec flameshot gui
 # Screenshot single screen
 bindsym Print exec --no-startup-id flameshot screen -p $HOME/Images/screenshots
 # Screenshot full desktop

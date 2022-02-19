@@ -246,7 +246,7 @@ let g:mkdp_auto_close = 1
 let g:mkdp_refresh_slow = 0
 let g:mkdp_command_for_global = 0
 let g:mkdp_open_to_the_world = 0
-let g:mkdp_browser = '/usr/bin/google-chrome-stable'
+let g:mkdp_browser = '/usr/bin/firefox'
 
 " Nerd Tree
 

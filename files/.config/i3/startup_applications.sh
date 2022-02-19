@@ -14,7 +14,7 @@ sleep 1
 
 /usr/bin/signal-desktop &
 /usr/bin/whatsapp-nativefier &
-/usr/bin/teams &
+/usr/bin/teams --no-sandbox &
 
 sleep 1
 
