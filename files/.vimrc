@@ -50,13 +50,23 @@ Plug 'haya14busa/incsearch.vim'
 " Linter
 Plug 'neomake/neomake'
 
+" Syntax checker
+Plug 'scrooloose/syntastic'
+
+" Tagbar
+Plug 'preservim/tagbar'
+
 " Auto close parentheses etc.
 Plug 'tmsvg/pear-tree'
 
 " Live preview of markdown files
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug'] }
 
+" NerdTree files and folders browser
 Plug 'preservim/nerdtree'
+
+" Rust support
+Plug 'rust-lang/rust.vim'
 
 call plug#end()
 
@@ -68,8 +78,7 @@ endif
 set nocompatible
 
 " allow plugins by file type
-filetype plugin on
-filetype indent on
+filetype plugin indent on
 
 " auto indentation
 set autoindent
@@ -257,3 +266,20 @@ nnoremap ,nt    :NERDTreeToggle<CR>
 
 nmap mdp :MarkdownPreview<CR>
 nmap mds :MarkdownPreviewStop<CR>
+
+" Rust
+
+" Format rust on buffer save
+autocmd FileType rust autocmd BufWritePre <buffer> :RustFmt
+
+" Syntastic
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+

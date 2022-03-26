@@ -27,7 +27,7 @@ export PATH="$PATH:$HOME/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr
 export EDITOR=vim
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
 export MEGA_PATH="$HOME/localdisk/MEGA"
-export TODO_DB_PATH="$MEGA_PATH/todo.json"
+export TODO_FILE="$MEGA_PATH/Auxiliary/todo.json"
 
 # Less colors
 export LESS='-R --use-color -Dd+r$Du+b'

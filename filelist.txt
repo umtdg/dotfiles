@@ -13,5 +13,11 @@
 + .p10k.zsh
 + .vimrc
 + .zshrc
++ .local/
++ .local/share/
++ .local/share/gnome-shell/
++ .local/share/gnome-shell/extensions/
++ .local/share/gnome-shell/extensions/**
 - .config/**
+- .local/**
 - /**

@@ -16,6 +16,7 @@ help() {
   echo "  -r | Install rofi"
   echo "  -s | Install spicetify"
   echo "  -v | Install vim"
+  echo "  -g | Gnome extensions and terminal profiles (extensions needs to be enabled manually)"
   echo "  -u | Install some utility packages"
   echo "  -c | Setup container environment (k8s + minikube + docker)"
   echo "  -d | Dry run, do nothing, only print actions"
@@ -34,12 +35,13 @@ install_spicetify="no"
 install_vim="no"
 install_utils="no"
 install_picom="no"
+configure_gnome="no"
 setup_container_env="no"
 dry_run="no"
 use_yay="yes"
 
 # Parse args
-while getopts ":panzsrifdbuvcnh" opt; do
+while getopts ":panzsrifdbuvgcnh" opt; do
     case "${opt}" in
         f)
             install_fonts="yes" ;;
@@ -65,6 +67,8 @@ while getopts ":panzsrifdbuvcnh" opt; do
             dry_run="yes" ;;
         b)
             install_picom="yes" ;;
+        g)
+            configure_gnome="yes" ;;
         n)
             use_yay="no" ;;
         h)
@@ -279,6 +283,13 @@ do_i3 () {
     config_files=("files/.config/i3")
     destination=("$HOME/.config/")
     copy
+}
+
+do_gnome_configuration () {
+    dconf load /org/gnome/shell/extensions/ < ./extension-settings.dconf
+    dconf load /org/gnome/terminal/legacy/profiles:/ < ./gnome-terminal-profiles.dconf
+    config_files=("files/.local/share/gnome-shell/extensions")
+    destination=("$HOME/.local/share/gnome-shell/")
 }
 
 if [ "${dry_run}" = "yes" ]; then
