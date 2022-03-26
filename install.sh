@@ -306,4 +306,5 @@ do_req
 [[ "${install_rofi}" = "yes" ]] && do_rofi
 [[ "${install_polybar}" = "yes" ]] && do_polybar
 [[ "${install_i3}" = "yes" ]] && do_i3
+[[ "${configure_gnome}" = "yes" ]] && do_gnome_configuration
 
