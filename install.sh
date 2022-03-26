@@ -288,8 +288,10 @@ do_i3 () {
 do_gnome_configuration () {
     dconf load /org/gnome/shell/extensions/ < ./extension-settings.dconf
     dconf load /org/gnome/terminal/legacy/profiles:/ < ./gnome-terminal-profiles.dconf
+
     config_files=("files/.local/share/gnome-shell/extensions")
     destination=("$HOME/.local/share/gnome-shell/")
+    copy
 }
 
 if [ "${dry_run}" = "yes" ]; then
