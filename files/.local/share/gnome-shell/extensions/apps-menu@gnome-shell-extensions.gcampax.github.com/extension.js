@@ -24,10 +24,13 @@ const NAVIGATION_REGION_OVERSHOOT = 50;
 Gio._promisify(Gio._LocalFilePrototype, 'query_info_async', 'query_info_finish');
 Gio._promisify(Gio._LocalFilePrototype, 'set_attributes_async', 'set_attributes_finish');
 
-var ApplicationMenuItem = GObject.registerClass(
 class ApplicationMenuItem extends PopupMenu.PopupBaseMenuItem {
-    _init(button, app) {
-        super._init();
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor(button, app) {
+        super();
         this._app = app;
         this._button = button;
 
@@ -93,12 +96,15 @@ class ApplicationMenuItem extends PopupMenu.PopupBaseMenuItem {
         icon.style_class = 'icon-dropshadow';
         this._iconBin.set_child(icon);
     }
-});
+}
 
-var CategoryMenuItem = GObject.registerClass(
 class CategoryMenuItem extends PopupMenu.PopupBaseMenuItem {
-    _init(button, category) {
-        super._init();
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor(button, category) {
+        super();
         this._category = category;
         this._button = button;
 
@@ -180,11 +186,14 @@ class CategoryMenuItem extends PopupMenu.PopupBaseMenuItem {
     }
 
     _onMotionEvent(actor, event) {
-        let device = event.get_device();
-        if (!device.get_grabbed_actor()) {
+        if (!this._grab) {
             this._oldX = -1;
             this._oldY = -1;
-            device.grab(this);
+            const grab = global.stage.grab(this);
+            if (grab.get_seat_state() !== Clutter.GrabState.NONE)
+                this._grab = grab;
+            else
+                grab.dismiss();
         }
         this.hover = true;
 
@@ -194,7 +203,8 @@ class CategoryMenuItem extends PopupMenu.PopupBaseMenuItem {
         this._oldX = -1;
         this._oldY = -1;
         this.hover = false;
-        device.ungrab();
+        this._grab?.dismiss();
+        delete this._grab;
 
         let source = event.get_source();
         if (source instanceof St.Widget)
@@ -210,7 +220,7 @@ class CategoryMenuItem extends PopupMenu.PopupBaseMenuItem {
         this._button.selectCategory(this._category);
         this._button.scrollToCatButton(this);
     }
-});
+}
 
 class ApplicationsMenu extends PopupMenu.PopupMenu {
     constructor(sourceActor, arrowAlignment, arrowSide, button) {
@@ -349,10 +359,13 @@ class DesktopTarget {
 }
 Signals.addSignalMethods(DesktopTarget.prototype);
 
-let ApplicationsButton = GObject.registerClass(
 class ApplicationsButton extends PanelMenu.Button {
-    _init() {
-        super._init(1.0, null, false);
+    static {
+        GObject.registerClass(this);
+    }
+
+    constructor() {
+        super(1.0, null, false);
 
         this.setMenu(new ApplicationsMenu(this, 1.0, St.Side.TOP, this));
         Main.panel.menuManager.addMenu(this.menu);
@@ -661,7 +674,7 @@ class ApplicationsButton extends PanelMenu.Button {
 
         return applist;
     }
-});
+}
 
 let appsMenuButton;
 

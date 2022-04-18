@@ -125,12 +125,14 @@ if (utils.isInShellProcess()) {
       // See assets/README.md for how this texture was created.
       const clawData    = GdkPixbuf.Pixbuf.new_from_resource('/img/claws.png');
       this._clawTexture = new Clutter.Image();
-      this._clawTexture.set_data(
-          clawData.get_pixels(), Cogl.PixelFormat.RGB_888, clawData.width,
-          clawData.height, clawData.rowstride);
+      this._clawTexture.set_data(clawData.get_pixels(), Cogl.PixelFormat.RGB_888,
+                                 clawData.width, clawData.height, clawData.rowstride);
 
       const color =
-          Clutter.Color.from_string(settings.get_string('claw-scratch-color'))[1];
+        Clutter.Color.from_string(settings.get_string('claw-scratch-color'))[1];
+
+      // If we are currently performing integration test, the animation uses a fixed seed.
+      const testMode = settings.get_boolean('test-mode');
 
       this.set_shader_source(`
 
@@ -141,7 +143,8 @@ if (utils.isInShellProcess()) {
         // See assets/README.md for how this texture was created.
         uniform sampler2D uClawTexture;
 
-        const vec2  SEED            = vec2(${Math.random()}, ${Math.random()});
+        const vec2  SEED            = vec2(${testMode ? 0 : Math.random()}, 
+                                           ${testMode ? 0 : Math.random()});
         const float CLAW_SIZE       = ${settings.get_double('claw-scratch-scale')};
         const float NUM_CLAWS       = ${settings.get_int('claw-scratch-count')};
         const float WARP_INTENSITY  = 1.0 + ${settings.get_double('claw-scratch-warp')};

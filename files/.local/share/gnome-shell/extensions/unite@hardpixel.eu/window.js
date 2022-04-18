@@ -343,8 +343,8 @@ var MetaWindow = GObject.registerClass(
       this.syncAppmenu()
     }
 
-    destroy() {
-      this.decorations.reset()
+    destroy(reset = true) {
+      reset && this.decorations.reset()
 
       this.signals.disconnectAll()
       this.settings.disconnectAll()
@@ -364,10 +364,6 @@ var WindowManager = GObject.registerClass(
 
       this.signals.connect(
         global.window_manager, 'map', this._onMapWindow.bind(this)
-      )
-
-      this.signals.connect(
-        global.window_manager, 'destroy', this._onDestroyWindow.bind(this)
       )
 
       this.signals.connect(
@@ -394,8 +390,7 @@ var WindowManager = GObject.registerClass(
     }
 
     get focusWindow() {
-      const win = global.display.get_focus_window()
-      return this.getWindow(win)
+      return this.getWindow(this._focusWindow)
     }
 
     get hideTitlebars() {
@@ -414,13 +409,17 @@ var WindowManager = GObject.registerClass(
       if (!this.hasWindow(win)) {
         const meta = new MetaWindow(win)
         this.windows.set(getId(win), meta)
+
+        win.connect('unmanaged', () => {
+          this.deleteWindow(win, false)
+        })
       }
     }
 
-    deleteWindow(win) {
+    deleteWindow(win, reset = true) {
       if (this.hasWindow(win)) {
         const meta = this.getWindow(win)
-        meta.destroy()
+        meta.destroy(reset)
 
         this.windows.delete(getId(win))
       }
@@ -438,12 +437,6 @@ var WindowManager = GObject.registerClass(
       }
     }
 
-    _onDestroyWindow(shellwm, { meta_window }) {
-      if (isValid(meta_window)) {
-        this.deleteWindow(meta_window)
-      }
-    }
-
     _onWindowEntered(display, index, meta_window) {
       if (isValid(meta_window)) {
         this.setWindow(meta_window)
@@ -451,6 +444,8 @@ var WindowManager = GObject.registerClass(
     }
 
     _onFocusWindow(display) {
+      this._focusWindow = display.focus_window
+
       if (this.focusWindow) {
         this.focusWindow.syncComponents()
       }

@@ -134,21 +134,26 @@ if (utils.isInShellProcess()) {
       // this texture is also re-created each time. This could be improved in the future!
       const shardData    = GdkPixbuf.Pixbuf.new_from_resource('/img/shards.png');
       this._shardTexture = new Clutter.Image();
-      this._shardTexture.set_data(
-          shardData.get_pixels(), Cogl.PixelFormat.RGB_888, shardData.width,
-          shardData.height, shardData.rowstride);
+      this._shardTexture.set_data(shardData.get_pixels(), Cogl.PixelFormat.RGB_888,
+                                  shardData.width, shardData.height, shardData.rowstride);
 
       // Usually, the shards fly away from the center of the window.
       let epicenterX = 0.5;
       let epicenterY = 0.5;
 
       // However, if this option is set, we use the mouse pointer position.
-      if (settings.get_boolean('broken-glass-use-pointer')) {
+      if (!forOpening && settings.get_boolean('broken-glass-use-pointer')) {
         const [x, y]               = global.get_pointer();
         const [ok, localX, localY] = actor.transform_stage_point(x, y);
-        epicenterX                 = localX / actor.width;
-        epicenterY                 = localY / actor.height;
+
+        if (ok) {
+          epicenterX = localX / actor.width;
+          epicenterY = localY / actor.height;
+        }
       }
+
+      // If we are currently performing integration test, the animation uses a fixed seed.
+      const testMode = settings.get_boolean('test-mode');
 
       this.set_shader_source(`
 
@@ -157,7 +162,8 @@ if (utils.isInShellProcess()) {
 
         uniform sampler2D uShardTexture;
 
-        const vec2  SEED         = vec2(${Math.random()}, ${Math.random()});
+        const vec2  SEED         = vec2(${testMode ? 0 : Math.random()}, 
+                                        ${testMode ? 0 : Math.random()});
         const float SHARD_SCALE  = ${settings.get_double('broken-glass-scale')};
         const float SHARD_LAYERS = 5;
         const float BLOW_FORCE   = ${settings.get_double('broken-glass-blow-force')};
@@ -228,8 +234,8 @@ if (utils.isInShellProcess()) {
       const pipeline = this.get_pipeline();
 
       // Use linear filtering for the window texture.
-      pipeline.set_layer_filters(
-          0, Cogl.PipelineFilter.LINEAR, Cogl.PipelineFilter.LINEAR);
+      pipeline.set_layer_filters(0, Cogl.PipelineFilter.LINEAR,
+                                 Cogl.PipelineFilter.LINEAR);
 
       // Bind the shard texture.
       pipeline.set_layer_texture(1, this._shardTexture.get_texture());

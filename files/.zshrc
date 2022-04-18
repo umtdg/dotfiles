@@ -26,8 +26,7 @@ source $ZSH/oh-my-zsh.sh
 export PATH="$PATH:$HOME/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin"
 export EDITOR=vim
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
-export MEGA_PATH="$HOME/localdisk/MEGA"
-export TODO_FILE="$MEGA_PATH/Auxiliary/todo.json"
+export TODO_FILE="$HOME/wdmypassport/Auxiliary/todo.json"
 
 # Less colors
 export LESS='-R --use-color -Dd+r$Du+b'
@@ -183,7 +182,7 @@ setopt hist_ignore_dups
 setopt hist_ignore_space
 setopt hist_verify
 setopt hist_no_functions
-alias history="history 0"
+# alias history="history 0"
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

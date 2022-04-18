@@ -161,7 +161,7 @@ set scrolloff=3
 " clear search results
 nnoremap <silent> // :noh<CR>
 
-" clear empty spaces at the end of lines on save of python files
+" clear empty spaces at the end of lines on save
 autocmd FileType c,cpp,python autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 " fix problems with uncommon shells (fish, xonsh)

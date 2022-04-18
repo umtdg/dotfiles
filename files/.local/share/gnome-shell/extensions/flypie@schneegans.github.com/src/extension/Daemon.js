@@ -305,6 +305,18 @@ var Daemon = class Daemon {
     return this._openMenu(name, false, x, y);
   }
 
+  // Opens a menu with that name if there are currently none open. Closes the currently
+  // open menu otherwise.
+  ToggleMenu(name) {
+    if (this._menu.getID() == null) {
+      return this.ShowMenu(name);
+    }
+
+    this.CancelMenu();
+
+    return DBusInterface.errorCodes.eHadToCancelAMenu;
+  }
+
   // This opens a menu configured with Fly-Pie's menu editor in preview mode and can be
   // directly called over the D-Bus. See the README.md for a description of Fly-Pie's
   // DBusInterface. If there are more than one menu with the same name, the first will be

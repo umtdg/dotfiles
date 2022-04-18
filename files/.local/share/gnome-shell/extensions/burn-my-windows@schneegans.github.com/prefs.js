@@ -32,11 +32,14 @@ const utils          = Me.imports.src.utils;
 
 // New effects must be registered here and in extension.js.
 const ALL_EFFECTS = [
+  Me.imports.src.Apparition.Apparition,
+  Me.imports.src.BrokenGlass.BrokenGlass,
   Me.imports.src.EnergizeA.EnergizeA,
   Me.imports.src.EnergizeB.EnergizeB,
   Me.imports.src.Fire.Fire,
+  Me.imports.src.Hexagon.Hexagon,
   Me.imports.src.Matrix.Matrix,
-  Me.imports.src.BrokenGlass.BrokenGlass,
+  Me.imports.src.SnapOfDisintegration.SnapOfDisintegration,
   Me.imports.src.TRexAttack.TRexAttack,
   Me.imports.src.TVEffect.TVEffect,
   Me.imports.src.Wisps.Wisps,
@@ -64,13 +67,11 @@ var PreferencesDialog = class PreferencesDialog {
     const styleProvider = Gtk.CssProvider.new();
     styleProvider.load_from_resource('/css/gtk.css');
     if (utils.isGTK4()) {
-      Gtk.StyleContext.add_provider_for_display(
-          Gdk.Display.get_default(), styleProvider,
-          Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+      Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), styleProvider,
+                                                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
     } else {
-      Gtk.StyleContext.add_provider_for_screen(
-          Gdk.Screen.get_default(), styleProvider,
-          Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+      Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), styleProvider,
+                                               Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
     // Make sure custom icons are found.
@@ -241,14 +242,13 @@ var PreferencesDialog = class PreferencesDialog {
         };
 
         // clang-format off
-        addURIAction('homepage',         'https://github.com/Schneegans/Burn-My-Windows');
-        addURIAction('changelog',        'https://github.com/Schneegans/Burn-My-Windows/blob/main/docs/changelog.md');
-        addURIAction('bugs',             'https://github.com/Schneegans/Burn-My-Windows/issues');
-        addURIAction('new-effect',       'https://github.com/Schneegans/Burn-My-Windows/blob/main/docs/how-to-create-new-effects.md');
-        addURIAction('translate',        'https://hosted.weblate.org/engage/burn-my-windows/');
-        addURIAction('donate-paypal',    'https://www.paypal.com/donate/?hosted_button_id=3F7UFL8KLVPXE');
-        addURIAction('donate-github',    'https://github.com/sponsors/Schneegans');
-        addURIAction('donate-liberapay', 'https://liberapay.com/Schneegans');
+        addURIAction('homepage',      'https://github.com/Schneegans/Burn-My-Windows');
+        addURIAction('changelog',     'https://github.com/Schneegans/Burn-My-Windows/blob/main/docs/changelog.md');
+        addURIAction('bugs',          'https://github.com/Schneegans/Burn-My-Windows/issues');
+        addURIAction('new-effect',    'https://github.com/Schneegans/Burn-My-Windows/blob/main/docs/how-to-create-new-effects.md');
+        addURIAction('translate',     'https://hosted.weblate.org/engage/burn-my-windows/');
+        addURIAction('donate-paypal', 'https://www.paypal.com/donate/?hosted_button_id=3F7UFL8KLVPXE');
+        addURIAction('donate-github', 'https://github.com/sponsors/Schneegans');
         // clang-format on
 
         // Add the about dialog.
@@ -481,80 +481,77 @@ var PreferencesDialog = class PreferencesDialog {
 
     // Each effect page is based on a template widget. This template contains the title
     // and the preview button.
-    // clang-format off
     if (GObject.type_from_name('BurnMyWindowsEffectPage') == null) {
-    BurnMyWindowsEffectPage =
-      GObject.registerClass({
-        GTypeName: 'BurnMyWindowsEffectPage',
-        Template: `resource:///ui/${utils.getGTKString()}/effectPage.ui`,
-        InternalChildren: ['label', 'button'],
-      },
-      class BurnMyWindowsEffectPage extends Gtk.Box {
-        _init(Effect, dialog) {
-          super._init();
+      BurnMyWindowsEffectPage = GObject.registerClass(
+        {
+          GTypeName: 'BurnMyWindowsEffectPage',
+          Template: `resource:///ui/${utils.getGTKString()}/effectPage.ui`,
+          InternalChildren: ['label', 'button'],
+        },
+        class BurnMyWindowsEffectPage extends Gtk.Box {  // ------------------------------
+          _init(Effect, dialog) {
+            super._init();
 
-          // Set the effect's name as label.
-          this._label.label = Effect.getLabel();
+            // Set the effect's name as label.
+            this._label.label = Effect.getLabel();
 
-          // Open the preview window once the preview button is clicked.
-          this._button.connect('clicked', () => {
+            // Open the preview window once the preview button is clicked.
+            this._button.connect('clicked', () => {
+              // Set the to-be-previewed effect.
+              dialog.getSettings().set_string('open-preview-effect', Effect.getNick());
+              dialog.getSettings().set_string('close-preview-effect', Effect.getNick());
 
-            // Set the to-be-previewed effect.
-            dialog.getSettings().set_string('open-preview-effect', Effect.getNick());
-            dialog.getSettings().set_string('close-preview-effect', Effect.getNick());
+              // Make sure that the window.show() firther below "sees" this change.
+              Gio.Settings.sync();
 
-            // Make sure that the window.show() firther below "sees" this change.
-            Gio.Settings.sync();
+              // Create the preview-window.
+              const window = new Gtk.Window({
+                // Translators: %s will be replaced by the effect's name.
+                title: _('Preview for %s').replace('%s', Effect.getLabel()),
+                default_width: 800,
+                default_height: 450,
+                modal: true,
+                transient_for: utils.isGTK4() ? this._button.get_root() :
+                                                this._button.get_toplevel()
+              });
 
-            // Create the preview-window.
-            const window = new Gtk.Window({
-              // Translators: %s will be replaced by the effect's name.
-              title: _('Preview for %s').replace("%s", Effect.getLabel()),
-              default_width: 800,
-              default_height: 450,
-              modal: true,
-              transient_for: utils.isGTK4() ? this._button.get_root() :
-                                              this._button.get_toplevel()
+              // Add a header bar to the window.
+              if (utils.isGTK4()) {
+                const header = Gtk.HeaderBar.new();
+                window.set_titlebar(header);
+              }
+
+              const box = new Gtk.Box({
+                orientation: Gtk.Orientation.VERTICAL,
+                valign: Gtk.Align.CENTER,
+                spacing: 10,
+                margin_start: 50,
+                margin_end: 50
+              });
+
+              const label = Gtk.Label.new(_('Close this Window to Preview the Effect!'));
+              label.wrap  = true;
+              label.justify = Gtk.Justification.CENTER;
+              label.get_style_context().add_class('large-title');
+
+              const image = new Gtk.Image({
+                icon_name: 'burn-my-windows-symbolic',
+                pixel_size: 128,
+              });
+
+              dialog.gtkBoxAppend(box, image);
+              dialog.gtkBoxAppend(box, label);
+
+              if (utils.isGTK4()) {
+                window.set_child(box);
+                window.show();
+              } else {
+                window.add(box);
+                window.show_all();
+              }
             });
-
-            // Add a header bar to the window.
-            if (utils.isGTK4()) {
-              const header = Gtk.HeaderBar.new();
-              window.set_titlebar(header);
-            }
-
-            const box = new Gtk.Box({
-              orientation: Gtk.Orientation.VERTICAL,
-              valign: Gtk.Align.CENTER,
-              spacing: 10,
-              margin_start:50,
-              margin_end:50
-            });
-
-            const label = Gtk.Label.new(_('Close this Window to Preview the Effect!'));
-            label.wrap = true;
-            label.justify = Gtk.Justification.CENTER;
-            label.get_style_context().add_class('large-title');
-
-            const image = new Gtk.Image({
-              icon_name: 'burn-my-windows-symbolic',
-              pixel_size: 128,
-            });
-
-            dialog.gtkBoxAppend(box, image);
-            dialog.gtkBoxAppend(box, label);
-
-            if (utils.isGTK4()) {
-              window.set_child(box);
-              window.show();
-            } else {
-              window.add(box);
-              window.show_all();
-            }
-          });
-        }
-      });
-      // clang-format on
+          }
+        });
     }
   }
 }

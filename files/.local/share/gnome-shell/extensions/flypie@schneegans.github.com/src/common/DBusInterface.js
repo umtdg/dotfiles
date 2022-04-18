@@ -28,6 +28,10 @@ var DBusInterface = {
             <arg name="y"      type="i" direction="in"/>                                 \
             <arg name="menuID" type="i" direction="out"/>                                \
           </method>                                                                      \
+          <method name="ToggleMenu">                                                     \
+            <arg name="name"   type="s" direction="in"/>                                 \
+            <arg name="menuID" type="i" direction="out"/>                                \
+          </method>                                                                      \
           <method name="PreviewMenu">                                                    \
             <arg name="name"   type="s" direction="in"/>                                 \
             <arg name="menuID" type="i" direction="out"/>                                \
@@ -82,6 +86,7 @@ var DBusInterface = {
     eNoSuchMenu: -5,
     eNoActiveMenu: -6,
     eInvalidPath: -7,
+    eHadToCancelAMenu: -8,
   },
 
   // This can be used to translate an error code to a human-readable message.

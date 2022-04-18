@@ -1,4 +1,3 @@
-const Gi         = imports._gi
 const System     = imports.system
 const GObject    = imports.gi.GObject
 const GLib       = imports.gi.GLib
@@ -199,55 +198,45 @@ var ExtendLeftBox = class ExtendLeftBox extends Handlers.Feature {
     super('extend-left-box', setting => setting == true)
 
     Override.inject(this, 'panel', 'ExtendLeftBox')
-    Override.inject(this, 'panel', 'ExtendLeftBoxLegacy')
   }
 
   activate() {
-    this._injectAllocate()
+    this.injections = new Handlers.Injections()
+
+    this.injections.vfunc(
+      Main.panel, 'allocate', this._allocate.bind(this)
+    )
+
     Main.panel.queue_relayout()
   }
 
-  _injectAllocate() {
-    this._defaultFunc = Object.getPrototypeOf(Main.panel).vfunc_allocate
-    const protoSymbol = Object.getPrototypeOf(Main.panel)[Gi.gobject_prototype_symbol]
+  _allocate(box) {
+    Main.panel.set_allocation(box)
 
-    protoSymbol[Gi.hook_up_vfunc_symbol]('allocate', (box) => {
-      Main.panel.vfunc_allocate.call(Main.panel, box)
-      this._allocate(Main.panel, box)
-    })
-  }
+    const leftBox     = Main.panel._leftBox
+    const centerBox   = Main.panel._centerBox
+    const rightBox    = Main.panel._rightBox
+    const childBox    = new Clutter.ActorBox()
 
-  _restoreAllocate() {
-    const protoSymbol = Object.getPrototypeOf(Main.panel)[Gi.gobject_prototype_symbol]
-    protoSymbol[Gi.hook_up_vfunc_symbol]('allocate', this._defaultFunc)
+    const leftWidth   = leftBox.get_preferred_width(-1)[1]
+    const centerWidth = centerBox.get_preferred_width(-1)[1]
+    const rightWidth  = rightBox.get_preferred_width(-1)[1]
 
-    this._defaultFunc = null
-  }
+    const allocWidth  = box.x2 - box.x1
+    const allocHeight = box.y2 - box.y1
+    const sideWidth   = Math.floor(allocWidth - centerWidth - rightWidth)
 
-  _allocate(actor, box) {
-    let leftBox   = Main.panel._leftBox
-    let centerBox = Main.panel._centerBox
-    let rightBox  = Main.panel._rightBox
-
-    let allocWidth  = box.x2 - box.x1
-    let allocHeight = box.y2 - box.y1
-
-    let [leftMinWidth, leftNaturalWidth]     = leftBox.get_preferred_width(-1)
-    let [centerMinWidth, centerNaturalWidth] = centerBox.get_preferred_width(-1)
-    let [rightMinWidth, rightNaturalWidth]   = rightBox.get_preferred_width(-1)
-
-    let sideWidth = allocWidth - rightNaturalWidth - centerNaturalWidth
-    let childBox  = new Clutter.ActorBox()
+    const rtlTextDir  = Main.panel.get_text_direction() == Clutter.TextDirection.RTL
 
     childBox.y1 = 0
     childBox.y2 = allocHeight
 
-    if (actor.get_text_direction() == Clutter.TextDirection.RTL) {
-      childBox.x1 = allocWidth - Math.min(Math.floor(sideWidth), leftNaturalWidth)
+    if (rtlTextDir) {
+      childBox.x1 = allocWidth - Math.min(sideWidth, leftWidth)
       childBox.x2 = allocWidth
     } else {
       childBox.x1 = 0
-      childBox.x2 = Math.min(Math.floor(sideWidth), leftNaturalWidth)
+      childBox.x2 = Math.min(sideWidth, leftWidth)
     }
 
     leftBox.allocate(childBox)
@@ -255,12 +244,12 @@ var ExtendLeftBox = class ExtendLeftBox extends Handlers.Feature {
     childBox.y1 = 0
     childBox.y2 = allocHeight
 
-    if (actor.get_text_direction() == Clutter.TextDirection.RTL) {
-      childBox.x1 = rightNaturalWidth
-      childBox.x2 = childBox.x1 + centerNaturalWidth
+    if (rtlTextDir) {
+      childBox.x1 = rightWidth
+      childBox.x2 = childBox.x1 + centerWidth
     } else {
-      childBox.x1 = allocWidth - centerNaturalWidth - rightNaturalWidth
-      childBox.x2 = childBox.x1 + centerNaturalWidth
+      childBox.x1 = allocWidth - centerWidth - rightWidth
+      childBox.x2 = childBox.x1 + centerWidth
     }
 
     centerBox.allocate(childBox)
@@ -268,11 +257,11 @@ var ExtendLeftBox = class ExtendLeftBox extends Handlers.Feature {
     childBox.y1 = 0
     childBox.y2 = allocHeight
 
-    if (actor.get_text_direction() == Clutter.TextDirection.RTL) {
+    if (rtlTextDir) {
       childBox.x1 = 0
-      childBox.x2 = rightNaturalWidth
+      childBox.x2 = rightWidth
     } else {
-      childBox.x1 = allocWidth - rightNaturalWidth
+      childBox.x1 = allocWidth - rightWidth
       childBox.x2 = allocWidth
     }
 
@@ -280,7 +269,7 @@ var ExtendLeftBox = class ExtendLeftBox extends Handlers.Feature {
   }
 
   destroy() {
-    this._restoreAllocate()
+    this.injections.removeAll()
     Main.panel.queue_relayout()
   }
 }
@@ -481,6 +470,8 @@ var TrayIcons = class TrayIcons extends Handlers.Feature {
 var TitlebarActions = class TitlebarActions extends Handlers.Feature {
   constructor() {
     super('enable-titlebar-actions', setting => setting == true)
+
+    Override.inject(this, 'panel', 'TitlebarActions')
   }
 
   activate() {
@@ -503,7 +494,7 @@ var TitlebarActions = class TitlebarActions extends Handlers.Feature {
       return Clutter.EVENT_PROPAGATE
     }
 
-    const ccount = event.get_click_count()
+    const ccount = event.get_click_count && event.get_click_count()
     const button = event.get_button()
 
     let action = null
@@ -552,12 +543,16 @@ var TitlebarActions = class TitlebarActions extends Handlers.Feature {
   }
 
   _openWindowMenu(win, x) {
-    const size = Main.panel.height + 4
-    const rect = { x: x - size, y: 0, width: size * 2, height: size }
+    const rect = this._menuPositionRect(x)
     const type = Meta.WindowMenuType.WM
 
     Main.wm._windowMenuManager.showWindowMenuForWindow(win, type, rect)
     return Clutter.EVENT_STOP
+  }
+
+  _menuPositionRect(x) {
+    const size = Main.panel.height
+    return { x: x - size, y: 0, width: size * 2, height: size }
   }
 
   destroy() {
