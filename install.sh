@@ -5,308 +5,250 @@ set -o errexit
 # Exit when undeclared variable is used
 set -o nounset
 
-help() {
-  echo "Usage: $0 [OPTIONS...]"
-  echo "Options:"
-  echo "  -f | Install fonts"
-  echo "  -a | Install alacritty"
-  echo "  -i | Install i3 gaps"
-  echo "  -p | Install polybar"
-  echo "  -z | Install zsh"
-  echo "  -r | Install rofi"
-  echo "  -s | Install spicetify"
-  echo "  -v | Install vim"
-  echo "  -g | Gnome extensions and terminal profiles (extensions needs to be enabled manually)"
-  echo "  -u | Install some utility packages"
-  echo "  -c | Setup container environment (k8s + minikube + docker)"
-  echo "  -d | Dry run, do nothing, only print actions"
-  echo "  -b | Install compositor, picom (fork of compton)"
-  echo "  -n | Do not use yay to install packages. This will make AUR packages to be installed manually"
-  echo "  -h | Show this message and exit"
+# Colors
+export c_default="\033[0m"
+export c_blue="\033[1;34m"
+export c_magenta="\033[1;35m"
+export c_cyan="\033[1;36m"
+export c_green="\033[1;32m"
+export c_red="\033[1;31m"
+export c_yellow="\033[1;33m"
+
+# Echo like ... with flag type and display message colors
+prompt() {
+  case "${1}" in
+  "-s")
+      echo -e "  ${c_green}${2}${c_default}"
+      ;; # print success message
+  "-e")
+      echo -e "  ${c_red}${2}${c_default}"
+      ;; # print error message
+  "-w")
+      echo -e "  ${c_yellow}${2}${c_default}"
+      ;; # print warning message
+  "-i")
+      echo -e "  ${c_cyan}${2}${c_default}"
+      ;; # print info message
+  esac
 }
 
-install_fonts="no"
+# Show help
+helpify_title() {
+  printf "${c_cyan}%s${c_blue}%s ${c_green}%s\n\n" "Usage: " "$0" "[OPTIONS...]"
+  printf "${c_cyan}%s\n" "OPTIONS:"
+}
+
+helpify() {
+  printf "  ${c_blue}%s ${c_green}%s\n ${c_magenta}%s. ${c_cyan}%s\n\n${c_default}" "${1}" "${2}" "${3}" "${4}"
+}
+
+usage() {
+  helpify_title
+  helpify "-a --alacritty --term --terminal"  ""    "Install alacritty" ""
+  helpify "-z --zsh --shell"                  ""    "Install zsh" ""
+  helpify "-i3 -wm --i3-gaps"                 ""    "Install i3-gaps" ""
+  helpify "-p --bar --polybar"                ""    "Install polybar" ""
+  helpify "-c --compositor --picom"           ""    "Install picom" ""
+  helpify "-r --rofi"                         ""    "Install rofi" ""
+  helpify "-v --vim --editor"                 ""    "Install vim" ""
+  helpify "-f --fonts"                        ""    "Install fonts" ""
+  helpify "--gnome"                           ""    "Copy Gnome extensions and terminal profiles" ""
+  helpify "--extra"                           ""    "Install additional packages" ""
+  helpify "--container"                       ""    "Setup container environment" ""
+  helpify "--aur-dir"                         "DIR" "Directory where manually installed AUR packages will be downloaded" "Default is /tmp/aur"
+  helpify "--keep-aur"                        ""    "Keep downloaded AUR packages" ""
+  helpify "--noyay --no-yay"                  ""    "Do not use yay to install AUR packages" ""
+  helpify "-d --dry-run"                      ""    "Dry run" ""
+  helpify "-h --help"                         ""    "Show this message and exit" ""
+}
+
+# Install options
 install_alacritty="no"
+install_zsh="no"
 install_i3="no"
 install_polybar="no"
-install_zsh="no"
-install_rofi="no"
-install_spicetify="no"
-install_vim="no"
-install_utils="no"
 install_picom="no"
-configure_gnome="no"
-setup_container_env="no"
+install_rofi="no"
+install_vim="no"
+install_fonts="no"
+install_extra="no"
+copy_gnome="no"
+setup_container="no"
+aur_dir="/tmp/aur"
+keep_aur="no"
+noyay="no"
 dry_run="no"
-use_yay="yes"
 
-# Parse args
-while getopts ":panzsrifdbuvgcnh" opt; do
-    case "${opt}" in
-        f)
-            install_fonts="yes" ;;
-        a)
-            install_alacritty="yes" ;;
-        i)
-            install_i3="yes" ;;
-        p)
-            install_polybar="yes" ;;
-        z)
-            install_zsh="yes" ;;
-        r)
-            install_rofi="yes" ;;
-        s)
-            install_spicetify="yes" ;;
-        v)
-            install_vim="yes" ;;
-        u)
-            install_utils="yes" ;;
-        c)
-            setup_container_env="yes" ;;
-        d)
-            dry_run="yes" ;;
-        b)
-            install_picom="yes" ;;
-        g)
-            configure_gnome="yes" ;;
-        n)
-            use_yay="no" ;;
-        h)
-            help
-            exit 0 ;;
-        *)
-            help
-            exit 1 ;;
+pacman_opts=("--noconfirm" "--needed")
+rsync_opts=("-avAHX")
+
+# Install a single aur package
+aur_install() {
+  local package_dir="${aur_dir}/$1"
+
+  mkdir -p "${aur_dir}"
+  git clone "https://aur.archlinux.org/$1.git" "${aur_dir}/$1"
+  pushd "${package_dir}"
+  makepkg -si "${pacman_opts[@]}"
+  popd
+  [[ "${keep_aur}" = "no" ]] rm -rf "${package_dir}"
+}
+
+# Install every package in packages and aur_packages
+install_packages() {
+  prompt -i "Pacman: ${packages[*]}"
+  prompt -i "AUR: ${aur_packages[*]}"
+
+  if [ "${noyay}" = "no" ]; then
+    prompt -i "Using yay to install AUR packages"
+  else
+    prompt -i "Manually installing AUR packages"
+
+  if [ "${dry_run}" = "no" ]; then
+    if [ "${noyay}" = "no" ]; then
+      yay -S "${pacman_opts[@]}" "${packages[@]}" "${aur_packages[@]}"
+    else
+      sudo pacman -S "${pacman_opts[@]}" "${packages[@]}"
+      for pkg in "${aur_packages[@]}"; do
+        aur_install "${pkg}"
+      done
+    fi
+  fi
+
+  unset packages
+  unset aur_packages
+}
+
+# Copy every file in config_files to destination
+copy_files() {
+  prompt -i "Copying files"
+  prompt -i "File list: ${config_files[*]}"
+  prompt -i "Destination: ${destination}"
+  # prompt -i "Command: rsync ${rsync_opts[@]} ${config_files[@]} ${destination}"
+
+  rsync "${rsync_opts[@]}" "${config_files[@]}" "${destination}"
+
+  unset config_files
+  unset destination
+}
+
+do_requirements() {
+  prompt -i "Installing requirements"
+
+  packages=("base-devel" "rsync" "curl" "wget" "git")
+  aur_packages=()
+
+  if [ "${dry_run}" = "no" ]; then
+    if [ "${noyay}" = "no" ]; then
+      if ! pacman -Qi yay >/dev/null 2>&1; then
+        aur_install yay
+      fi
+    fi
+  fi
+
+  install_packages
+}
+
+do_alacritty() {
+  prompt -i "Installing alacritty"
+
+  packages=("alacritty")
+  aur_packages=()
+  install_packages
+
+  config_files=("files/.config/alacritty")
+  destination="$HOME/.config/"
+  copy_files
+}
+
+do_zsh() {
+  prompt -i "Installing zsh"
+
+  packages=("zsh")
+  aur_packages=()
+
+  install_packages
+
+  local ZSH_DIR="$HOME/.oh-my-zsh"
+  if [ "${dry_run}" = "no" ]; then
+    [[ -d "${ZSH_DIR}" ]] && rm -rf "${ZSH_DIR}"
+    RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+      "${ZSH_CUSTOM:-${ZSH_DIR}/custom}/themes/powerlevel10k"
+
+    git clone https://github.com/zsh-users/zsh-autosuggestions \
+        "${ZSH_CUSTOM:-${ZSH_DIR}/custom}/plugins/zsh-autosuggestions"
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting \
+        "${ZSH_CUSTOM:-${ZSH_DIR}/custom}/plugins/zsh-syntax-highlighting"
+  else
+    prompt -i "Installing oh-my-zsh"
+    [[ -d "${ZSH_DIR}" ]] && prompt -i "Removing old oh-my-zsh installation"
+
+    prompt -i "Clone powerlevel10k"
+    prompt -i "Clone zsh-autosuggestions"
+    prompt -i "Clone zsh-syntax-highlighting"
+  fi
+
+  config_files=("files/.zshrc" "files/.p10k.zsh")
+  destination="$HOME/"
+  copy_files
+}
+
+while [[ $# -gt 0 ]];; do
+  case "$1" in
+    -a|--alacritty|--term|--terminal)
+      install_alacritty="yes"
+      shift ;;
+    -z|--zsh|--shell)
+      install_zsh="yes"
+      shift ;;
+    -i3|-wm|--i3-gaps)
+      install_i3="yes"
+      shift ;;
+    -p|--bar|--polybar)
+      install_polybar="yes"
+      shift ;;
+    -c|--compositor|--picom)
+      install_picom="yes"
+      shift ;;
+    -r|--rofi)
+      install_rofi="yes"
+      shift ;;
+    -v|--vim|--editor)
+      install_vim="yes"
+      shift ;;
+    -f|--fonts)
+      install_fonts="yes"
+      shift ;;
+    --gnome)
+      configure_gnome="yes"
+      shift ;;
+    --extra)
+      install_extra="yes"
+      shift ;;
+    --container)
+      setup_container="yes"
+      shift ;;
+    --aur-dir)
+      aur_dir="$2"
+      shift 2 ;;
+    --keep-aur)
+      keep_aur="yes"
+      shift ;;
+    --noyay|--no-yay)
+      noyay="yes"
+      shift ;;
+    -d|--dry-run)
+      dry_run="yes"
+      rsync_opts+=("-n")
+      shift ;;
+    -h|--help)
+      usage
+      exit 0
+    *)
+      prompt -e "Unkown option $1"
+      usage
+      exit 1
     esac
 done
-shift $((OPTIND-1))
-
-# List of packages to be installed
-packages=()
-aur_packages=()
-
-# List of configuration files and destination
-config_files=()
-destination=""
-
-# Pacman options
-pacman_opts=("--noconfirm" "--needed")
-# Rsync options
-rsync_opts=("-av")
-
-aur_install () {
-    name="$1"
-    git clone "https://aur.archlinux.org/$name.git" "/tmp/$name"
-    pushd "/tmp/$name"
-    makepkg -si "${pacman_opts[@]}"
-    popd
-    rm -rf "/tmp/$name"
-}
-
-install () {
-    echo "Installing packages"
-    echo "Pacman: ${packages[*]}"
-    echo "AUR: ${aur_packages[*]}"
-    [[ "${use_yay}" = "yes" ]] && echo "Using yay to install AUR packages" \
-                                || echo "Manually installing AUR packages"
-
-    if [ "${dry_run}" = "no" ]; then
-        sudo pacman -S --noconfirm --needed "${packages[@]}"
-        if [ "${use_yay}" = "yes" ]; then
-            yay -S "${pacman_opts[@]}" "${aur_packages[@]}"
-        else
-            for pkg in "${aur_packages[@]}"; do
-                aur_install "$pkg"
-            done
-        fi
-    fi
-
-    unset packages
-    unset aur_packages
-
-    echo
-}
-
-copy () {
-    echo "Copying files"
-    echo "Files: ${config_files[*]}"
-    echo "Destination: ${destination}"
-    echo "rsync ${rsync_opts[@]} ${config_files[@]} ${destination}"
-    rsync "${rsync_opts[@]}" "${config_files[@]}" "${destination}"
-
-    unset config_files
-    unset destination
-
-    echo
-}
-
-# Install requirements to run this script
-do_req () {
-    packages=("base-devel" "rsync" "curl" "wget" "git")
-    aur_packages=()
-    install
-
-    if [ "${dry_run}" = "no" ]; then
-        # If use_yay, then check if yay is installed
-        # If not, install yay using git and makepkg
-        if [ "${use_yay}" = "yes" ]; then
-            if ! pacman -Qi yay >/dev/null 2>&1; then
-                aur_install yay
-            fi
-        fi
-    fi
-}
-
-do_fonts () {
-    packages=("ttf-iosevka-nerd")
-    aur_packages=("ttf-meslo-nerd-font-powerlevel10k")
-    install
-}
-
-do_utils () {
-    packages=("neofetch" "figlet" "tar" "zip" "unzip" "unrar" "fzf" "thefuck" "figlet")
-    aur_packages=("expressvpn")
-    install
-}
-
-do_vim () {
-    # Install packages
-    packages=("gvim")
-    aur_packages=()
-    install
-
-    if [ "${dry_run}" = "no" ]; then
-        # Install vim-plug
-        curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs \
-            https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    elif [ "${dry_run}" = "yes" ]; then
-        echo "Download plugged to $HOME/.vim/autoload/plug.vim"
-    fi
-
-    config_files=("files/.vimrc")
-    destination="$HOME/"
-    copy
-
-    if [ "${dry_run}" = "no" ]; then
-        vim +PlugInstall +qa
-    elif [ "${dry_run}" = "yes" ]; then
-        echo "vim +PlugInstall +qa"
-    fi
-}
-
-do_zsh () {
-    packages=("zsh")
-    aur_packages=()
-    install
-
-    if [ "${dry_run}" = "yes" ]; then
-        echo "Install oh-my-zsh"
-        echo "Clone powerlevel10k"
-        echo "Clone zsh-autosuggestions"
-        echo "Clone zsh-syntax-highlighting"
-
-        [[ -d $HOME/.oh-my-zsh ]] && echo "oh-my-zsh is already installed"
-
-        echo
-    elif [ "${dry_run}" = "no" ]; then
-        # Install oh-my-zsh
-        [[ -d $HOME/.oh-my-zsh ]] && rm -rf $HOME/.oh-my-zsh
-        RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-        # Install powerlevel10k
-        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
-            "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
-
-        # Clone zsh-autosuggestions and zsh-syntax-highlighting
-        git clone https://github.com/zsh-users/zsh-autosuggestions \
-            "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-        git clone https://github.com/zsh-users/zsh-syntax-highlighting \
-            "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-    fi
-
-    # Copy configuration files
-    config_files=("files/.zshrc" "files/.p10k.zsh")
-    destination="$HOME/"
-    copy
-}
-
-do_alacritty () {
-    packages=("alacritty")
-    aur_packages=()
-    install
-
-    # Copy config files
-    config_files=("files/.config/alacritty")
-    destination="$HOME/.config/"
-    copy
-}
-
-do_picom () {
-    packages=("picom")
-    aur_packages=()
-
-    install
-
-    config_files=("files/.config/compton.conf")
-    destination="$HOME/.config/"
-    copy
-}
-
-do_rofi () {
-    packages=("rofi")
-    aur_packages=()
-    install
-
-    config_files=("files/.config/rofi")
-    destination="$HOME/.config/"
-    copy
-}
-
-do_polybar () {
-    packages=("polybar" "procps-ng" "playerctl")
-    aur_packages=()
-    install
-
-    config_files=("files/.config/polybar")
-    destination="$HOME/.config/"
-    copy
-}
-
-do_i3 () {
-    packages=("i3-gaps" "xss-lock" "flameshot" "playerctl" "feh"
-                "xorg-setxkbmap" "xorg-xset" "xorg-xrandr" "xorg-xinput" "signal-desktop"
-                "discord" "easyeffects" "thunderbird")
-    aur_packages=("i3lock-fancy-multimonitor" "xkb-switch" "whatsapp-nativefier" "teams" "spotify" "prospect-mail-bin"
-                "megasync-bin")
-    install
-
-    config_files=("files/.config/i3")
-    destination=("$HOME/.config/")
-    copy
-}
-
-do_gnome_configuration () {
-    dconf load /org/gnome/shell/extensions/ < ./extension-settings.dconf
-    dconf load /org/gnome/terminal/legacy/profiles:/ < ./gnome-terminal-profiles.dconf
-
-    config_files=("files/.local/share/gnome-shell/extensions")
-    destination=("$HOME/.local/share/gnome-shell/")
-    copy
-}
-
-if [ "${dry_run}" = "yes" ]; then
-    rsync_opts+=("-n")
-fi
-
-do_req
-[[ "${install_utils}" = "yes" ]] && do_utils
-[[ "${install_fonts}" = "yes" ]] && do_fonts
-[[ "${install_vim}" = "yes" ]]  && do_vim
-[[ "${install_zsh}" = "yes" ]] && do_zsh
-[[ "${install_alacritty}" = "yes" ]] && do_alacritty
-[[ "${install_picom}" = "yes" ]] && do_picom
-[[ "${install_rofi}" = "yes" ]] && do_rofi
-[[ "${install_polybar}" = "yes" ]] && do_polybar
-[[ "${install_i3}" = "yes" ]] && do_i3
-[[ "${configure_gnome}" = "yes" ]] && do_gnome_configuration
-

@@ -137,6 +137,7 @@ font-4 = "Iosevka Nerd Font:pixelsize=9.7;3"
 font-5 = "Iosevka Nerd Font:pixelsize=9.7;3"
 
 modules-right = cputemp cpufan1 cpufan2 sep gputemp gpufan gpupower
+;modules-center = sep tray sep
 modules-left = launcher sep i3 sep title
 
 tray-position = center
@@ -155,6 +156,9 @@ content-margin = 1
 content-foreground = ${colors.arch-logo}
 ;content-padding = 2
 click-left = /usr/bin/rofi -modi drun,run -show drun -theme applications -show-icons
+
+[module/tray]
+type = internal/tray
 
 [module/title]
 type = internal/xwindow
@@ -417,24 +421,17 @@ label-unmounted = Root
 ;label-mounted = H:%percentage_used%%
 ;label-unmounted = Home
 
-[module/fs_gamessd]
-inherit = module/filesystem
-
-mount-0 = $HOME/gamessd
-label-mounted = GSSD:%percentage_used%%
-label-unmounted = GSSD
-
 [module/fs_localdisk]
 inherit = module/filesystem
 
-mount-0 = $HOME/localdisk
+mount-0 = "$HOME/localdisk"
 label-mounted = LD:%percentage_used%%
 label-unmounted = LD
 
 [module/fs_wdmypassport]
 inherit = module/filesystem
 
-mount-0 = $HOME/wdmypassport
+mount-0 = "$HOME/wdmypassport"
 label-mounted = WD:%percentage_used%%
 label-unmounted = WD
 
