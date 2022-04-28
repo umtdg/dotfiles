@@ -136,7 +136,8 @@ font-3 = "Iosevka Nerd Font:pixelsize=9.7;3"
 font-4 = "Iosevka Nerd Font:pixelsize=9.7;3"
 font-5 = "Iosevka Nerd Font:pixelsize=9.7;3"
 
-modules-right = cputemp cpufan1 cpufan2 sep gputemp gpufan gpupower
+modules-right = cputemp mobotemp cpufan1 cpufan2 sep gputemp gpufan gpupower sep nvme-composite nvme-sensor1 nvme-sensor2
+;modules-right = gputemp gpufan gpupower sep nvme-composite nvme-sensor1 nvme-sensor2
 ;modules-center = sep tray sep
 modules-left = launcher sep i3 sep title
 
@@ -251,24 +252,40 @@ label-muted = " Muted"
 type = internal/temperature
 
 interval = 1
-hwmon-path = /sys/devices/platform/it87.656/hwmon/hwmon2/temp1_input
-warn-temperature = 75
+hwmon-path = /sys/devices/platform/nct6775.656/hwmon/hwmon2/temp7_input
+warn-temperature = 70
 
-label = " ﬙ %temperature-c% "
+label = " ﬙ %temperature-c%"
 format =  <label>
 format-prefix = "CPU"
 format-foreground = ${colors.cpu-temp}
 format-prefix-foreground = ${colors.cpu-temp-pfx}
 
-label-warn = " ﬙ %temperature-c% "
+label-warn = " ﬙ %temperature-c%"
 format-warn = <label-warn>
 format-warn-prefix = CPU
 format-warn-foreground = ${colors.cpu-temp-warn}
 
+[module/mobotemp]
+type = internal/temperature
+
+interval = 1
+hwmon-path = /sys/devices/platform/nct6775.656/hwmon/hwmon2/temp1_input
+warn-temperature = 75
+
+label = " ﮕ %temperature-c% "
+format =  <label>
+format-foreground = ${colors.cpu-temp}
+
+label-warn = " ﬙ %temperature-c% "
+format-warn = <label-warn>
+format-warn-foreground = ${colors.cpu-temp-warn}
+
+
 [module/cpufan1]
 type = custom/script
 
-exec = cat /sys/devices/platform/it87.656/hwmon/hwmon2/fan1_input
+exec = cat /sys/devices/platform/nct6775.656/hwmon/hwmon2/fan1_input
 interval = 1
 
 label = " %output% RPM "
@@ -279,7 +296,7 @@ format-foreground = ${colors.cpu-fan}
 [module/cpufan2]
 type = custom/script
 
-exec = cat /sys/devices/platform/it87.656/hwmon/hwmon2/fan2_input
+exec = cat /sys/devices/platform/nct6775.656/hwmon/hwmon2/fan2_input
 interval = 1
 
 label = " %output% RPM"
@@ -291,7 +308,7 @@ format-foreground = ${colors.cpu-fan}
 type = internal/temperature
 
 interval = 1
-hwmon-path = /sys/devices/pci0000:00/0000:00:03.1/0000:09:00.0/hwmon/hwmon1/temp1_input
+hwmon-path = /sys/devices/pci0000:00/0000:00:03.2/0000:0a:00.0/hwmon/hwmon1/temp1_input
 warn-temperature = 75
 
 label = " ﬙ %temperature-c% "
@@ -308,7 +325,7 @@ format-warn-foreground = ${colors.cpu-temp-warn}
 [module/gpufan]
 type = custom/script
 
-exec = cat /sys/devices/pci0000:00/0000:00:03.1/0000:09:00.0/hwmon/hwmon1/fan1_input
+exec = cat /sys/devices/pci0000:00/0000:00:03.2/0000:0a:00.0/hwmon/hwmon1/fan1_input
 interval = 1
 
 label = " %output% RPM "
@@ -319,13 +336,58 @@ format-foreground = ${colors.cpu-fan}
 [module/gpupower]
 type = custom/script
 
-exec = sensors -u amdgpu-pci-0900 | grep -w "power1_average" | cut -c 19-24
+exec = sensors -u amdgpu-pci-0a00 | grep -w "power1_average" | cut -c 19-24
 interval = 1
 
-label = " %output% W "
+label = " %output% W"
 format = <label>
 format-prefix = 臘
 format-foreground = ${colors.gpu-power}
+
+[module/nvme-composite]
+type = internal/temperature
+
+hwmon-path = /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/nvme/nvme0/hwmon0/temp1_input
+warn-temperature = 60
+
+label = " C %temperature-c% "
+format = <label>
+format-prefix = NVME
+format-foreground = ${colors.cpu-temp}
+format-prefix-foreground = ${colors.cpu-temp-pfx}
+
+label-warn = " C %temperature-c% "
+format-warn = <label-warn>
+format-warn-prefix = NVME
+format-warn-foreground = ${colors.cpu-temp-warn}
+
+[module/nvme-sensor1]
+type = internal/temperature
+
+hwmon-path = /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/nvme/nvme0/hwmon0/temp2_input
+warn-temperature = 60
+
+label = " S1 %temperature-c% "
+format = <label>
+format-foreground = ${colors.cpu-temp}
+
+label-warn = " S1 %temperature-c% "
+format-warn = <label-warn>
+format-warn-foreground = ${colors.cpu-temp-warn}
+
+[module/nvme-sensor2]
+type = internal/temperature
+
+hwmon-path = /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/nvme/nvme0/hwmon0/temp3_input
+warn-temperature = 60
+
+label = " S2 %temperature-c% "
+format = <label>
+format-foreground = ${colors.cpu-temp}
+
+label-warn = " S2 %temperature-c% "
+format-warn = <label-warn>
+format-warn-foreground = ${colors.cpu-temp-warn}
 
 [module/powermenu]
 type = custom/text
@@ -424,14 +486,14 @@ label-unmounted = Root
 [module/fs_localdisk]
 inherit = module/filesystem
 
-mount-0 = "$HOME/localdisk"
+mount-0 = /home/skywalker/localdisk
 label-mounted = LD:%percentage_used%%
 label-unmounted = LD
 
 [module/fs_wdmypassport]
 inherit = module/filesystem
 
-mount-0 = "$HOME/wdmypassport"
+mount-0 = /home/skywalker/wdmypassport
 label-mounted = WD:%percentage_used%%
 label-unmounted = WD
 
@@ -459,7 +521,7 @@ label = " %percentage%%"
 
 [module/network]
 type = internal/network
-interface = enp8s0
+interface = enp5s0
 
 interval = 1.0
 accumulate-stats = true
