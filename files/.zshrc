@@ -85,6 +85,11 @@ alias dockdown='sudo systemctl stop docker.socket docker.service'
 alias dockyeet='docker system prune -fa'
 alias dockbuild='docker build -f ./Dockerfile -t '
 
+alias ovpnuc='openvpn3 session-start -c ulak'
+alias ovpnud='openvpn3 session-manage -c ulak --disconnect'
+alias ovpnur='openvpn3 session-manage -c ulak --restart'
+alias ovpnl='openvpn3 sessions-list'
+
 # Function definitions
 function extract {
   if [ -z "$1" ]; then

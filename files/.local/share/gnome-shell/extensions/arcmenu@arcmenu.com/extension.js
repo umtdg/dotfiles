@@ -1,7 +1,7 @@
 /*
  * ArcMenu - Application Menu Extension for GNOME
  * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
@@ -32,57 +32,50 @@ const Utils = Me.imports.utils;
 let settings;
 let settingsControllers;
 let extensionChangedId;
-let enableTimeoutID;
 
 // Initialize menu language translations
 function init() {
-    ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);      
+    ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);
 }
 
 // Enable the extension
 function enable() {
-    if (ShellVersion < 3.39 && ShellVersion >= 3.36)
-        throw new Error(`ArcMenu v${Me.metadata.version} does not work on GNOME Shell version ${ShellVersion}. Please visit https://extensions.gnome.org/extension/3628/arcmenu/ and download ArcMenu v17`);
-    else if (ShellVersion < 3.36)
-        throw new Error(`GNOME Shell version ${ShellVersion} is not supported. Please visit https://extensions.gnome.org/extension/1228/arc-menu/ which supports GNOME Shell versions 3.14 - 3.34`);
+    if(imports.gi.Meta.is_wayland_compositor())
+        Me.metadata.isWayland = true;
+    else
+        Me.metadata.isWayland = false;
 
-    enableTimeoutID = GLib.timeout_add(0, 300, () => {
-        if(imports.gi.Meta.is_wayland_compositor())
-            Me.metadata.isWayland = true;
-        else
-            Me.metadata.isWayland = false;
+    settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
+    settings.connect('changed::multi-monitor', () => _reload());
+    settings.connect('changed::dash-to-panel-standalone', () => _reload());
+    settingsControllers = [];
 
-        settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
-        settings.connect('changed::multi-monitor', () => _reload());
-        settingsControllers = [];
-    
-        _enableButtons();
-        
-        // dash to panel might get enabled after Arc-Menu
-        extensionChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
-            if (extension.uuid === 'dash-to-panel@jderose9.github.com') {
-                _disconnectDtpSignals();
-                _connectDtpSignals();
-                _reload();
-            }
-        });
-    
-        // listen to dash to panel if they are compatible and already enabled
-        _connectDtpSignals();
-        enableTimeoutID = null;
-        return GLib.SOURCE_REMOVE;
+    Me.customStylesheet = Utils.getStylesheetFile();
+    Utils.updateStylesheet(settings);
+
+    _enableButtons();
+
+    // dash to panel might get enabled after ArcMenu
+    extensionChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
+        if (extension.uuid === 'dash-to-panel@jderose9.github.com') {
+            _disconnectDtpSignals();
+            _connectDtpSignals();
+            _reload();
+        }
     });
+
+    // listen to dash to panel if they are compatible and already enabled
+    _connectDtpSignals();
 }
 
 function disable() {
-    if(enableTimeoutID){
-        GLib.source_remove(enableTimeoutID);
-        enableTimeoutID = null;
-    }
     if(extensionChangedId){
         Main.extensionManager.disconnect(extensionChangedId);
         extensionChangedId = null;
     }
+
+    Utils.unloadStylesheet();
+    delete Me.customStylesheet;
 
     _disconnectDtpSignals();
 
@@ -114,25 +107,30 @@ function _reload() {
 function _enableButtons() {
     let multiMonitor = settings.get_boolean('multi-monitor');
 
-    let isDtPLoaded = false;
+    let dashToPanelEnabled = false;
     let panelArray = [Main.panel];
     if(global.dashToPanel && global.dashToPanel.panels){
         panelArray = global.dashToPanel.panels.map(pw => pw);
-        isDtPLoaded = true;
+        dashToPanelEnabled = true;
     }
 
     let panelLength = multiMonitor ? panelArray.length : 1;
     for(var index = 0; index < panelLength; index++){
-        let panel = isDtPLoaded ? panelArray[index].panel : panelArray[index];
+        let panel = dashToPanelEnabled ? panelArray[index].panel : panelArray[index];
         let panelParent = panelArray[index];
 
+        //Place ArcMenu in top panel when Dash to Panel setting "Keep original gnome-shell top panel" is on
+        let isStandalone = settings.get_boolean('dash-to-panel-standalone') && dashToPanelEnabled;
+        if(isStandalone && ('isPrimary' in panelParent && panelParent.isPrimary) && panelParent.isStandalone)
+            panel = Main.panel;
+    
         let isPrimaryPanel = index === 0 ? true : false;
         let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, isPrimaryPanel);
 
-        settingsController.monitorIndex = panelParent.monitor?.index;
-        
-        if(isDtPLoaded)
-            panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController, 1) : null);
+        settingsController.monitorIndex = panelParent.monitor?.index ?? 0;
+
+        if(dashToPanelEnabled)
+            panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController) : null);
 
         settingsController.enableButton();
         settingsController.bindSettingsChanges();
@@ -143,18 +141,16 @@ function _enableButtons() {
 function _disableButtons(){
     for (let i = settingsControllers.length - 1; i >= 0; --i) {
         let sc = settingsControllers[i];
-        _disableButton(sc, 1);
+        _disableButton(sc);
     }
 }
 
-function _disableButton(controller, remove) {
-    if(controller.panel._amDestroyId){
+function _disableButton(controller) {
+    if(controller.panel?._amDestroyId){
         controller.panel.disconnect(controller.panel._amDestroyId);
         delete controller.panel._amDestroyId;
     }
 
+    settingsControllers.splice(settingsControllers.indexOf(controller), 1);
     controller.destroy();
-
-    if(remove)
-        settingsControllers.splice(settingsControllers.indexOf(controller), 1);
 }

@@ -95,15 +95,6 @@
     padding-bottom: 6px;
 }
 
-#arcmenu-launcher-button{
-    max-width: 90px;
-    padding: 10px 14px;
-    margin: 0px;
-}
-#arcmenu-launcher-button.active-item, #arcmenu-launcher-button:active{
-    background-color: rgba(245, 245, 245, .08);
-}
-
 #arcmenu-plasma-button-top{
     width: 90px;
     height: 65px;
@@ -184,119 +175,15 @@ StScrollView .small-vfade{
 }
 
 /* Recently Installed App Indicator */
+/*
 .arcmenu-indicator{
     color: rgb(41, 165, 249);
 }
+*/
 
-/* Recently Installed App Indicator in parent category */
+/* Recently Installed App Indicator on parent category */
+/*
 .arcmenu-text-indicator{
     background-color: rgba(196, 196, 196, 0.3);
-}
-
-/* Style varius elements of ArcMenu below */
-/* Uncomment each desired section and fill in desired options */
-/* -----------------------------------------------------------*/
-/* -----------------------------------------------------------*/
-/* -----------------------------------------------------------*/
-
-/* Menu Styling Section -----------------------------------------------------------------------------*/
-/* See https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/data/theme/gnome-shell-sass/widgets/_popovers.scss for more info*/
-/*
-.arcmenu-menu {
-    color: ;
-    font-size: ;
-}
-*/
-
-/*
-.arcmenu-menu .popup-menu-content {
-    padding-top: 6px;
-    padding-bottom: 8px;
-    border-radius: ; 
-    border: ; 
-    box-shadow: ;
-    background-color: ; 
-}
-*/
-
-/*
-.arcmenu-menu .popup-menu-item {
-    padding: 
-    border-radius: ;
-    transition: 0.2s all ease;
-    background-color: transparent;
-}
-
-.arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover  {
-    background-color: ;
-}
-
-.arcmenu-menu .popup-menu-item:checked {
-    background-color: ;
-    margin-bottom: ;
-    box-shadow: ;
-    border-radius: ;
-}
-
-.arcmenu-menu .popup-menu-item:active {
-    background-color: ;
-    color: ;
-}
-
-.arcmenu-menu .popup-menu-item:insensitive {
-    background-color: ;
-    color: ;
-}
-*/
-/*End Menu Styling Section----------------------------------------------------------------------*/
-
-
-/* Separator Color */
-/*
-.separator-color-style{
-    background-color: ;
-}
-*/
-
-/* Button Foreground Color */
-/*
-.arcmenu-menu-button{
-    color: ;
-}
-*/
-
-/* Button Foreground Hover Color */
-/*
-.arcmenu-panel-menu:hover .arcmenu-menu-button{
-    color: ;
-}
-*/
-
-/* Button Foreground Active Color */
-/*
-.arcmenu-menu-button:active{
-    color: ;
-}
-*/
-
-/* Button Background Hover Color */
-/* 
-.arcmenu-panel-menu:hover{
-    background-color: ;
-}
-*/
-
-/* Button Background Active Color */
-/*
-.arcmenu-panel-menu:active{
-    background-color: ;
-}
-*/
-
-/* Button Border and Border Radius */
-/*
-.arcmenu-panel-menu{
-    border-radius: ;
-    border: ;
 }
 */

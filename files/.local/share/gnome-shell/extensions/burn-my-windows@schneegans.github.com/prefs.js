@@ -30,21 +30,6 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me             = imports.misc.extensionUtils.getCurrentExtension();
 const utils          = Me.imports.src.utils;
 
-// New effects must be registered here and in extension.js.
-const ALL_EFFECTS = [
-  Me.imports.src.Apparition.Apparition,
-  Me.imports.src.BrokenGlass.BrokenGlass,
-  Me.imports.src.EnergizeA.EnergizeA,
-  Me.imports.src.EnergizeB.EnergizeB,
-  Me.imports.src.Fire.Fire,
-  Me.imports.src.Hexagon.Hexagon,
-  Me.imports.src.Matrix.Matrix,
-  Me.imports.src.SnapOfDisintegration.SnapOfDisintegration,
-  Me.imports.src.TRexAttack.TRexAttack,
-  Me.imports.src.TVEffect.TVEffect,
-  Me.imports.src.Wisps.Wisps,
-];
-
 // This template widget class is defined at the bottom of this file.
 var BurnMyWindowsEffectPage = null;
 
@@ -59,6 +44,22 @@ var PreferencesDialog = class PreferencesDialog {
   // ------------------------------------------------------------ constructor / destructor
 
   constructor() {
+
+    // New effects must be registered here and in extension.js.
+    this._ALL_EFFECTS = [
+      new Me.imports.src.Apparition.Apparition(),
+      new Me.imports.src.BrokenGlass.BrokenGlass(),
+      new Me.imports.src.EnergizeA.EnergizeA(),
+      new Me.imports.src.EnergizeB.EnergizeB(),
+      new Me.imports.src.Fire.Fire(),
+      new Me.imports.src.Hexagon.Hexagon(),
+      new Me.imports.src.Matrix.Matrix(),
+      new Me.imports.src.SnapOfDisintegration.SnapOfDisintegration(),
+      new Me.imports.src.TRexAttack.TRexAttack(),
+      new Me.imports.src.TVEffect.TVEffect(),
+      new Me.imports.src.Wisps.Wisps(),
+    ];
+
     // Load all of our resources.
     this._resources = Gio.Resource.load(Me.path + '/resources/burn-my-windows.gresource');
     Gio.resources_register(this._resources);
@@ -96,10 +97,11 @@ var PreferencesDialog = class PreferencesDialog {
     this.bindSwitch('destroy-dialogs');
 
 
-    // Starting with GNOME Shell 42, the settings dialog uses libadwaita. We have to use a
-    // different layout, as the stack sidebar looks pretty ugly with the included
-    // Adw.Clamp...
-    if (utils.shellVersionIsAtLeast(42, 'beta')) {
+    // Starting with GNOME Shell 42, the settings dialog uses libadwaita (at least most of
+    // the time - it seems that pop!_OS does not support libadwaita even on GNOME 42). We
+    // have to use a different layout, as the stack sidebar looks pretty ugly with the
+    // included Adw.Clamp...
+    if (Adw && utils.shellVersionIsAtLeast(42, 'beta')) {
 
       // This is our top-level widget which we will return later.
       this._widget = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
@@ -112,24 +114,24 @@ var PreferencesDialog = class PreferencesDialog {
       const group = new Adw.PreferencesGroup({title: _('Effect Options')});
       this.gtkBoxAppend(this._widget, group);
 
-      ALL_EFFECTS.forEach(Effect => {
-        const [minMajor, minMinor] = Effect.getMinShellVersion();
+      this._ALL_EFFECTS.forEach(effect => {
+        const [minMajor, minMinor] = effect.getMinShellVersion();
         if (utils.shellVersionIsAtLeast(minMajor, minMinor)) {
 
-          const row = new Adw.ActionRow({title: Effect.getLabel(), activatable: true});
+          const row = new Adw.ActionRow({title: effect.getLabel(), activatable: true});
           row.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
 
           // Open a subpage with the effect's settings.
           row.connect('activated', () => {
-            const page         = new BurnMyWindowsEffectPage(Effect, this);
+            const page         = new BurnMyWindowsEffectPage(effect, this);
             page.valign        = Gtk.Align.CENTER;
             page.margin_top    = 10;
             page.margin_bottom = 10;
             page.margin_start  = 10;
             page.margin_end    = 10;
 
-            // Add the Effect's preferences (if any).
-            const preferences = Effect.getPreferences(this);
+            // Add the effect's preferences (if any).
+            const preferences = effect.getPreferences(this);
             if (preferences) {
               this.gtkBoxAppend(page, preferences);
             }
@@ -185,23 +187,23 @@ var PreferencesDialog = class PreferencesDialog {
       this.gtkBoxAppend(this._widget, stack);
 
       // Add all other effect pages.
-      ALL_EFFECTS.forEach(Effect => {
-        const [minMajor, minMinor] = Effect.getMinShellVersion();
+      this._ALL_EFFECTS.forEach(effect => {
+        const [minMajor, minMinor] = effect.getMinShellVersion();
         if (utils.shellVersionIsAtLeast(minMajor, minMinor)) {
 
-          const page         = new BurnMyWindowsEffectPage(Effect, this);
+          const page         = new BurnMyWindowsEffectPage(effect, this);
           page.margin_start  = 60;
           page.margin_end    = 60;
           page.margin_top    = 60;
           page.margin_bottom = 60;
 
-          // Add the Effect's preferences (if any).
-          const preferences = Effect.getPreferences(this);
+          // Add the effect's preferences (if any).
+          const preferences = effect.getPreferences(this);
           if (preferences) {
             this.gtkBoxAppend(page, preferences);
           }
 
-          stack.add_titled(page, Effect.getNick(), Effect.getLabel());
+          stack.add_titled(page, effect.getNick(), effect.getLabel());
         }
       });
     }
@@ -221,7 +223,7 @@ var PreferencesDialog = class PreferencesDialog {
 
         // Starting with GNOME Shell 42, we have to hack our way through the widget tree
         // of the Adw.PreferencesWindow...
-        if (utils.shellVersionIsAtLeast(42, 'beta')) {
+        if (Adw && utils.shellVersionIsAtLeast(42, 'beta')) {
           const header = this._findWidgetByType(window.get_content(), Adw.HeaderBar);
           header.pack_end(menu);
 
@@ -301,11 +303,11 @@ var PreferencesDialog = class PreferencesDialog {
         const group = Gio.SimpleActionGroup.new();
         window.insert_action_group('open-effects', group);
 
-        ALL_EFFECTS.forEach(Effect => {
-          const [minMajor, minMinor] = Effect.getMinShellVersion();
+        this._ALL_EFFECTS.forEach(effect => {
+          const [minMajor, minMinor] = effect.getMinShellVersion();
           if (utils.shellVersionIsAtLeast(minMajor, minMinor)) {
-            const nick       = Effect.getNick();
-            const label      = Effect.getLabel();
+            const nick       = effect.getNick();
+            const label      = effect.getLabel();
             const actionName = nick + '-open-effect';
             const fullName   = 'open-effects.' + actionName;
 
@@ -323,11 +325,11 @@ var PreferencesDialog = class PreferencesDialog {
         const group = Gio.SimpleActionGroup.new();
         window.insert_action_group('close-effects', group);
 
-        ALL_EFFECTS.forEach(Effect => {
-          const [minMajor, minMinor] = Effect.getMinShellVersion();
+        this._ALL_EFFECTS.forEach(effect => {
+          const [minMajor, minMinor] = effect.getMinShellVersion();
           if (utils.shellVersionIsAtLeast(minMajor, minMinor)) {
-            const nick       = Effect.getNick();
-            const label      = Effect.getLabel();
+            const nick       = effect.getNick();
+            const label      = effect.getLabel();
             const actionName = nick + '-close-effect';
             const fullName   = 'close-effects.' + actionName;
 
@@ -489,17 +491,17 @@ var PreferencesDialog = class PreferencesDialog {
           InternalChildren: ['label', 'button'],
         },
         class BurnMyWindowsEffectPage extends Gtk.Box {  // ------------------------------
-          _init(Effect, dialog) {
+          _init(effect, dialog) {
             super._init();
 
             // Set the effect's name as label.
-            this._label.label = Effect.getLabel();
+            this._label.label = effect.getLabel();
 
             // Open the preview window once the preview button is clicked.
             this._button.connect('clicked', () => {
               // Set the to-be-previewed effect.
-              dialog.getSettings().set_string('open-preview-effect', Effect.getNick());
-              dialog.getSettings().set_string('close-preview-effect', Effect.getNick());
+              dialog.getSettings().set_string('open-preview-effect', effect.getNick());
+              dialog.getSettings().set_string('close-preview-effect', effect.getNick());
 
               // Make sure that the window.show() firther below "sees" this change.
               Gio.Settings.sync();
@@ -507,7 +509,7 @@ var PreferencesDialog = class PreferencesDialog {
               // Create the preview-window.
               const window = new Gtk.Window({
                 // Translators: %s will be replaced by the effect's name.
-                title: _('Preview for %s').replace('%s', Effect.getLabel()),
+                title: _('Preview for %s').replace('%s', effect.getLabel()),
                 default_width: 800,
                 default_height: 450,
                 modal: true,

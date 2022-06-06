@@ -1,11 +1,11 @@
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-const {Gio, GLib, Gtk, St} = imports.gi;
+const { Gio, GLib, Gtk, Shell, St } = imports.gi;
 const Constants = Me.imports.constants;
 const Keybinder = Me.imports.keybinder;
 const Main = imports.ui.main;
 const MenuButton = Me.imports.menuButton;
-const {StandaloneRunner} = Me.imports.standaloneRunner;
+const { StandaloneRunner } = Me.imports.standaloneRunner;
 const Utils = Me.imports.utils;
 
 var MenuSettingsController = class {
@@ -15,27 +15,30 @@ var MenuSettingsController = class {
 
         global.toggleArcMenu = () => this.toggleMenus();
 
+        this._settingsConnections = new Utils.SettingsConnectionsHandler(this._settings);
+
         this.currentMonitorIndex = 0;
         this._activitiesButton = Main.panel.statusArea.activities;
         this.isPrimaryPanel = isPrimaryPanel;
 
         this._menuButton = new MenuButton.MenuButton(settings, panel);
 
-        this._settingsControllers = settingsControllers
+        this._settingsControllers = settingsControllers;
 
         if(this.isPrimaryPanel){
             this._overrideOverlayKey = new Keybinder.OverrideOverlayKey();
-            this._customKeybinding = new Keybinder.CustomKeybinding(this._settings); 
+            this._customKeybinding = new Keybinder.CustomKeybinding(this._settings);
         }
         this._applySettings();
     }
 
-    // Load and apply the settings from the arc-menu settings
     _applySettings() {
         if(this.isPrimaryPanel){
+            this._appSystem = Shell.AppSystem.get_default();
             this._updateHotKeyBinder();
+            this._initRecentAppsTracker();
         }
-            
+
         this._setButtonAppearance();
         this._setButtonText();
         this._setButtonIcon();
@@ -43,77 +46,107 @@ var MenuSettingsController = class {
         this._setButtonIconPadding();
         this._configureActivitiesButton();
     }
-    // Bind the callbacks for handling the settings changes to the event signals
+
     bindSettingsChanges() {
-        this.settingsChangeIds = [
-            this._settings.connect('changed::menu-hotkey', this._updateHotKeyBinder.bind(this)),
-            this._settings.connect('changed::runner-menu-hotkey', this._updateHotKeyBinder.bind(this)),
-            this._settings.connect('changed::enable-standlone-runner-menu', this._updateHotKeyBinder.bind(this)),
-            this._settings.connect('changed::position-in-panel', this._setButtonPosition.bind(this)),
-            this._settings.connect('changed::menu-button-position-offset', this._setButtonPosition.bind(this)),
-            this._settings.connect('changed::menu-position-alignment', this._setMenuPositionAlignment.bind(this)),
-            this._settings.connect('changed::menu-button-appearance', this._setButtonAppearance.bind(this)),
-            this._settings.connect('changed::custom-menu-button-text', this._setButtonText.bind(this)),
-            this._settings.connect('changed::menu-button-icon', this._setButtonIcon.bind(this)),
-            this._settings.connect('changed::distro-icon', this._setButtonIcon.bind(this)),
-            this._settings.connect('changed::arc-menu-icon', this._setButtonIcon.bind(this)),
-            this._settings.connect('changed::custom-menu-button-icon', this._setButtonIcon.bind(this)),
-            this._settings.connect('changed::custom-menu-button-icon-size', this._setButtonIconSize.bind(this)),
-            this._settings.connect('changed::button-padding', this._setButtonIconPadding.bind(this)),
-            this._settings.connect('changed::directory-shortcuts-list', this._reload.bind(this)),
-            this._settings.connect('changed::application-shortcuts-list', this._reload.bind(this)),
-            this._settings.connect('changed::disable-recently-installed-apps', this._initiateRecentlyInstalledApps.bind(this)),
-            this._settings.connect('changed::extra-categories', this._reload.bind(this)),
-            this._settings.connect('changed::power-options', this._reload.bind(this)),
-            this._settings.connect('changed::show-external-devices', this._reload.bind(this)),
-            this._settings.connect('changed::show-bookmarks', this._reload.bind(this)),
-            this._settings.connect('changed::disable-user-avatar', this._reload.bind(this)),
-            this._settings.connect('changed::avatar-style', this._reload.bind(this)),
-            this._settings.connect('changed::enable-activities-shortcut', this._reload.bind(this)),
-            this._settings.connect('changed::enable-horizontal-flip', this._reload.bind(this)),
-            this._settings.connect('changed::searchbar-default-bottom-location', this._reload.bind(this)),
-            this._settings.connect('changed::searchbar-default-top-location', this._reload.bind(this)),
-            this._settings.connect('changed::multi-lined-labels', this._reload.bind(this)),
-            this._settings.connect('changed::apps-show-extra-details', this._reload.bind(this)),
-            this._settings.connect('changed::show-search-result-details', this._reload.bind(this)),
-            this._settings.connect('changed::search-provider-open-windows', this._reload.bind(this)),
-            this._settings.connect('changed::search-provider-recent-files', this._reload.bind(this)),
-            this._settings.connect('changed::disable-scrollview-fade-effect', this._reload.bind(this)),
-            this._settings.connect('changed::menu-height', this._updateMenuHeight.bind(this)),
-            this._settings.connect('changed::left-panel-width', this._updateMenuWidth.bind(this)),
-            this._settings.connect('changed::right-panel-width', this._updateMenuWidth.bind(this)),
-            this._settings.connect('changed::menu-width-adjustment', this._updateMenuWidth.bind(this)),
-            this._settings.connect('changed::pinned-app-list',this._updatePinnedApps.bind(this)),
-            this._settings.connect('changed::enable-weather-widget-unity',this._updatePinnedApps.bind(this)),
-            this._settings.connect('changed::enable-clock-widget-unity',this._updatePinnedApps.bind(this)),
-            this._settings.connect('changed::enable-weather-widget-raven',this._updatePinnedApps.bind(this)),
-            this._settings.connect('changed::enable-clock-widget-raven',this._updatePinnedApps.bind(this)),
-            this._settings.connect('changed::brisk-shortcuts-list',this._updateExtraPinnedApps.bind(this)),
-            this._settings.connect('changed::mint-pinned-app-list',this._updateExtraPinnedApps.bind(this)),
-            this._settings.connect('changed::mint-separator-index',this._updateExtraPinnedApps.bind(this)),
-            this._settings.connect('changed::unity-pinned-app-list',this._updateExtraPinnedApps.bind(this)),
-            this._settings.connect('changed::unity-separator-index',this._updateExtraPinnedApps.bind(this)),
-            this._settings.connect('changed::windows-disable-frequent-apps', this._reload.bind(this)),
-            this._settings.connect('changed::windows-disable-pinned-apps', this._reload.bind(this)),
-            this._settings.connect('changed::default-menu-view', this._reload.bind(this)),
-            this._settings.connect('changed::default-menu-view-tognee',this._reload.bind(this)),
-            this._settings.connect('changed::alphabetize-all-programs',this._reload.bind(this)),
-            this._settings.connect('changed::enable-unity-homescreen',this._setDefaultMenuView.bind(this)),
-            this._settings.connect('changed::menu-layout', this._updateMenuLayout.bind(this)),
-            this._settings.connect('changed::menu-item-grid-icon-size', this._reload.bind(this)),
-            this._settings.connect('changed::menu-item-icon-size', this._reload.bind(this)),
-            this._settings.connect('changed::button-item-icon-size', this._reload.bind(this)),
-            this._settings.connect('changed::quicklinks-item-icon-size', this._reload.bind(this)),
-            this._settings.connect('changed::misc-item-icon-size', this._reload.bind(this)),
-            this._settings.connect('changed::runner-position', this.updateLocation.bind(this)),
-            this._settings.connect('changed::runner-show-frequent-apps', this._reload.bind(this)),
-            this._settings.connect('changed::show-activities-button', this._configureActivitiesButton.bind(this)),
-            this._settings.connect('changed::force-menu-location', this._forceMenuLocation.bind(this)),
-            this._settings.connect('changed::category-icon-type', this._reload.bind(this)),
-            this._settings.connect('changed::shortcut-icon-type', this._reload.bind(this)),
-            this._settings.connect('changed::arcmenu-extra-categories-links', this._reload.bind(this)),
-            this._settings.connect('changed::arcmenu-extra-categories-links-location', this._reload.bind(this)),
-        ];
+        this._settingsConnections.connectMultipleEvents(
+            [
+                'override-menu-theme', 'menu-background-color', 'menu-foreground-color', 'menu-border-color',
+                'menu-border-width', 'menu-border-radius', 'menu-font-size', 'menu-separator-color',
+                'menu-item-hover-bg-color', 'menu-item-hover-fg-color', 'menu-item-active-bg-color',
+                'menu-item-active-fg-color', 'menu-button-fg-color', 'menu-button-hover-bg-color',
+                'menu-button-hover-fg-color', 'menu-button-active-bg-color', 'menu-button-active-fg-color',
+                'menu-button-border-radius', 'menu-button-border-width', 'menu-button-border-color', 'menu-arrow-rise'
+            ],
+            this._overrideMenuTheme.bind(this)
+        );
+
+        this._settingsConnections.connectMultipleEvents(
+            [
+                'menu-hotkey', 'runner-menu-hotkey', 'enable-standlone-runner-menu'
+            ],
+            this._updateHotKeyBinder.bind(this)
+        );
+
+        this._settingsConnections.connectMultipleEvents(
+            [
+                'position-in-panel', 'menu-button-position-offset'
+            ],
+            this._setButtonPosition.bind(this)
+        );
+
+        this._settingsConnections.connectMultipleEvents(
+            [
+                'menu-button-icon', 'distro-icon', 'arc-menu-icon', 'custom-menu-button-icon'
+            ],
+            this._setButtonIcon.bind(this)
+        );
+
+        this._settingsConnections.connectMultipleEvents(
+            [
+                'directory-shortcuts-list', 'application-shortcuts-list', 'extra-categories',
+                'power-options','show-external-devices', 'show-bookmarks', 'disable-user-avatar',
+                'avatar-style', 'enable-activities-shortcut', 'enable-horizontal-flip',
+                'searchbar-default-bottom-location', 'searchbar-default-top-location', 'multi-lined-labels',
+                'apps-show-extra-details', 'show-search-result-details', 'search-provider-open-windows',
+                'search-provider-recent-files', 'misc-item-icon-size', 'windows-disable-pinned-apps',
+                'disable-scrollview-fade-effect', 'windows-disable-frequent-apps', 'default-menu-view',
+                'default-menu-view-tognee', 'alphabetize-all-programs', 'menu-item-grid-icon-size',
+                'menu-item-icon-size', 'button-item-icon-size', 'quicklinks-item-icon-size',
+                'category-icon-type', 'shortcut-icon-type', 'arcmenu-extra-categories-links',
+                'arcmenu-extra-categories-links-location', 'runner-show-frequent-apps'
+            ],
+            this._reload.bind(this)
+        );
+
+        this._settingsConnections.connectMultipleEvents(
+            [
+                'left-panel-width', 'right-panel-width', 'menu-width-adjustment'
+            ],
+            this._updateMenuWidth.bind(this)
+        );
+
+        this._settingsConnections.connectMultipleEvents(
+            [
+                'pinned-app-list', 'enable-weather-widget-unity', 'enable-clock-widget-unity',
+                'enable-weather-widget-raven', 'enable-clock-widget-raven'
+            ],
+            this._updatePinnedApps.bind(this)
+        );
+
+        this._settingsConnections.connectMultipleEvents(
+            [
+                'brisk-shortcuts-list', 'mint-pinned-app-list', 'mint-separator-index',
+                'unity-pinned-app-list', 'unity-separator-index'
+            ],
+            this._updateExtraPinnedApps.bind(this)
+        );
+
+        this._settingsConnections.connect('menu-position-alignment', this._setMenuPositionAlignment.bind(this));
+        this._settingsConnections.connect('menu-button-appearance', this._setButtonAppearance.bind(this));
+        this._settingsConnections.connect('custom-menu-button-text', this._setButtonText.bind(this));
+        this._settingsConnections.connect('custom-menu-button-icon-size', this._setButtonIconSize.bind(this));
+        this._settingsConnections.connect('disable-recently-installed-apps', this._setRecentApps.bind(this));
+        this._settingsConnections.connect('button-padding', this._setButtonIconPadding.bind(this));
+        this._settingsConnections.connect('menu-height', this._updateMenuHeight.bind(this));
+        this._settingsConnections.connect('enable-unity-homescreen', this._setDefaultMenuView.bind(this));
+        this._settingsConnections.connect('menu-layout', this._updateMenuLayout.bind(this));
+        this._settingsConnections.connect('runner-position', this.updateLocation.bind(this));
+        this._settingsConnections.connect('show-activities-button', this._configureActivitiesButton.bind(this));
+        this._settingsConnections.connect('force-menu-location', this._forceMenuLocation.bind(this));
+    }
+
+    _overrideMenuTheme(){
+        if(!this.isPrimaryPanel)
+            return;
+
+        if (this._writeTimeoutId)
+            GLib.source_remove(this._writeTimeoutId);
+
+        this._writeTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, () => {
+            Utils.updateStylesheet(this._settings);
+            this._writeTimeoutId = null;
+            return GLib.SOURCE_REMOVE;
+        });
     }
 
     _reload(){
@@ -126,13 +159,65 @@ var MenuSettingsController = class {
         this._menuButton.forceMenuLocation();
     }
 
-    _initiateRecentlyInstalledApps(){
-        this._menuButton.initiateRecentlyInstalledApps();
-        this._menuButton.reload();
-        if(this.runnerMenu){
-            this.runnerMenu.initiateRecentlyInstalledApps();
+    _setRecentApps(){
+        if(!this.isPrimaryPanel)
+            return;
+
+        this._initRecentAppsTracker();
+        for (let i = 0; i < this._settingsControllers.length; i++) {
+            let menuButton = this._settingsControllers[i]._menuButton;
+            menuButton.reload();
+        }
+        if(this.runnerMenu)
             this.runnerMenu.reload();
-        } 
+    }
+
+    _initRecentAppsTracker(){
+        if(this._installedChangedId){
+            this._appSystem.disconnect(this._installedChangedId);
+            this._installedChangedId = null;
+        }
+
+        if(this._settings.get_boolean('disable-recently-installed-apps'))
+            return;
+
+        this._appList = this._listAllApps();
+
+        this._installedChangedId = this._appSystem.connect('installed-changed', () => {
+            let appList = this._listAllApps();
+
+            //Filter to find if a new application has been installed
+            let newAppsList = appList.filter(app => !this._appList.includes(app));
+            this._appList = appList;
+
+            if(!newAppsList.length)
+                return;
+
+            //A new app has been installed, Save it in settings
+            let recentApps = this._settings.get_strv('recently-installed-apps');
+            let newRecentApps = [...new Set(recentApps.concat(newAppsList))];
+            this._settings.set_strv('recently-installed-apps', newRecentApps);
+
+            for (let i = 0; i < this._settingsControllers.length; i++) {
+                let menuButton = this._settingsControllers[i]._menuButton;
+                menuButton.MenuLayout?.reloadApplications();
+            }
+
+            if(this.runnerMenu)
+                this.runnerMenu.MenuLayout?.reloadApplications();
+        });
+    }
+
+    _listAllApps(){
+        let appList = this._appSystem.get_installed().filter(appInfo => {
+            try {
+                appInfo.get_id(); // catch invalid file encodings
+            } catch (e) {
+                return false;
+            }
+            return appInfo.should_show();
+        });
+        return appList.map(app => app.get_id());
     }
 
     updateLocation(){
@@ -184,7 +269,7 @@ var MenuSettingsController = class {
                 if(menuButton.arcMenuContextMenu.isOpen)
                     menuButton.toggleArcMenuContextMenu();
             }
-        } 
+        }
         //open the current monitors menu
         this._settingsControllers[this.currentMonitorIndex]._menuButton.toggleMenu();
     }
@@ -216,7 +301,7 @@ var MenuSettingsController = class {
         if(!activeCategory)
             return;
         if(activeCategory === Constants.CategoryType.PINNED_APPS || activeCategory === Constants.CategoryType.HOME_SCREEN)
-            this._menuButton.displayPinnedApps();  
+            this._menuButton.displayPinnedApps();
     }
 
     _updateExtraPinnedApps(){
@@ -264,7 +349,6 @@ var MenuSettingsController = class {
         }
     }
 
-    // Place the menu button to main panel as specified in the settings
     _setButtonPosition() {
         if (this._isButtonEnabled()) {
             this._removeMenuButtonFromMainPanel();
@@ -276,13 +360,12 @@ var MenuSettingsController = class {
     _setMenuPositionAlignment(){
         this._menuButton.setMenuPositionAlignment();
     }
-    
-    // Change the menu button appearance as specified in the settings
+
     _setButtonAppearance() {
         let menuButtonWidget = this._menuButton.menuButtonWidget;
         this._menuButton.container.set_width(-1);
         this._menuButton.container.set_height(-1);
-        menuButtonWidget.actor.show();
+        menuButtonWidget.show();
         switch (this._settings.get_enum('menu-button-appearance')) {
             case Constants.MenuButtonAppearance.TEXT:
                 menuButtonWidget.hidePanelIcon();
@@ -303,7 +386,7 @@ var MenuSettingsController = class {
                 menuButtonWidget.showPanelIcon();
                 break;
             case Constants.MenuButtonAppearance.NONE:
-                menuButtonWidget.actor.hide();
+                menuButtonWidget.hide();
                 this._menuButton.container.set_width(0);
                 this._menuButton.container.set_height(0);
                 break;
@@ -314,9 +397,7 @@ var MenuSettingsController = class {
         }
     }
 
-    // Update the text of the menu button as specified in the settings
     _setButtonText() {
-        // Update the text of the menu button
         let menuButtonWidget = this._menuButton.menuButtonWidget;
         let label = menuButtonWidget.getPanelLabel();
 
@@ -324,17 +405,15 @@ var MenuSettingsController = class {
         label.set_text(customTextLabel);
     }
 
-    // Update the icon of the menu button as specified in the settings
     _setButtonIcon() {
         let path = this._settings.get_string('custom-menu-button-icon');
         let menuButtonWidget = this._menuButton.menuButtonWidget;
         let stIcon = menuButtonWidget.getPanelIcon();
-        
+
         let iconString = Utils.getMenuButtonIcon(this._settings, path);
         stIcon.set_gicon(Gio.icon_new_for_string(iconString));
     }
 
-    // Update the icon of the menu button as specified in the settings
     _setButtonIconSize() {
         let menuButtonWidget = this._menuButton.menuButtonWidget;
         let stIcon = menuButtonWidget.getPanelIcon();
@@ -364,7 +443,6 @@ var MenuSettingsController = class {
         parent.insert_child_at_index(this._menuButton, actorIndex);
     }
 
-    // Get the current position of the menu button and its associated position order
     _getMenuPosition() {
         let offset = this._settings.get_int('menu-button-position-offset');
         switch (this._settings.get_enum('position-in-panel')) {
@@ -387,54 +465,48 @@ var MenuSettingsController = class {
 
     _configureActivitiesButton(){
         let isActivitiesButtonPresent = Main.panel.statusArea.activities && Main.panel.statusArea.activities.container && Main.panel._leftBox.contains(Main.panel.statusArea.activities.container);
-        let showActivities = this._settings.get_boolean('show-activities-button'); 
-        
+        let showActivities = this._settings.get_boolean('show-activities-button');
+
         let container = Main.panel.statusArea.activities.container;
         let parent = container.get_parent();
         let index = 0;
-        if(this._settings.get_enum('position-in-panel') === Constants.MenuPosition.LEFT && 
+        if(this._settings.get_enum('position-in-panel') === Constants.MenuPosition.LEFT &&
             this._settings.get_int('menu-button-position-offset') == 0)
             index = 1;
 
         if(showActivities && !isActivitiesButtonPresent){
             parent ? parent.remove_child(container) : null;
             Main.panel._leftBox.insert_child_at_index(this._activitiesButton.container, index);
-        }                          
+        }
         else if(!showActivities && isActivitiesButtonPresent)
             Main.panel._leftBox.remove_child(Main.panel.statusArea.activities.container);
     }
 
-    // Check if the activities button is present on the main panel
     _isActivitiesButtonPresent() {
         return (this._activitiesButton &&
             this._activitiesButton.container &&
             Main.panel._leftBox.contains(this._activitiesButton.container));
     }
 
-    // Add or restore the activities button on the main panel
     _addActivitiesButtonToMainPanel() {
         if (!this._isActivitiesButtonPresent()) {
-            // Retsore the activities button at the default position
             let parent = this._activitiesButton.container.get_parent();
             if(!parent)
                 Main.panel._leftBox.insert_child_at_index(this._activitiesButton.container, 0);
         }
     }
 
-    // Add the menu button to the main panel
     _addMenuButtonToMainPanel() {
         let [position, box] = this._getMenuPosition();
         this.panel.addToStatusArea('ArcMenu', this._menuButton, position, box);
     }
 
-    // Remove the menu button from the main panel
     _removeMenuButtonFromMainPanel() {
         this.panel.menuManager.removeMenu(this._menuButton.arcMenu);
         this.panel.menuManager.removeMenu(this._menuButton.arcMenuContextMenu);
         this.panel.statusArea['ArcMenu'] = null;
     }
 
-    // Enable the menu button
     enableButton() {
         this._addMenuButtonToMainPanel();
         this._menuButton.initiate();
@@ -450,21 +522,32 @@ var MenuSettingsController = class {
     }
 
     destroy() {
-        if(this.runnerMenu){
-            this.runnerMenu.destroy();
+        if(this._writeTimeoutId){
+            GLib.source_remove(this._writeTimeoutId);
+            this._writeTimeoutId = null;
         }
-        this.settingsChangeIds.forEach(id => this._settings.disconnect(id));
-        
+
+        if(this._installedChangedId){
+            this._appSystem.disconnect(this._installedChangedId);
+            this._installedChangedId = null;
+        }
+
+        if(this.runnerMenu)
+            this.runnerMenu.destroy();
+
+        this._settingsConnections.destroy();
+        this._settingsConnections = null;
+
         if(this.panel == undefined)
             this._menuButton.destroy();
-        else if (this._isButtonEnabled()) {
+        else if (this._isButtonEnabled())
             this._disableButton();
-        }
 
         if(this.isPrimaryPanel){
             this._overrideOverlayKey.destroy();
             this._customKeybinding.destroy();
         }
+
         this._settings = null;
         this._activitiesButton = null;
         this._menuButton = null;

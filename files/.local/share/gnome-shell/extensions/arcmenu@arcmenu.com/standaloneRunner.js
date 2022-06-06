@@ -2,7 +2,6 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
 const {Clutter, GLib, Shell, St} = imports.gi;
-const appSys = Shell.AppSystem.get_default();
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
@@ -12,7 +11,7 @@ const PopupMenu = imports.ui.popupMenu;
 const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
 
-var StandaloneRunner = class Arc_Menu_StandaloneRunner{
+var StandaloneRunner = class ArcMenu_StandaloneRunner{
     constructor(settings) {
         this._settings = settings;
 
@@ -41,7 +40,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         let positionX = Math.round(rect.x + (rect.width / 2));
         let positionY = rect.y;
         this.dummyWidget.set_position(positionX, positionY);
-        
+
         //Context Menus for applications and other menu items
         this.contextMenuManager = new PopupMenu.PopupMenuManager(this.dummyWidget);
         this.contextMenuManager._changeMenu = (menu) => {};
@@ -58,56 +57,12 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     initiate(){
-        this.initiateRecentlyInstalledApps();
-
         //Create Basic Layout
         this.createLayoutID = GLib.timeout_add(0, 100, () => {
             this.createMenuLayout();
             this.createLayoutID = null;
             return GLib.SOURCE_REMOVE;
         });
-    }
-
-    initiateRecentlyInstalledApps(){
-        if(this._installedChangedId){
-            appSys.disconnect(this._installedChangedId);
-            this._installedChangedId = null;
-        }
-
-        if(this._settings.get_boolean('disable-recently-installed-apps'))
-            return;
-
-        this._appList = this.listAllApps();
-        //Update Categories on 'installed-changed' event-------------------------------------
-        this._installedChangedId = appSys.connect('installed-changed', () => {
-            this._newAppList = this.listAllApps();
-
-            //Filter to find if a new application has been installed
-            let newApps = this._newAppList.filter(app => !this._appList.includes(app));
-
-            //A New Application has been installed
-            //Save it in settings
-            if(newApps.length){
-                let recentApps = this._settings.get_strv('recently-installed-apps');
-                let newRecentApps = [...new Set(recentApps.concat(newApps))];
-                this._settings.set_strv('recently-installed-apps', newRecentApps);
-                this.MenuLayout.reloadApplications();
-            }
-            
-            this._appList = this._newAppList;
-        });
-    }
-
-    listAllApps(){
-        let appList = appSys.get_installed().filter(appInfo => {
-            try {
-                appInfo.get_id(); // catch invalid file encodings
-            } catch (e) {
-                return false;
-            }
-            return appInfo.should_show();
-        });
-        return appList.map(app => app.get_id());
     }
 
     createMenuLayout(){
@@ -124,7 +79,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL
-        });        
+        });
         this.mainBox._delegate = this.mainBox;
         this.section.actor.add_child(this.mainBox);
 
@@ -174,17 +129,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         }
     }
 
-    getActiveMenu(){
-        if(this.contextMenuManager.activeMenu)
-            return this.contextMenuManager.activeMenu;
-        else if(this.subMenuManager.activeMenu)
-            return this.subMenuManager.activeMenu;
-        else if(this.arcMenu.isOpen)
-            return this.arcMenu;
-        else
-            return null;
-    }
-
     destroy(){
         if(this.createLayoutID){
             GLib.source_remove(this.createLayoutID);
@@ -201,21 +145,10 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
             this.tooltipShowingID = null;
         }
 
-        if(this.tooltip)
-            this.tooltip.destroy();
-        if(this._installedChangedId){
-            appSys.disconnect(this._installedChangedId);
-            this._installedChangedId = null;
-        }
-
-        if(this.MenuLayout)
-            this.MenuLayout.destroy();
-        if(this.arcMenu)
-            this.arcMenu.destroy();
-        if(this.dummyWidget){
-            Main.uiGroup.remove_child(this.dummyWidget);
-            this.dummyWidget.destroy();
-        }
+        this.tooltip?.destroy();
+        this.MenuLayout?.destroy();
+        this.arcMenu?.destroy();
+        this.dummyWidget?.destroy();
     }
 
     updateMenuLayout(){
@@ -242,9 +175,8 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     reload(){
-        if(this.MenuLayout){
+        if(this.MenuLayout)
             this.reloadMenuLayout();
-        }
     }
 
     shouldLoadPinnedApps(){
@@ -258,16 +190,16 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     _onOpenStateChanged(menu, open) {
-        if(open){                
+        if(open){
             if(Main.panel.menuManager && Main.panel.menuManager.activeMenu)
                 Main.panel.menuManager.activeMenu.toggle();
-        }      
-        else{ 
+        }
+        else{
             if(!this.arcMenu.isOpen){
                 if (this.tooltipShowingID) {
                     GLib.source_remove(this.tooltipShowingID);
                     this.tooltipShowingID = null;
-                }     
+                }
                 this.tooltipShowing = false;
                 if(this.activeTooltip){
                     this.activeTooltip.hide();

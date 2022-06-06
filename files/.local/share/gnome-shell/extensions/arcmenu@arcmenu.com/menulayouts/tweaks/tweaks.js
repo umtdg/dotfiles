@@ -11,11 +11,13 @@ var TweaksPage = GObject.registerClass({
     Signals: {
         'response': { param_types: [GObject.TYPE_INT] },
     },
-},  class Arc_Menu_TweaksPage extends Gtk.Box {
+},  class ArcMenu_TweaksPage extends Gtk.Box {
     _init(settings, layoutName) {
         this._settings = settings;
         this.addResponse = false;
         super._init({
+            margin_start: 5,
+            margin_end: 5,
             orientation: Gtk.Orientation.VERTICAL,
         });
 
@@ -456,7 +458,7 @@ var TweaksPage = GObject.registerClass({
         this.mainBox.append(generalTweaksFrame);
 
         let defaulViews = new Gtk.StringList();
-        defaulViews.append(_("Home Screen"));
+        defaulViews.append(_("Home"));
         defaulViews.append(_("All Programs"));
         let defaultViewRow = new Adw.ComboRow({
             title: _("Default View"),
@@ -494,7 +496,7 @@ var TweaksPage = GObject.registerClass({
         });
 
         let infoButton = new PW.Button({
-            icon_name: 'info-circle-symbolic'
+            icon_name: 'help-about-symbolic'
         });
         infoButton.connect('clicked', ()=> {
             let dialog = new Gtk.MessageDialog({
@@ -525,7 +527,7 @@ var TweaksPage = GObject.registerClass({
         this.mainBox.append(generalTweaksFrame);
 
         let defaulViews = new Gtk.StringList();
-        defaulViews.append(_("Home Screen"));
+        defaulViews.append(_("Home"));
         defaulViews.append(_("All Programs"));
         let defaultViewRow = new Adw.ComboRow({
             title: _("Default View"),
@@ -584,7 +586,7 @@ var TweaksPage = GObject.registerClass({
         });
 
         let infoButton = new PW.Button({
-            icon_name: 'info-circle-symbolic'
+            icon_name: 'help-about-symbolic'
         });
         infoButton.connect('clicked', ()=> {
             let dialog = new Gtk.MessageDialog({
@@ -786,7 +788,6 @@ var TweaksPage = GObject.registerClass({
             selected: this._settings.get_enum('arcmenu-extra-categories-links-location')
         });
         extraCategoriesLocationRow.connect('notify::selected', (widget) => {
-            log("hello")
             this._settings.set_enum('arcmenu-extra-categories-links-location' , widget.selected);
         });
         extraCategoriesLocationFrame.add(extraCategoriesLocationRow);

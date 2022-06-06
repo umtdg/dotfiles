@@ -30,7 +30,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             DefaultPinnedIconSize: Constants.LARGE_ICON_SIZE,
         });
     }
-    createLayout(){     
+    createLayout(){
         super.createLayout();
         this.actionsBox = new St.BoxLayout({
             x_expand: true,
@@ -43,9 +43,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.actionsBox);
 
         this.extrasButton = new MW.ExtrasButton(this);
-        this.extrasButton.actor.y_expand = true;
-        this.extrasButton.actor.y_align= Clutter.ActorAlign.START;
-        this.actionsBox.add_child(this.extrasButton.actor);
+        this.extrasButton.y_expand = true;
+        this.extrasButton.y_align= Clutter.ActorAlign.START;
+        this.actionsBox.add_child(this.extrasButton);
 
         let isContainedInCategory = false;
         let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
@@ -55,10 +55,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsBox.add_child(terminalButton);
 
         let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        this.actionsBox.add_child(settingsButton);
-    
+        if(settingsButton.shouldShow)
+            this.actionsBox.add_child(settingsButton);
+
         this.leaveButton = new MW.LeaveButton(this);
-        this.actionsBox.add_child(this.leaveButton.actor);
+        this.actionsBox.add_child(this.leaveButton);
 
         this.subMainBox = new St.BoxLayout({
             x_expand: true,
@@ -76,27 +77,27 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style_class: this.disableFadeEffect ? '' : 'vfade'
         });
 
-        this.pinnedAppsBox = new St.BoxLayout({ 
+        this.pinnedAppsBox = new St.BoxLayout({
             vertical: true,
             x_expand: true
         });
         this.pinnedAppsScrollBox.add_actor(this.pinnedAppsBox);
 
-        let layout = new Clutter.GridLayout({ 
+        let layout = new Clutter.GridLayout({
             orientation: Clutter.Orientation.VERTICAL,
             column_spacing: 10,
-            row_spacing: 10 
+            row_spacing: 10
         });
-        this.pinnedAppsGrid = new St.Widget({ 
+        this.pinnedAppsGrid = new St.Widget({
             x_expand: true,
             x_align: Clutter.ActorAlign.CENTER,
-            layout_manager: layout 
+            layout_manager: layout
         });
         layout.hookup_style(this.pinnedAppsGrid);
 
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 15px 10px 0px 10px;";
-        
+
         this.applicationsBox = new St.BoxLayout({
             vertical: true
         });
@@ -112,9 +113,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
-        this.subMainBox.add_child(this.searchBox.actor);
+        this.subMainBox.add_child(this.searchBox);
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
-        
+
         let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("ArcMenu Settings")];
         let applicationShortcutsList = this._settings.get_value('application-shortcuts-list').deep_unpack();
         this.applicationShortcuts = [];
@@ -122,24 +123,24 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let applicationName = applicationShortcutsList[i][0];
             let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcutsList[i][1], applicationShortcutsList[i][2], Constants.DisplayType.LIST);
             if(shortcutMenuItem.shouldShow)
-                this.applicationShortcuts.push(shortcutMenuItem.actor);
+                this.applicationShortcuts.push(shortcutMenuItem);
         }
 
         let directoryShortcutsList = this._settings.get_value('directory-shortcuts-list').deep_unpack();
         this._loadPlaces(directoryShortcutsList);
-        
+
         this.externalDevicesBox = new St.BoxLayout({
             vertical: true,
             x_expand: true,
             y_expand: true
-        });	
+        });
         this._sections = { };
         this.placesManager = new PlaceDisplay.PlacesManager();
         for (let i = 0; i < Constants.SECTIONS.length; i++) {
             let id = Constants.SECTIONS[i];
             this._sections[id] = new St.BoxLayout({
                 vertical: true
-            });	
+            });
             this.placeManagerUpdatedID = this.placesManager.connect(`${id}-updated`, () => {
                 this._redisplayPlaces(id);
             });
@@ -170,15 +171,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this._sections[id].add_child(this.createLabelRow(_("Bookmarks")));
             for (let i = 0; i < places.length; i++){
                 let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
-                this._sections[id].add_child(item); 
-            } 
+                this._sections[id].add_child(item);
+            }
         }
 
         if(id === 'devices' && places.length > 0){
             this._sections[id].add_child(this.createLabelRow(_("Devices")));
             for (let i = 0; i < places.length; i++){
                 let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
-                this._sections[id].add_child(item); 
+                this._sections[id].add_child(item);
             }
         }
 
@@ -186,7 +187,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this._sections[id].add_child(this.createLabelRow(_("Network")));
             for (let i = 0; i < places.length; i++){
                 let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
-                this._sections[id].add_child(item); 
+                this._sections[id].add_child(item);
             }
         }
     }
@@ -196,7 +197,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         for (let i = 0; i < directoryShortcutsList.length; i++) {
             let directory = directoryShortcutsList[i];
             let isContainedInCategory = false;
-            let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST, isContainedInCategory);         
+            let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST, isContainedInCategory);
             this.directoryShortcuts.push(placeMenuItem);
         }
     }
@@ -210,11 +211,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.extrasMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
 
         this.section = new PopupMenu.PopupMenuSection();
-        this.extrasMenu.addMenuItem(this.section);  
-        
+        this.extrasMenu.addMenuItem(this.section);
+
         this.leftPanelPopup = new St.BoxLayout({
             vertical: true,
-        });   
+        });
         this.leftPanelPopup._delegate = this.leftPanelPopup;
         this.section.actor.add_child(this.leftPanelPopup);
 
@@ -224,30 +225,30 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
             vertical: true
-        });    
+        });
         this.leftPanelPopup.add_child(headerBox);
 
         this.backButton = new MW.BackMenuItem(this);
         this.backButton.connect("activate", () => this.toggleExtrasMenu());
-        headerBox.add_child(this.backButton.actor);
+        headerBox.add_child(this.backButton);
 
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
         headerBox.add_child(separator);
 
         this.computerScrollBox = this._createScrollBox({
-            x_expand: true, 
+            x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             reactive: true,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });
-        
+
         this.leftPanelPopup.add_child(this.computerScrollBox);
-       
+
         this.computerBox = new St.BoxLayout({
             vertical: true
-        });     
+        });
         this.computerScrollBox.add_actor(this.computerBox);
 
         this.computerBox.add_child(this.createLabelRow(_("Application Shortcuts")));
@@ -286,10 +287,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.arcMenu.actor.get_allocation_box();
         let [x, y] = this.arcMenu.actor.get_transformed_position();
         let rise = themeNode.get_length('-arrow-rise');
-    
+
         if(this.arcMenu._arrowSide === St.Side.TOP)
             y += 1;
-        else 
+        else
             y -= rise - 1;
 
         if(this.arcMenu._arrowSide === St.Side.LEFT)
@@ -302,7 +303,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.backButton.grab_key_focus();
         }
     }
-    
+
     setDefaultMenuView(){
         super.setDefaultMenuView();
 
@@ -333,13 +334,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             }
             const MaxItems = 8;
             if(this.frequentAppsList.length > 0){
-                this.applicationsBox.add_child(label.actor);
+                this.applicationsBox.add_child(label);
                 for (let i = 0; i < this.frequentAppsList.length && i < MaxItems; i++) {
                     let item = this.frequentAppsList[i];
-                    if(item.actor.get_parent())
-                        item.actor.get_parent().remove_child(item.actor);
-                    if (!item.actor.get_parent()) 
-                        this.applicationsBox.add_child(item.actor);
+                    if(item.get_parent())
+                        item.get_parent().remove_child(item);
+                    this.applicationsBox.add_child(item);
                     if(!this.activeMenuItemSet){
                         this._frequentActiveItem = item;
                         this.activeMenuItemSet = true;
@@ -364,11 +364,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadCategories() {
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
+        this.categoryDirectories = new Map();
         this.hasPinnedApps = true;
         super.loadCategories();
     }
-    
+
     _clearActorsFromBox(box){
         super._clearActorsFromBox(box);
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
@@ -382,7 +382,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.HOME_SCREEN, this.pinnedAppsGrid);
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))
             this.pinnedAppsBox.add_child(this.pinnedAppsGrid);
-        
+
         if(this.activeMenuItemSet)
             this.activeMenuItem = this._frequentActiveItem;
     }

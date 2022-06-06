@@ -8,7 +8,7 @@
 
 ### Introduction
 
-ArcMenu is an application menu for GNOME Shell, designed to provide a more traditional user experience and workflow. This extension has many features, including multiple menu layout styles, GNOME search, quick access to system shorctus, and more! If you are a new user to GNOME and are looking for a Windows style start menu, this extension will be perfect for you! 
+ArcMenu is an application menu for GNOME Shell, designed to provide a more familiar user experience and workflow. This extension has many features, including various menu layout styles, GNOME search, quick access to system shortcuts, and much more!
 
 **For ArcMenu to work properly, you may need [these dependencies](https://gitlab.com/arcmenu/ArcMenu/-/wikis/ArcMenu-Dependencies).**
 
@@ -23,7 +23,6 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to help 
 
 -----
 
-
 ### Installation
 
 #### To install the most recent official release: Visit ArcMenu on the [Official GNOME Extensions](https://extensions.gnome.org/extension/3628/arcmenu/) website.
@@ -37,19 +36,11 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to help 
 
 -----
 
-### Bugs
-
-Bugs should be reported [here](https://gitlab.com/arcmenu/ArcMenu/issues) on the GitLab issues page.
-
-When reporting a bug, please provide as much information as you can about the issue and make sure to include your Linux distribution, GNOME Shell version, and ArcMenu version.
-
------
-
 ### Credits:
 
 **@[AndrewZaech](https://gitlab.com/AndrewZaech) - Current Project Maintainer and Developer**
 
-**@[AndyC](https://gitlab.com/LinxGem33) - Founder of ArcMenu and former project maintainer**
+**@[AndyC](https://gitlab.com/LinxGem33) - ArcMenu Founder, Former Maintainer, Digital Art Designer**
 
 **@[lexruee](https://github.com/lexruee) - Former UI/UX Designer | @[Thomas Ingvarsson](https://gitlab.com/tingvarsson) -  Former Developer**
 
@@ -77,12 +68,12 @@ Additional credits:
 
 #### Translators:
 
-**@[Nilvus](https://gitlab.com/Nilvus) - French** | **@[Etamuk](https://gitlab.com/Etamuk) - German** | **@[alex4401](https://gitlab.com/alex4401) - Polish** | **@[frnogueira](https://gitlab.com/frnogueira), @[Z Bed](https://gitlab.com/zbed) - Brazilian Portuguese** | **@[sigbjokj](https://gitlab.com/sigbjokj), @[sssandum](https://gitlab.com/sssandum) - Norwegian**
+**@[Nilvus](https://gitlab.com/Nilvus), @[steve.kossouho](https://gitlab.com/steve.kossouho) - French** | **@[Etamuk](https://gitlab.com/Etamuk) - German** | **@[alex4401](https://gitlab.com/alex4401) - Polish** | **@[frnogueira](https://gitlab.com/frnogueira), @[Z Bed](https://gitlab.com/zbed) - Brazilian Portuguese** | **@[sigbjokj](https://gitlab.com/sigbjokj), @[sssandum](https://gitlab.com/sssandum) - Norwegian**
 
  **@[Ivan](https://gitlab.com/vantu5z), @[Ser82-png](https://gitlab.com/Ser82-png) - Russian** | **@[gkkulik](https://gitlab.com/gkkulik) - Silesian** | **@[vikaig](https://gitlab.com/vikaig) - Ukrainian** | **@[jordim](https://gitlab.com/jordim) - Catalan** | **@[aylinux](https://gitlab.com/aylinux) - Turkish**
  
 
-**@[MorganAntonsson](https://gitlab.com/MorganAntonsson) - Swedish** | **@[jiri.doubravsky](https://gitlab.com/jiri.doubravsky) - Czech** | **@[juanlucer](https://gitlab.com/juanlucer) - Spanish** | **@[plesry](https://gitlab.com/plesry) - Chinese (Taiwan)** | **@[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi) - Italian**
+**@[MorganAntonsson](https://gitlab.com/MorganAntonsson) - Swedish** | **@[jiri.doubravsky](https://gitlab.com/jiri.doubravsky), @[panmourovaty ](https://gitlab.com/panmourovaty) - Czech** | **@[juanlucer](https://gitlab.com/juanlucer) - Spanish** | **@[plesry](https://gitlab.com/plesry) - Chinese (Taiwan)** | **@[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi) - Italian**
 
 **@[skygmin](https://gitlab.com/skygmin) - Simplified Chinese** | **@[Vistaus](https://gitlab.com/Vistaus), @[vinno97](https://gitlab.com/vinno97) - Dutch** | **@[artnay](https://gitlab.com/artnay) - Finnish** |  **@[rimasx](https://gitlab.com/rimasx) - Estonian** | **@[stevendobay](https://gitlab.com/stevendobay) - Hungarian** 
 
@@ -96,7 +87,13 @@ Additional credits:
 
 ArcMenu is available under the terms of the GPL-2.0 license See [`COPYING`](https://gitlab.com/arcmenu/ArcMenu/blob/master/COPYING) for details.
 
-Most of ArcMenu's image assets including, but not limited to, custom menu button icons, wire frame svgs, and custom settings icons, are created by [LinxGem33](https://gitlab.com/LinxGem33) and licensed under; [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+#### Icon Assets - Credits and Licenses
+
+**@[AndyC](https://gitlab.com/LinxGem33)** - Custom menu button icons, wire frame svgs, and custom settings icons. Licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+
+Fallback category icons included in ArcMenu are copied from [Ubuntu Yaru Icons](https://github.com/ubuntu/yaru) and licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+
+#### Distro Icons
 
 **Legal disclaimer for brand icons and trademarks:**
 

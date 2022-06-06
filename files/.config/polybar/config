@@ -402,7 +402,7 @@ click-left = rofi -show power-menu -modi "power-menu:rofi-power-menu --choices=l
 [module/i3]
 type = internal/i3
 
-pin-workspaces = false
+pin-workspaces = true
 enable-click = true
 enable-scroll = true
 strip-wsnumbers = true

@@ -20,7 +20,7 @@ const { RecentFilesSearchProvider } = Me.imports.searchProviders.recentFiles;
 
 const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
-var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult extends MW.ApplicationMenuItem{
+var ListSearchResult = GObject.registerClass(class ArcMenu_ListSearchResult extends MW.ApplicationMenuItem{
     _init(provider, metaInfo, resultsView) {
         let menulayout = resultsView._menuLayout;
         let app = appSys.lookup_app(metaInfo['id']);
@@ -37,7 +37,7 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         this.layout = this._settings.get_enum('menu-layout');
 
         if(this.provider.id === 'org.gnome.Nautilus.desktop' || this.provider.id === 'arcmenu.recent-files')
-            this.parentFolderPath = this.metaInfo['description'];
+            this.folderPath = this.metaInfo['description'];
 
         let highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
         if(highlightSearchResultTerms){
@@ -91,7 +91,7 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
     }
 });
 
-var AppSearchResult = GObject.registerClass(class Arc_Menu_AppSearchResult extends MW.ApplicationMenuItem{
+var AppSearchResult = GObject.registerClass(class ArcMenu_AppSearchResult extends MW.ApplicationMenuItem{
     _init(provider, metaInfo, resultsView) {
         let menulayout = resultsView._menuLayout;
         let app = appSys.lookup_app(metaInfo['id']) || appSys.lookup_app(provider.id);
@@ -526,8 +526,6 @@ var SearchResults = GObject.registerClass({
 
         this.recentFilesManager.destroy();
         this.recentFilesManager = null;
-
-        this._content.destroy_all_children();
     }
 
     _reloadRemoteProviders() {
@@ -761,23 +759,6 @@ var SearchResults = GObject.registerClass({
         return this._defaultResult;
     }
 
-    getProviders(){
-        return this._providers;
-    }
-
-    setProvider(providerID){
-        if(!this._oldProviders)
-            this._oldProviders = this._providers;
-        this._clearDisplay();
-        this._providers = this._oldProviders;
-        if(providerID === Constants.CategoryType.ALL_PROGRAMS){
-            this._providers = this._providers.filter(p => (p.appInfo ? false : true));
-        }
-        else if(providerID !== Constants.CategoryType.SEARCH_RESULTS){
-            this._providers = this._providers.filter(p => (p.appInfo ? p.appInfo.get_id() : p) === providerID);
-        }
-    }
-
     _setSelected(result, selected) {
         if(!result)
             return;
@@ -800,7 +781,7 @@ var SearchResults = GObject.registerClass({
     }
 });
 
-var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProviderInfo extends MW.ArcMenuPopupBaseMenuItem{
+var ArcSearchProviderInfo = GObject.registerClass(class ArcMenu_ArcSearchProviderInfo extends MW.ArcMenuPopupBaseMenuItem{
     _init(provider, menuLayout) {
         super._init(menuLayout);
         this.provider = provider;

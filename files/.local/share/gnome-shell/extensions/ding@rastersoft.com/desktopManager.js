@@ -44,6 +44,11 @@ var DesktopManager = class {
     constructor(mainApp, desktopList, codePath, asDesktop, primaryIndex) {
 
         this.mainApp = mainApp;
+        if (asDesktop) {
+            this.mainApp.hold(); // Don't close the application if there are no desktops
+            this._hold_active = true;
+        }
+        this._selectedFiles = null;
 
         this._premultiplied = false;
         try {
@@ -213,7 +218,6 @@ var DesktopManager = class {
         } catch(e) {
             this._errorWindow = new ShowErrorPopup.ShowErrorPopup(_("Nautilus File Manager not found"),
                                                                   _("The Nautilus File Manager is mandatory to work with Desktop Icons NG."),
-                                                                  null,
                                                                   true);
         }
         this._pendingDropFiles = {};
@@ -227,6 +231,10 @@ var DesktopManager = class {
                 this._forcedExit = true;
                 if (this._desktopEnumerateCancellable) {
                     this._desktopEnumerateCancellable.cancel();
+                }
+                if (this._hold_active) {
+                    this.mainApp.release();
+                    this._hold_active = false;
                 }
                 return false;
             });
@@ -753,7 +761,6 @@ var DesktopManager = class {
                         let windowError = new ShowErrorPopup.ShowErrorPopup(
                             _("Clear Current Selection before New Search"),
                             null,
-                            null,
                             true);
                         windowError.timeoutClose(2000);
                         return true;
@@ -1089,7 +1096,7 @@ var DesktopManager = class {
         if (this._readingDesktopFiles) {
             // just notify that the files changed while being read from the disk.
             this._desktopFilesChanged = true;
-            if (this._desktopEnumerateCancellable) {
+            if (this._desktopEnumerateCancellable && ! this._forceDraw) {
                 this._desktopEnumerateCancellable.cancel();
                 this._desktopEnumerateCancellable = null;
             }
@@ -1097,6 +1104,8 @@ var DesktopManager = class {
         }
 
         this._readingDesktopFiles = true;
+        this._forceDraw = false;
+        this._lastDesktopUpdateRequest = GLib.get_monotonic_time();
         let fileList;
         while(true) {
             this._desktopFilesChanged = false;
@@ -1108,12 +1117,24 @@ var DesktopManager = class {
             if (this._forcedExit) {
                 return;
             }
-            if (!this._desktopFilesChanged && (fileList !== null)) {
-                break;
+            if (fileList !== null) {
+                 if (!this._desktopFilesChanged) {
+                     break;
+                }
+                if (this._forceDraw) {
+                    this._drawDesktop(fileList);
+                    this._lastDesktopUpdateRequest = GLib.get_monotonic_time();
+                }
             }
             await DesktopIconsUtil.waitDelayMs(500);
+            if ((GLib.get_monotonic_time() - this._lastDesktopUpdateRequest) > 1000000) {
+                this._forceDraw = true;
+            } else {
+                this._forceDraw = false;
+            }
         }
         this._readingDesktopFiles = false;
+        this._forceDraw = false;
         this._drawDesktop(fileList);
     }
 
@@ -1132,7 +1153,7 @@ var DesktopManager = class {
                     this._desktopEnumerateCancellable = null;
                     try {
                         let fileEnum = source.enumerate_children_finish(result);
-                        if (this._desktopFilesChanged) {
+                        if (this._desktopFilesChanged && ! this._forceDraw) {
                             resolve(null);
                             return;
                         }
@@ -1198,9 +1219,34 @@ var DesktopManager = class {
     }
 
     _drawDesktop(fileList) {
+        this._selectedFiles = this.getCurrentSelection(true);
+        if (this._renameWindow) {
+            // disconnect the popup from the fileItem to avoid it being
+            // destroyed when the fileItem is removed from the desktop
+            this._renameWindow.updateFileItem(null);
+        }
         this._removeAllFilesFromGrids();
         this._fileList = fileList;
+        // Select the files that were selected before the repaint
+        if (this._selectedFiles) {
+            for(let fileItem of fileList) {
+                if (this._selectedFiles.includes(fileItem.uri)) {
+                    fileItem.setSelected();
+                }
+            }
+        }
+        if (this._renameWindow) {
+            // assign the popover to the new fileItem
+            let file = fileList.filter(f => f.fileName == this._renamingFile)[0];
+            if (file) {
+                file.setRenamePopup(this._renameWindow);
+            } else {
+                this._renameWindow.closeWindow();
+            }
+        }
         this._placeAllFilesOnGrids();
+        this.fileItemMenu.refreshedIcons();
+        this._selectedFiles = null;
     }
 
     _placeAllFilesOnGrids(redisplay=false) {
@@ -1219,6 +1265,7 @@ var DesktopManager = class {
     _addFilesToDesktop(fileList, storeMode) {
         let outOfDesktops = [];
         let notAssignedYet = [];
+
         // First, add those icons that fit in the current desktops
         for(let fileItem of fileList) {
             if (fileItem.savedCoordinates == null) {
@@ -1457,15 +1504,26 @@ var DesktopManager = class {
         return count;
     }
 
+    getFileItemFromURI(uri) {
+        for (let item of this._fileList) {
+            if (uri == item.uri) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     doRename(fileItem, allowReturnOnSameName) {
-        if (!fileItem.canRename) {
+        if (!fileItem || !fileItem.canRename) {
             return;
         }
         this.unselectAll();
         if (!this._renameWindow) {
+            this._renamingFile = fileItem.fileName;
             this._renameWindow = new AskRenamePopup.AskRenamePopup(fileItem, allowReturnOnSameName, () => {
                 this._renameWindow = null;
                 this.newFolderDoRename = null;
+                this._renamingFile = null;
             });
         }
     }

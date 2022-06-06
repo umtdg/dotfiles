@@ -51,13 +51,13 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             style: "margin: 5px 0px 0px 0px;"
         });
         this.runnerTweaksButton = new MW.RunnerTweaksButton(this);
-        this.runnerTweaksButton.actor.x_expand = false;
-        this.runnerTweaksButton.actor.y_expand = true;
-        this.runnerTweaksButton.actor.y_align = this.searchBox.y_align = Clutter.ActorAlign.CENTER;
-        this.runnerTweaksButton.actor.x_align = Clutter.ActorAlign.CENTER;
-        this.runnerTweaksButton.actor.style = "margin: 0px 0px 0px 6px;";
+        this.runnerTweaksButton.x_expand = false;
+        this.runnerTweaksButton.y_expand = true;
+        this.runnerTweaksButton.y_align = this.searchBox.y_align = Clutter.ActorAlign.CENTER;
+        this.runnerTweaksButton.x_align = Clutter.ActorAlign.CENTER;
+        this.runnerTweaksButton.style = "margin: 0px 0px 0px 6px;";
 
-        this.topBox.add_child(this.searchBox.actor);
+        this.topBox.add_child(this.searchBox);
         this.topBox.add_child(this.runnerTweaksButton);
         this.mainBox.add_child(this.topBox);
 
@@ -72,7 +72,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         });
 
         this.mainBox.add_child(this.applicationsScrollBox);
-        this.applicationsBox = new St.BoxLayout({ 
+        this.applicationsBox = new St.BoxLayout({
             vertical: true,
             style: "margin: 5px 0px 0px 0px;"
         });
@@ -102,14 +102,13 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         let activeMenuItemSet = false;
         for (let i = 0; i < appList.length; i++) {
             let item = appList[i];
-            if(item.actor.get_parent())
-                item.actor.get_parent().remove_child(item.actor);
-            if (!item.actor.get_parent()) 
-                this.applicationsBox.add_actor(item.actor);
+            if(item.get_parent())
+                item.get_parent().remove_child(item);
+            this.applicationsBox.add_actor(item);
             if(!activeMenuItemSet){
-                activeMenuItemSet = true;  
+                activeMenuItemSet = true;
                 this.activeMenuItem = item;
-            }    
+            }
         }
     }
 
@@ -130,7 +129,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     updateLocation(){
         this.arcMenu._boxPointer.setSourceAlignment(0.5);
         this.arcMenu._arrowAlignment = 0.5;
-        
+
         let rect = Main.layoutManager.getWorkAreaForMonitor(this._getMonitorIndexForPlacement());
 
         //Position the runner menu in the center of the current monitor, at top of screen.

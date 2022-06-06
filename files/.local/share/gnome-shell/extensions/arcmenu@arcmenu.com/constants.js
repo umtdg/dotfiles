@@ -50,6 +50,7 @@ var PrefsVisiblePage = {
     CUSTOMIZE_MENU: 5,
     RUNNER_TWEAKS: 6,
     GENERAL: 7,
+    MENU_THEME: 8
 }
 
 var DefaultMenuViewTognee = {
@@ -61,11 +62,11 @@ var SoftwareManagerIDs = ['org.manjaro.pamac.manager.desktop', 'pamac-manager.de
                             'snap-store_ubuntu-software.desktop', 'snap-store_snap-store.desktop', 'org.gnome.Software.desktop'];
 
 var Categories = [
-    {CATEGORY: CategoryType.FAVORITES, NAME: _("Favorites"), ICON: 'emblem-favorite-symbolic', FULL_COLOR_ICON: 'emblem-favorite'},
-    {CATEGORY: CategoryType.FREQUENT_APPS, NAME: _("Frequent Apps"), ICON: 'user-bookmarks-symbolic', FULL_COLOR_ICON: 'user-bookmarks'},
-    {CATEGORY: CategoryType.ALL_PROGRAMS, NAME: _("All Apps"), ICON: 'view-grid-symbolic', FULL_COLOR_ICON: 'view-grid-symbolic'},
-    {CATEGORY: CategoryType.PINNED_APPS, NAME: _("Pinned Apps"), ICON: 'view-pin-symbolic', FULL_COLOR_ICON: 'view-pin-symbolic'},
-    {CATEGORY: CategoryType.RECENT_FILES, NAME: _("Recent Files"), ICON: 'document-open-recent-symbolic', FULL_COLOR_ICON: 'document-open-recent'}
+    {CATEGORY: CategoryType.FAVORITES, NAME: _("Favorites"), ICON: 'emblem-favorite-symbolic'},
+    {CATEGORY: CategoryType.FREQUENT_APPS, NAME: _("Frequent Apps"), ICON: 'user-bookmarks-symbolic'},
+    {CATEGORY: CategoryType.ALL_PROGRAMS, NAME: _("All Apps"), ICON: 'view-grid-symbolic'},
+    {CATEGORY: CategoryType.PINNED_APPS, NAME: _("Pinned Apps"), ICON: 'view-pin-symbolic'},
+    {CATEGORY: CategoryType.RECENT_FILES, NAME: _("Recent Files"), ICON: 'document-open-recent-symbolic'}
 ]
 
 var TooltipLocation = {
@@ -209,7 +210,7 @@ var MenuButtonAppearance = {
 };
 
 var MenuIcon = {
-    ARC_MENU: 0,
+    ARCMENU_ICON: 0,
     DISTRO_ICON: 1,
     CUSTOM: 2
 };
@@ -224,17 +225,13 @@ var PowerType = {
     HIBERNATE: 6,
 };
 
-var SleepIcon = {
-    PATH: '/media/icons/menu_icons/sleep-symbolic.svg'
-};
-
 var PowerOptions = [
-    { TYPE: PowerType.LOGOUT, ICON: 'application-exit-symbolic', NAME: _("Log Out") },
+    { TYPE: PowerType.LOGOUT, ICON: 'system-log-out-symbolic', NAME: _("Log Out") },
     { TYPE: PowerType.LOCK, ICON: 'changes-prevent-symbolic', NAME: _("Lock") },
     { TYPE: PowerType.RESTART, ICON: 'system-reboot-symbolic', NAME: _("Restart") },
     { TYPE: PowerType.POWER_OFF, ICON: 'system-shutdown-symbolic', NAME: _("Power Off") },
     { TYPE: PowerType.SUSPEND, ICON: 'media-playback-pause-symbolic', NAME: _("Suspend") },
-    { TYPE: PowerType.HYBRID_SLEEP, ICON: Me.path + SleepIcon.PATH, NAME: _("Hybrid Sleep") },
+    { TYPE: PowerType.HYBRID_SLEEP, ICON: 'weather-clear-night-symbolic', NAME: _("Hybrid Sleep") },
     { TYPE: PowerType.HIBERNATE, ICON: 'document-save-symbolic', NAME: _("Hibernate") },
 ];
 
@@ -352,9 +349,8 @@ var MenuLayout = {
     TOGNEE: 14,
     PLASMA: 15,
     WINDOWS: 16,
-    LAUNCHER: 17,
-    ELEVEN: 18,
-    AZ: 19,
+    ELEVEN: 17,
+    AZ: 18,
 };
 
 var TraditionalMenus = [
@@ -380,7 +376,6 @@ var TouchMenus = [
     { IMAGE: 'chromebook-layout-symbolic', TITLE: _('Chromebook'), LAYOUT: MenuLayout.CHROMEBOOK}];
 
 var LauncherMenus = [
-    { IMAGE: 'launcher-layout-symbolic', TITLE: _('Launcher'), LAYOUT: MenuLayout.LAUNCHER},
     { IMAGE: 'runner-layout-symbolic', TITLE: _('Runner'), LAYOUT: MenuLayout.RUNNER},
     { IMAGE: 'gnomeoverview-layout-symbolic', TITLE: _('GNOME Overview'), LAYOUT: MenuLayout.GNOME_OVERVIEW}];
 
@@ -398,10 +393,6 @@ var MenuStyles = {
 };
 
 var ArcMenuSettingsCommand = 'gnome-extensions prefs arcmenu@arcmenu.com';
-
-var HamburgerIcon = {
-    PATH: '/media/icons/menu_icons/hamburger-symbolic.svg'
-};
 
 var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by ArcMenu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer."</i>'+
                                 '\n\n•   <b>Ubuntu®</b> - Ubuntu name and Ubuntu logo are trademarks of Canonical© Ltd.'+
@@ -427,8 +418,8 @@ var CONTRIBUTORS = '<b>Thank you to all contributors and translators</b>\n\n' +
                     '<b><a href="https://gitlab.com/arcmenu/ArcMenu#contributors">Contributors</a></b> - ' +
                     '<b><a href="https://gitlab.com/arcmenu/ArcMenu#translators">Translators</a></b>';
 var ARTWORK = '<b>ArcMenu Artwork</b>\n\n' +
-                '<b><a href="https://gitlab.com/LinxGem33">@AndyC</a></b> - Menu Icons, Settings Icons, Wire-Frame Icons, other ArcMenu Assets' +
-                '\n\n<b><a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a></b> - Menu Icons, Wire-Frame Icons';
+                '<b><a href="https://gitlab.com/LinxGem33">@AndyC</a></b> - Majority of icons in ArcMenu and Settings, plus other ArcMenu Assets' +
+                '\n\n<b><a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a></b> - Some ArcMenu and Settings Icons';
 
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +
