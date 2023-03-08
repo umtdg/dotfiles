@@ -5,7 +5,7 @@ set -e
 echo -e "\n\nBootstrap WM\n"
 
 distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
-[[ "$distro" != 'arch' ]] && { echo "Skipping on $distro"; exit 1; }
+[[ "$distro" != 'arch' ]] && { echo "Skipping on $distro"; exit 0; }
 
 packages=(
     sddm i3-gaps
