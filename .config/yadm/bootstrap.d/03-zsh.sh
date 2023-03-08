@@ -4,21 +4,33 @@ set -e
 
 distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
 
+function git_clone() {
+    url="$1"
+    dir="$2"
+    shift 2
+
+    if [[ -d "$dir" ]]; then
+        echo "Already installed"
+    else
+        git clone "$url" "$dir" "$@"
+    fi
+}
+
 function ubuntu_install() {
     echo -e "Installing Oh My Zsh\n"
-    git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+    git_clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
 
     echo -e "\nInstalling powerlevel10k\n"
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    git_clone https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k --depth=1
 
     echo -e "\nInstalling zsh-syntax-highlighting\n"
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    git_clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
     echo -e "\nInstalling zsh-autosuggestions\n"
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    git_clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 
     echo -e "\nInstalling zsh-fzf-plugin\n"
-    git clone https://github.com/unixorn/fzf-zsh-plugin.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-zsh-plugin
+    git_clone https://github.com/unixorn/fzf-zsh-plugin.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-zsh-plugin
 }
 
 function arch_install() {
