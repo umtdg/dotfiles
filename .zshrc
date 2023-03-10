@@ -47,7 +47,7 @@ if [[ "$distro" == 'arch' ]]; then
 fi
 
 # Less colors
-export LESS='-NRFX --use-color -Dd+r$Du+b'
+export LESS='-iNRF --use-color -Dd+r$Du+b'
 export LESS_TERMCAP_mb=$'\E[1;31m'
 export LESS_TERMCAP_md=$'\E[1;36m'
 export LESS_TERMCAP_me=$'\E[0m'
