@@ -440,7 +440,7 @@ label = " %percentage%%"
 
 [module/network]
 type = internal/network
-interface = enp6s0
+interface = enp5s0
 
 interval = 1.0
 accumulate-stats = true
