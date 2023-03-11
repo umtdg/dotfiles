@@ -11,7 +11,7 @@ function ubuntu_install() {
 
 function arch_install() {
     sudo pacman -S --noconfirm --needed \
-        base-devel git wget python gnupg openssh \
+        pacman-contrib base-devel git wget python gnupg openssh \
         xorg xf86-video-vesa xf86-input-libinput
 
     [[ -f '/usr/bin/yay' ]] && return 0

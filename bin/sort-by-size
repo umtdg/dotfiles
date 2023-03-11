@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+sudo du -chs "$1"/* 2>/dev/null | sort -hr | head -10

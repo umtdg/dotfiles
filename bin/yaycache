@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+paccache -rvk2 -c /var/cache/pacman/pkg $(find $HOME/.cache/yay -maxdepth 1 -mindepth 1 -type d | awk '{print "-c " $1}')

@@ -1,0 +1,72 @@
+#!/usr/bin/bash
+
+function list_containers() {
+    for f in $(ls -1 "$container_path"); do
+        filename="$(basename $f)"
+        echo "${filename%.*}"
+    done
+}
+
+function usage() {
+    echo "Usage: $0 [OPTIONS...]"
+    echo ''
+    echo 'Options:'
+    echo '  -c | -f | -n    Name of the VeraCrypt container'
+    echo '  -m              Where to mount the container'
+    echo '  -u              Unmount instead of mount'
+    echo '  -l              Print list of VeraCrypt containers'
+    echo '  -L              Print list of mounted VeraCrypt containers'
+    echo '  -h              Show this message and exit'
+}
+
+container_name=""
+container_path="$HOME/ssd500/VeraCryptContainers"
+container_file=""
+mount_point=""
+unmount=false
+
+args="$(getopt -o c:f:n:m:ulLh --name "$0" -- "$@")"
+eval set -- "$args"
+
+while true; do
+    case "$1" in
+        -c | -f | -n) container_name="$2"; shift 2; ;;
+        -m) mount_point="$2"; shift 2; ;;
+        -u) unmount=true; shift; ;;
+        -l) list_containers; exit 0; ;;
+        -L) veracrypt -t -l; exit 0; ;;
+        -h) usage; exit 0; ;;
+        --) shift; break; ;;
+        *) echo "Unknown option $1"; exit 1; ;;
+    esac
+done
+
+
+if [ -z "$mount_point" ]; then
+    mount_point="$HOME/$container_name"
+fi
+
+case "$container_name" in
+    *.hc) ;;
+    *) container_name="$container_name.hc"; ;;
+esac
+
+container_file="$container_path/$container_name"
+if [ ! -f "$container_file" ]; then
+    echo "$container_file is not a file"
+    exit 1
+fi
+
+if [ "$unmount" == "false" ]; then
+    if [ ! -d "$mount_point" ]; then
+        echo "$mount_point is not a directory"
+        exit 2
+    fi
+
+    echo "Mounting $container_file to $mount_point"
+    sudo veracrypt -t -k "" --pim=0 --protect-hidden=no "$container_file" "$mount_point"
+else
+    echo "Unmounting $container_file"
+    sudo veracrypt -t -d "$container_file"
+fi
+
