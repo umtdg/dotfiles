@@ -18,7 +18,7 @@ packages=(
     thunar thunar-volman thunar-archive-plugin
     polkit polkit-qt5 polkit-gnome
     sddm-theme-sugar-candy-git sweet-gtk-theme sweet-gtk-theme-dark
-    ttf-iosevka-nerd
+    ttf-iosevka-nerd ttf-meslo-nerd ttf-meslo-nerd-font-powerlevel10k
 )
 opts=(
     -S --needed
