@@ -43,7 +43,7 @@ echo -e "\n\nExtracting Papirus icons"
 tar -xzf "$icon_dir/Papirus.tar.gz" -C "$icon_dir"
 
 echo -e "\nExtracting Sweet cursor"
-tar -xzf "$icon_dir/Sweet-cursor.tar.gz" -C "$icon_dir"
+tar -xzf "$icon_dir/Sweet-cursors.tar.gz" -C "$icon_dir"
 
 echo -e "\nExtracting Sweet-mars theme"
 tar -xzf "$theme_dir/Sweet-mars.tar.gz" -C "$theme_dir"
