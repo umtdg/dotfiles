@@ -2,6 +2,10 @@
 
 set -e
 
+function write_file_sudo() {
+    echo "$1" | sudo tee -a "$2" >/dev/null
+}
+
 echo -e "\n\nBootstrap WM\n"
 
 distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
@@ -38,15 +42,35 @@ icon_dir="$HOME/.icons"
 theme_dir="$HOME/.themes"
 mkdir -p "$icon_dir" "$theme_dir"
 
-echo -e "\n\nExtracting Papirus icons"
-tar -xzf "$icon_dir/Papirus.tar.gz" -C "$icon_dir"
+if [[ ! -d "$icon_dir/Papirus" ]]; then
+    echo -e "\n\nExtracting Papirus icons"
+    tar -xzf "$icon_dir/Papirus.tar.gz" -C "$icon_dir"
+fi
 
-echo -e "\nExtracting Sweet cursor"
-tar -xzf "$icon_dir/Sweet-cursors.tar.gz" -C "$icon_dir"
+if [[ ! -d "$icon_dir/Sweet-cursors" ]]; then
+    echo -e "\nExtracting Sweet cursors"
+    tar -xzf "$icon_dir/Sweet-cursors.tar.gz" -C "$icon_dir"
+fi
 
-echo -e "\nExtracting Sweet-mars theme"
-tar -xzf "$theme_dir/Sweet-mars.tar.gz" -C "$theme_dir"
+if [[ ! -d "$theme_dir/Sweet-mars" ]]; then
+    echo -e "\nExtracting Sweet-mars theme"
+    tar -xzf "$theme_dir/Sweet-mars.tar.gz" -C "$theme_dir"
+fi
 
 echo -e "\nEnabling sddm.service"
 sudo systemctl enable sddm.service
+
+echo -e "\nCopying SDDM config"
+sudo install -Dm 644 -t /etc/sddm.conf.d ~/sddm.conf.d/*
+
+if [[ "$HOSTNAME" == 'naboo' ]]; then
+    echo -e "\nCreating libinput config"
+    file='/etc/X11/xorg.conf.d/30-touchpad.conf'
+    write_file_sudo 'Section "InputClass"' "$file"
+    write_file_sudo "    Identifier \"$(sudo libinput list-devices | grep -i '^device:.*touchpad' | cut -d: -f2 | xargs)\"" "$file"
+    write_file_sudo '    Driver "libinput"' "$file"
+    write_file_sudo '    Option "Tapping" "on"' "$file"
+    write_file_sudo '    Option "NaturalScrolling" "true"' "$file"
+    write_file_sudo 'EndSection' "$file"
+fi
 

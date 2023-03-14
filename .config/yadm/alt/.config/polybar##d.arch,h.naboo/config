@@ -77,7 +77,7 @@ gpu-power = ${colors.nord12}
 ; |_.__/ \__,_|_|  |___/
 
 [bar/mainbar]
-monitor = "HDMI-1"
+monitor = "eDP-1"
 
 enable-ipc = true
 height = 25
@@ -98,7 +98,7 @@ font-3 = "Iosevka Nerd Font:pixelsize=9;3"
 font-4 = "Iosevka Nerd Font:pixelsize=9;3"
 font-5 = "Iosevka Nerd Font:pixelsize=9;3"
 
-modules-right = keyboard notification pulseaudio sep time sep powermenu
+modules-right = network sep keyboard notification pulseaudio sep time sep powermenu
 modules-left = launcher sep i3 sep title
 
 override-redirect = false
@@ -172,7 +172,7 @@ content = "   "
 content-foreground = ${colors.powermenu}
 content-padding = 0
 
-click-left = /home/skywalker/.config/rofi/bin/powermenu
+click-left = /home/ahsoka/.config/rofi/bin/powermenu
 
 [module/i3]
 type = internal/i3
@@ -245,7 +245,7 @@ label = " %percentage%%"
 
 [module/network]
 type = internal/network
-interface = enp5s0
+interface = wlan0
 
 interval = 1.0
 accumulate-stats = true
