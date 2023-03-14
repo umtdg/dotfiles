@@ -63,6 +63,9 @@ sudo systemctl enable sddm.service
 echo -e "\nCopying SDDM config"
 sudo install -Dm 644 -t /etc/sddm.conf.d ~/sddm.conf.d/*
 
+echo -e "\nChange SDDM theme background"
+HOME_ESCAPED=${HOME//\//\\\/}; sudo sed -i "s/^Background=\(.*\)$/Background=\"$HOME_ESCAPED\/.background\"/g" /usr/share/sddm/themes/Sugar-Candy/theme.conf
+
 if [[ "$HOSTNAME" == 'naboo' ]]; then
     echo -e "\nCreating libinput config"
     file='/etc/X11/xorg.conf.d/30-touchpad.conf'
