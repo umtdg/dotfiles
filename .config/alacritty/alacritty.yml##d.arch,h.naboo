@@ -1,0 +1,28 @@
+import:
+  - ~/.config/alacritty/theme.yml
+
+live_config_reload: true
+
+env:
+  TERM: xterm-256color
+
+window:
+  dynamic_title: true
+
+font:
+  normal:
+    family: MesloLGS NF
+    style: Regular
+
+  bold:
+    family: MesloLGS NF
+    style: Bold
+
+  italic:
+    family: MesloLGS NF
+    style: Italic
+
+  size: 8
+
+shell:
+  program: /bin/zsh
