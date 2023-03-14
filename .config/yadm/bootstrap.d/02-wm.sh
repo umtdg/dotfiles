@@ -10,10 +10,10 @@ distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
 packages=(
     sddm i3-gaps picom
     i3lock i3lock-fancy-multimonitor
-    xorg xorg-setxkbmap xkg-switch
+    xorg xorg-setxkbmap xkb-switch
     xf86-video-vesa xf86-input-libinput
     polybar rofi dunst feh flameshot shutter alacritty
-    firefox thunderbird copyq megasync
+    firefox thunderbird copyq megasync-bin
     teams signal-desktop whatsapp-nativefier spotify discord
     thunar thunar-volman thunar-archive-plugin
     polkit polkit-qt5 polkit-gnome
