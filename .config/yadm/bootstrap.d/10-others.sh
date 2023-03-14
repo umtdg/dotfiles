@@ -12,3 +12,5 @@ yay -S --noconfirm --noeditmenu --nodiffmenu --nocleanmenu --nocleanafter \
     veracrypt vmware-workstation vmware-keymaps \
     docker docker-buildx docker-compose docker-credential-pass
 
+sudo usermod -aG docker $USER
+
