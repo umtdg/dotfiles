@@ -5,7 +5,7 @@ set -e
 echo -e "\n\nBootstrapping misc apps\n"
 
 distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
-[[ "$distro" != 'arch' ]] && { echo "Skipping on '$distro'" }
+[[ "$distro" != 'arch' ]] && { echo "Skipping on '$distro'"; exit 0; }
 
 yay -S --noconfirm --noeditmenu --nodiffmenu --nocleanmenu --nocleanafter \
     ffmpeg vlc openvpn openvpn3 1password gitkraken expressvpn \
