@@ -12,7 +12,7 @@ function ubuntu_install() {
 function arch_install() {
     sudo pacman -S --noconfirm --needed \
         pacman-contrib base-devel git wget python gnupg openssh \
-        xorg xf86-video-vesa xf86-input-libinput
+        xorg xf86-video-vesa xf86-input-libinput mlocate
 
     [[ -f '/usr/bin/yay' ]] && return 0
     [[ -d '/tmp/yay' ]] && rm -rf '/tmp/yay'
@@ -28,4 +28,7 @@ function arch_install() {
 
 echo -e "\n\nBootstrap general distro stuff\n"
 ${distro}_install
+
+echo -e "\nCopying Pacman hooks"
+sudo install -Dm 644 /etc/pacman.d/hooks ~/pacman_hooks/*.hook
 

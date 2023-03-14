@@ -18,7 +18,6 @@ packages=(
     thunar thunar-volman thunar-archive-plugin
     polkit polkit-qt5 polkit-gnome
     sddm-theme-sugar-candy-git sweet-gtk-theme sweet-gtk-theme-dark
-    ttf-iosevka-nerd ttf-meslo-nerd ttf-meslo-nerd-font-powerlevel10k
 )
 opts=(
     -S --needed
@@ -48,5 +47,6 @@ tar -xzf "$icon_dir/Sweet-cursors.tar.gz" -C "$icon_dir"
 echo -e "\nExtracting Sweet-mars theme"
 tar -xzf "$theme_dir/Sweet-mars.tar.gz" -C "$theme_dir"
 
+echo -e "\nEnabling sddm.service"
 sudo systemctl enable sddm.service
 

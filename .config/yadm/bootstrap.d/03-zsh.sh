@@ -51,5 +51,6 @@ function arch_install() {
 echo -e "\n\nBootstrap ZSH\n"
 ${distro}_install
 
+echo -e "\nChanging shell"
 sudo chsh -s /usr/bin/zsh $USER
 
