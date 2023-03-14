@@ -98,37 +98,10 @@ font-3 = "Iosevka Nerd Font:pixelsize=9;3"
 font-4 = "Iosevka Nerd Font:pixelsize=9;3"
 font-5 = "Iosevka Nerd Font:pixelsize=9;3"
 
-modules-right = keyboard sep cpu sep memory sep fs_root fs_localdisk sep network sep time sep powermenu
+modules-right = keyboard notification pulseaudio sep time sep powermenu
 modules-left = launcher sep i3 sep title
-modules-center = notification pulseaudio sep spotify
 
 override-redirect = false
-
-[bar/secondbar]
-monitor = "HDMI-0"
-
-enable-ipc = true
-height = 25
-width = 100%
-
-background = ${colors.background}
-foreground = ${colors.foreground}
-
-border-top-size = 0
-border-bottom-size = 0
-bordor-color = #0000
-
-line-size = 1
-
-font-0 = "Iosevka Nerd Font:pixelsize=9.7;3"
-font-1 = "Iosevka Nerd Font:pixelsize=9.7;3"
-font-2 = "Iosevka Nerd Font:pixelsize=9.7;3"
-font-3 = "Iosevka Nerd Font:pixelsize=9.7;3"
-font-4 = "Iosevka Nerd Font:pixelsize=9.7;3"
-font-5 = "Iosevka Nerd Font:pixelsize=9.7;3"
-
-modules-right = cputemp mobotemp cpufan1 cpufan2 sep gputemp gpufan gpupower sep nvme-composite nvme-sensor1 nvme-sensor2 sep time sep powermenu
-modules-left = launcher sep i3 sep title
 
 tray-position = center
 tray-offset-x = 0
@@ -192,140 +165,6 @@ format-muted-padding = 0
 label-volume = " %percentage%%"
 label-muted = " Muted"
 
-[module/cputemp]
-type = internal/temperature
-
-interval = 1
-hwmon-path = ${env:CPUTEMP}
-warn-temperature = 70
-
-label = " ﬙ %temperature-c%"
-format =  <label>
-format-prefix = "CPU"
-format-foreground = ${colors.cpu-temp}
-format-prefix-foreground = ${colors.cpu-temp-pfx}
-
-label-warn = " ﬙ %temperature-c%"
-format-warn = <label-warn>
-format-warn-prefix = CPU
-format-warn-foreground = ${colors.cpu-temp-warn}
-
-[module/mobotemp]
-type = internal/temperature
-
-interval = 1
-hwmon-path = ${env:MOBOTEMP}
-warn-temperature = 75
-
-label = " ﮕ %temperature-c% "
-format =  <label>
-format-foreground = ${colors.cpu-temp}
-
-label-warn = " ﬙ %temperature-c% "
-format-warn = <label-warn>
-format-warn-foreground = ${colors.cpu-temp-warn}
-
-[module/cpufan1]
-type = custom/script
-
-exec = ${env:CPUFAN_1}
-interval = 1
-
-label = " %output% RPM "
-format = <label>
-format-prefix = 
-format-foreground = ${colors.cpu-fan}
-
-[module/cpufan2]
-type = custom/script
-
-exec = ${env:CPUFAN_2}
-interval = 1
-
-label = " %output% RPM"
-format = <label>
-format-prefix = 
-format-foreground = ${colors.cpu-fan}
-
-[module/gputemp]
-type = custom/script
-
-interval = 1
-exec = nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader
-
-label = " ﬙ %output%°C "
-format =  <label>
-format-prefix = GPU
-format-foreground = ${colors.cpu-temp}
-format-prefix-foreground = ${colors.cpu-temp-pfx}
-
-[module/gpufan]
-type = custom/script
-
-exec = nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits
-interval = 1
-
-label = " %output%% "
-format = <label>
-format-prefix = 
-format-foreground = ${colors.cpu-fan}
-
-[module/gpupower]
-type = custom/script
-
-exec = nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits
-interval = 1
-
-label = " %output% W"
-format = <label>
-format-prefix = 臘
-format-foreground = ${colors.gpu-power}
-
-[module/nvme-composite]
-type = internal/temperature
-
-hwmon-path = ${env:NVME_COMP}
-warn-temperature = 60
-
-label = " C %temperature-c% "
-format = <label>
-format-prefix = NVME
-format-foreground = ${colors.cpu-temp}
-format-prefix-foreground = ${colors.cpu-temp-pfx}
-
-label-warn = " C %temperature-c% "
-format-warn = <label-warn>
-format-warn-prefix = NVME
-format-warn-foreground = ${colors.cpu-temp-warn}
-
-[module/nvme-sensor1]
-type = internal/temperature
-
-hwmon-path = ${env:NVME_1}
-warn-temperature = 60
-
-label = " S1 %temperature-c% "
-format = <label>
-format-foreground = ${colors.cpu-temp}
-
-label-warn = " S1 %temperature-c% "
-format-warn = <label-warn>
-format-warn-foreground = ${colors.cpu-temp-warn}
-
-[module/nvme-sensor2]
-type = internal/temperature
-
-hwmon-path = ${env:NVME_2}
-warn-temperature = 60
-
-label = " S2 %temperature-c% "
-format = <label>
-format-foreground = ${colors.cpu-temp}
-
-label-warn = " S2 %temperature-c% "
-format-warn = <label-warn>
-format-warn-foreground = ${colors.cpu-temp-warn}
-
 [module/powermenu]
 type = custom/text
 
@@ -382,35 +221,6 @@ label-urgent-padding = 1
 
 label-separator = " " 
 
-[module/filesystem]
-type = internal/fs
-
-interval = 30
-
-fixed-values = true
-
-format-mounted = <label-mounted>
-format-mounted-foreground = ${colors.fs-mounted}
-format-mounted-padding = 1
-
-format-unmounted = <label-unmounted>
-format-unmounted-foreground = ${colors.fs-unmounted}
-format-unmounted-padding = 1
-
-[module/fs_root]
-inherit = module/filesystem
-
-mount-0 = /
-label-mounted = R:%percentage_used%%
-label-unmounted = Root
-
-[module/fs_localdisk]
-inherit = module/filesystem
-
-mount-0 = /home/skywalker/localdisk
-label-mounted = LD:%percentage_used%%
-label-unmounted = LD
-
 [module/memory]
 type = internal/memory
 
@@ -458,7 +268,7 @@ label-packetloss-foreground = ${colors.network-packetloss}
 type = internal/xkeyboard
 
 format = <label-layout> <label-indicator>
-format-spacing = 0
+format-spacing = 1
 format-foreground = ${colors.nord11}
 
 blacklist-0 = num lock
