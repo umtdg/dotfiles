@@ -30,5 +30,5 @@ echo -e "\n\nBootstrap general distro stuff\n"
 ${distro}_install
 
 echo -e "\nCopying Pacman hooks"
-sudo install -Dm 644 /etc/pacman.d/hooks ~/pacman_hooks/*.hook
+sudo install -Dm 644 -t /etc/pacman.d/hooks ~/pacman_hooks/*.hook
 
