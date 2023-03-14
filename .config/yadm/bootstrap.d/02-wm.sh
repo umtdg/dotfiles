@@ -48,3 +48,5 @@ tar -xzf "$icon_dir/Sweet-cursors.tar.gz" -C "$icon_dir"
 echo -e "\nExtracting Sweet-mars theme"
 tar -xzf "$theme_dir/Sweet-mars.tar.gz" -C "$theme_dir"
 
+sudo systemctl enable sddm.service
+

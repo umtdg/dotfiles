@@ -13,4 +13,5 @@ yay -S --noconfirm --noeditmenu --nodiffmenu --nocleanmenu --nocleanafter \
     docker docker-buildx docker-compose docker-credential-pass
 
 sudo usermod -aG docker $USER
+# TODO: vmware services
 
