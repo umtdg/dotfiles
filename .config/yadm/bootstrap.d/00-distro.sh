@@ -26,6 +26,8 @@ function arch_install() {
 
     echo -e "\nCopying Pacman hooks"
     sudo install -Dm 644 -t /etc/pacman.d/hooks ~/pacman_hooks/*.hook
+
+    yay --save --nocleanafter --nocleanmenu --nodiffmenu --noeditmenu --combinedupgrade
 }
 
 
