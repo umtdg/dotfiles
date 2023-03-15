@@ -1,3 +1,13 @@
 #!/usr/bin/env bash
 
-paccache -rvk2 -c /var/cache/pacman/pkg $(find $HOME/.cache/yay -maxdepth 1 -mindepth 1 -type d | awk '{print "-c " $1}')
+yay_cache="$(yay -Pg | jq -r .buildDir)"
+pacman_cache='/var/cache/pacman/pkg'
+
+echo "Cache dirs:"
+echo "  $pacman_cache"
+echo "  $yay_cache"
+
+mapfile -t pkgdirs < <(find "$yay_cache" -maxdepth 1 -mindepth 1 -type d)
+pkgidr+=(/var/cache/pacman/pkg)
+
+paccache -rvk2 "${pkgdirs[@]/#/-c}"
