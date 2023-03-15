@@ -23,12 +23,12 @@ function arch_install() {
     popd >/dev/null 2>&1
 
     rm -rf '/tmp/yay'
+
+    echo -e "\nCopying Pacman hooks"
+    sudo install -Dm 644 -t /etc/pacman.d/hooks ~/pacman_hooks/*.hook
 }
 
 
 echo -e "\n\nBootstrap general distro stuff\n"
 ${distro}_install
-
-echo -e "\nCopying Pacman hooks"
-sudo install -Dm 644 -t /etc/pacman.d/hooks ~/pacman_hooks/*.hook
 
