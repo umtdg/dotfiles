@@ -39,13 +39,20 @@ nord13 = #EBCB8B
 nord14 = #A3BE8C
 nord15 = #B48EAD
 
+blue = ${colors.nord10}
+red = ${colors.nord11}
+orange =  ${colors.nord12}
+yellow = ${colors.nord13}
+green = ${colors.nord14}
+magenta = ${colors.nord15}
+
 powermenu = ${colors.nord11}
 
 time = ${colors.nord12}
 
-network-connected = ${colors.nord13}
-network-disconnected = ${colors.nord11}
-network-packetloss = ${colors.nord12}
+network-connected = ${colors.green}
+network-disconnected = ${colors.red}
+network-packetloss = ${colors.yellow}
 
 fs-mounted = ${colors.nord14}
 fs-unmounted = ${colors.nord11}
@@ -53,8 +60,11 @@ fs-unmounted = ${colors.nord11}
 pulse-volume = ${colors.nord14}
 pulse-muted = ${colors.nord11}
 
-memory = ${colors.nord13}
-cpu = ${colors.nord12}
+memory = ${colors.green}
+memory-warn = ${colors.red}
+
+cpu = ${colors.green}
+cpu-warn = ${colors.red}
 
 i3-focused = ${colors.nord8}
 i3-focused-underline = ${colors.nord8}
@@ -98,9 +108,9 @@ font-3 = "Iosevka Nerd Font:pixelsize=9;3"
 font-4 = "Iosevka Nerd Font:pixelsize=9;3"
 font-5 = "Iosevka Nerd Font:pixelsize=9;3"
 
-modules-right = keyboard sep cpu sep memory sep fs_root fs_localdisk sep network sep time sep powermenu
+modules-right = keyboard sep notification pulseaudio sep time sep powermenu
+modules-center = spotify
 modules-left = launcher sep i3 sep title
-modules-center = notification pulseaudio sep spotify
 
 override-redirect = false
 
@@ -127,7 +137,7 @@ font-3 = "Iosevka Nerd Font:pixelsize=9.7;3"
 font-4 = "Iosevka Nerd Font:pixelsize=9.7;3"
 font-5 = "Iosevka Nerd Font:pixelsize=9.7;3"
 
-modules-right = cputemp mobotemp cpufan1 cpufan2 sep gputemp gpufan gpupower sep nvme-composite nvme-sensor1 nvme-sensor2 sep time sep powermenu
+modules-right = cpu cputemp mobotemp memory cpufan1 cpufan2 sep gputemp gpufan gpupower sep network sep time sep powermenu
 modules-left = launcher sep i3 sep title
 
 tray-position = center
@@ -199,15 +209,12 @@ interval = 1
 hwmon-path = ${env:CPUTEMP}
 warn-temperature = 70
 
-label = " ﬙ %temperature-c%"
-format =  <label>
-format-prefix = "CPU"
+label = " %temperature-c%"
+format = <label>
 format-foreground = ${colors.cpu-temp}
 format-prefix-foreground = ${colors.cpu-temp-pfx}
 
-label-warn = " ﬙ %temperature-c%"
-format-warn = <label-warn>
-format-warn-prefix = CPU
+format-warn = <label>
 format-warn-foreground = ${colors.cpu-temp-warn}
 
 [module/mobotemp]
@@ -382,56 +389,37 @@ label-urgent-padding = 1
 
 label-separator = " " 
 
-[module/filesystem]
-type = internal/fs
-
-interval = 30
-
-fixed-values = true
-
-format-mounted = <label-mounted>
-format-mounted-foreground = ${colors.fs-mounted}
-format-mounted-padding = 1
-
-format-unmounted = <label-unmounted>
-format-unmounted-foreground = ${colors.fs-unmounted}
-format-unmounted-padding = 1
-
-[module/fs_root]
-inherit = module/filesystem
-
-mount-0 = /
-label-mounted = R:%percentage_used%%
-label-unmounted = Root
-
-[module/fs_localdisk]
-inherit = module/filesystem
-
-mount-0 = /home/skywalker/localdisk
-label-mounted = LD:%percentage_used%%
-label-unmounted = LD
-
 [module/memory]
 type = internal/memory
 
 interval = 1
+warn-precentage = 90
 
 format = <label>
 format-prefix = 
 format-foreground = ${colors.memory}
 
-label = " %percentage_used%%"
+format-warn = <label>
+format-warn-prefix =  
+format-warn-foreground = ${colors.memory-warn}
+
+label = " %percentage_used%% "
 
 [module/cpu]
 type = internal/cpu
 
 interval = 1
+warn-percentage = 80
 
 format = <label>
-format-prefix = ﬙
+format-prefix = "CPU ﬙ "
 format-foreground = ${colors.cpu}
 
-label = " %percentage%%"
+format-warn = <label>
+format-warn-prefix = "CPU ﬙ "
+format-warn-foreground = ${colors.cpu-warn}
+
+label = "%percentage%%"
 
 [module/network]
 type = internal/network
