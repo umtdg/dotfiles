@@ -84,7 +84,7 @@ i3-urgent-underline = ${colors.nord11}
 monitor = "eDP-1"
 
 enable-ipc = true
-height = 25
+height = 20
 width = 100%
 
 background = ${colors.background}
@@ -102,7 +102,7 @@ font-3 = "Iosevka Nerd Font:pixelsize=9;3"
 font-4 = "Iosevka Nerd Font:pixelsize=9;3"
 font-5 = "Iosevka Nerd Font:pixelsize=9;3"
 
-modules-right = keyboard sep network sep notification pulseaudio sep battery sep time sep powermenu
+modules-right = keyboard sep network sep notification pulseaudio sep backlight sep battery sep time sep powermenu
 modules-left = launcher sep i3 sep title
 
 override-redirect = false
@@ -189,6 +189,17 @@ animation-charging-3 = 
 animation-charging-4 = 
 animation-charging-framerate = 500
 
+[module/backlight]
+type = internal/backlight
+
+card = intel_backlight
+use-actual-brightness = true
+
+format = <label>
+format-prefix = " "
+format-foreground = ${colors.yellow}
+label = "%percentage%%"
+
 [module/pulseaudio]
 type = internal/pulseaudio
 
@@ -205,8 +216,8 @@ format-muted-prefix = " "
 format-muted-foreground = ${colors.pulse-muted}
 format-muted-padding = 0
 
-label-volume = " %percentage%%"
-label-muted = " Muted"
+label-volume = "%percentage%%"
+label-muted = "Muted"
 
 [module/powermenu]
 type = custom/text
@@ -311,14 +322,13 @@ label-packetloss-foreground = ${colors.network-packetloss}
 type = internal/xkeyboard
 
 format = <label-layout> <label-indicator>
-format-spacing = 1
 format-foreground = ${colors.nord11}
 
 blacklist-0 = num lock
 blacklist-1 = scroll lock
 blacklist-2 = caps lock
 
-label-layout = %layout%
+label-layout = "%layout%"
 
 [module/sep]
 type = custom/text
@@ -346,7 +356,7 @@ click-right = "playerctl --player=spotify next"
 type = custom/ipc
 initial = 1
 
-format = "<output> "
+format = "<output>"
 format-foreground = ${colors.nord13}
 
 hook-0 = echo "%{A1:dunstctl set-paused true && polybar-msg action '#notification.next':} %{A}"
