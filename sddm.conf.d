@@ -1,1 +1,0 @@
-.config/yadm/alt/sddm.conf.d##d.arch
