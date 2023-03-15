@@ -39,11 +39,18 @@ nord13 = #EBCB8B
 nord14 = #A3BE8C
 nord15 = #B48EAD
 
+blue = ${colors.nord10}
+red = ${colors.nord11}
+orange =  ${colors.nord12}
+yellow = ${colors.nord13}
+green = ${colors.nord14}
+magenta = ${colors.nord15}
+
 powermenu = ${colors.nord11}
 
-time = ${colors.nord12}
+time = ${colors.nord14}
 
-network-connected = ${colors.nord13}
+network-connected = ${colors.nord14}
 network-disconnected = ${colors.nord11}
 network-packetloss = ${colors.nord12}
 
@@ -53,8 +60,11 @@ fs-unmounted = ${colors.nord11}
 pulse-volume = ${colors.nord14}
 pulse-muted = ${colors.nord11}
 
-memory = ${colors.nord13}
-cpu = ${colors.nord12}
+memory = ${colors.green}
+memory-warn = ${colors.red}
+
+cpu = ${colors.green}
+cpu-warn = ${colors.red}
 
 i3-focused = ${colors.nord8}
 i3-focused-underline = ${colors.nord8}
@@ -63,12 +73,6 @@ i3-unfocused-underline = ${colors.nord10}
 i3-visible = ${colors.nord8}
 i3-urgent = ${colors.nord11}
 i3-urgent-underline = ${colors.nord11}
-
-cpu-temp = ${colors.nord14}
-cpu-temp-warn = ${colors.nord11}
-cpu-temp-pfx = ${colors.nord11}
-cpu-fan = ${colors.nord13}
-gpu-power = ${colors.nord12}
 
 ;  _                    
 ; | |__   __ _ _ __ ___ 
@@ -98,7 +102,7 @@ font-3 = "Iosevka Nerd Font:pixelsize=9;3"
 font-4 = "Iosevka Nerd Font:pixelsize=9;3"
 font-5 = "Iosevka Nerd Font:pixelsize=9;3"
 
-modules-right = network sep keyboard notification pulseaudio sep time sep powermenu
+modules-right = keyboard sep network sep notification pulseaudio sep battery sep time sep powermenu
 modules-left = launcher sep i3 sep title
 
 override-redirect = false
@@ -145,6 +149,45 @@ date = "%a, %d %b %Y"
 
 label = %date% - %time%
 label-background = ${colors.background}
+
+[module/battery]
+type = internal/battery
+
+full-at = 99
+low-at = 15
+battery = BAT0
+adapter = AC
+poll-interval = 1
+
+format-full = <animation-charging> <label-full>
+format-full-foreground = ${colors.nord14}
+
+format-charging = " <animation-charging> <label-charging>"
+format-charging-foreground = ${colors.nord13}
+
+format-discharging = " <animation-discharging> <label-discharging>"
+format-discharging-foreground = ${colors.nord12}
+
+format-low = " <animation-low> <label-low>"
+format-low-foreground = ${colors.nord11}
+
+animation-low-0 = !
+animation-low-1 = 
+animation-low-framerate = 200
+
+animation-discharging-0 = 
+animation-discharging-1 = 
+animation-discharging-2 = 
+animation-discharging-3 = 
+animation-discharging-4 = 
+animation-discharging-framerate = 500
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-framerate = 500
 
 [module/pulseaudio]
 type = internal/pulseaudio
