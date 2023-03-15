@@ -162,13 +162,13 @@ poll-interval = 1
 format-full = <animation-charging> <label-full>
 format-full-foreground = ${colors.nord14}
 
-format-charging = " <animation-charging> <label-charging>"
+format-charging = " <animation-charging>  <label-charging>"
 format-charging-foreground = ${colors.nord13}
 
 format-discharging = " <animation-discharging> <label-discharging>"
 format-discharging-foreground = ${colors.nord12}
 
-format-low = " <animation-low> <label-low>"
+format-low = " <animation-low>  <label-low>"
 format-low-foreground = ${colors.nord11}
 
 animation-low-0 = !
@@ -198,7 +198,7 @@ use-actual-brightness = true
 format = <label>
 format-prefix = " "
 format-foreground = ${colors.yellow}
-label = "%percentage%%"
+label = " %percentage%%"
 
 [module/pulseaudio]
 type = internal/pulseaudio
@@ -216,8 +216,8 @@ format-muted-prefix = " "
 format-muted-foreground = ${colors.pulse-muted}
 format-muted-padding = 0
 
-label-volume = "%percentage%%"
-label-muted = "Muted"
+label-volume = " %percentage%%"
+label-muted = " Muted"
 
 [module/powermenu]
 type = custom/text
@@ -356,7 +356,7 @@ click-right = "playerctl --player=spotify next"
 type = custom/ipc
 initial = 1
 
-format = "<output>"
+format = "<output> "
 format-foreground = ${colors.nord13}
 
 hook-0 = echo "%{A1:dunstctl set-paused true && polybar-msg action '#notification.next':} %{A}"
