@@ -187,6 +187,9 @@ exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-ag
 exec --no-startup-id xset s off
 exec --no-startup-id xset -dpms
 
+# reduce blue light
+exec --no-startup-id redshift -P -O 5000
+
 # adjust mouse pointer speed
 exec_always --no-startup-id xinput --set-prop "pointer:ASUSTeK ROG GLADIUS II CORE" "Coordinate Transformation Matrix" 0.7 0 0 0 0.7 0 0 0 1
 

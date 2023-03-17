@@ -12,7 +12,7 @@ distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
 [[ "$distro" != 'arch' ]] && { echo "Skipping on $distro"; exit 0; }
 
 packages=(
-    sddm i3-gaps picom
+    sddm i3-gaps picom redshift
     i3lock i3lock-fancy-multimonitor
     xorg xorg-setxkbmap xkb-switch
     xf86-video-vesa xf86-input-libinput
