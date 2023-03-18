@@ -14,5 +14,8 @@ yay -S --noconfirm --noeditmenu --nodiffmenu --nocleanmenu --nocleanafter \
 
 sudo usermod -aG docker $USER
 
-sudo install -Dm 644 -t /etc/systemd/system $HOME/vmware_services
+sudo systemctl enable --now \
+    vmware-networks-configuration.service \
+    vmware-networks.service \
+    vmware-usbarbitrator.service
 
