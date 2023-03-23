@@ -246,9 +246,6 @@ for_window [class="VeraCrypt" title="^VeraCrypt$"] move container to workspace $
 
 for_window [instance="^zoom$" title="^zoom$"] floating enable
 
-assign [class="Tomate-gtk"] $ws4
-for_window [class="Tomate-gtk"] floating disable
-
 # WS9
 assign [class="vlc"] $ws9
 
