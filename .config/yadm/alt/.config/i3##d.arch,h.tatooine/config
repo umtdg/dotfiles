@@ -230,7 +230,7 @@ workspace $ws8 output HDMI-0
 # WS2
 assign [class="whatsapp-nativefier-d40211"] $ws2
 assign [class="Signal"] $ws2
-assign [class="zoom"] $ws2
+for_window [class="zoom"] move container to workspace $ws2
 for_window [class="Microsoft Teams - Preview"] move container to workspace $ws2
 assign [class="teams-for-linux"] $ws2
 assign [class="discord"] $ws2
@@ -243,8 +243,6 @@ assign [class="Pavucontrol"] $ws4
 assign [class="qBittorrent"] $ws4
 # assign [class="VeraCrypt"] $ws4
 for_window [class="VeraCrypt" title="^VeraCrypt$"] move container to workspace $ws4
-
-for_window [instance="^zoom$" title="^zoom$"] floating enable
 
 # WS9
 assign [class="vlc"] $ws9

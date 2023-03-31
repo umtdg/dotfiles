@@ -231,7 +231,7 @@ workspace $ws8 output eDP-1
 # WS2
 assign [class="whatsapp-nativefier-d40211"] $ws2
 assign [class="Signal"] $ws2
-assign [class="zoom"] $ws2
+for_window [class="zoom"] move container to workspace $ws2
 for_window [class="Microsoft Teams - Preview"] move container to workspace $ws2
 assign [class="teams-for-linux"] $ws2
 assign [class="discord"] $ws2
