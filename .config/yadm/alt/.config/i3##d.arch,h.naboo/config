@@ -228,6 +228,13 @@ workspace $ws8 output eDP-1
 
 # window settings
 
+# gap between windows
+gaps inner 5
+
+# window borders
+default_border pixel 0
+default_floating_border pixel 2
+
 # WS2
 assign [class="whatsapp-nativefier-d40211"] $ws2
 assign [class="Signal"] $ws2
@@ -249,12 +256,6 @@ for_window [instance="^zoom$" title="^zoom$"] floating enable
 
 # WS9
 assign [class="vlc"] $ws9
-
-# gap between windows
-gaps inner 5
-
-# remove window border
-for_window [class="^.*"] border pixel 0
 
 exec $HOME/.config/i3/startup_applications.sh
 

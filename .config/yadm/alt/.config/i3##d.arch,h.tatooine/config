@@ -148,14 +148,7 @@ mode "resize" {
         bindsym Escape mode "default"
         bindsym $mod+r mode "default"
 }
-
 bindsym $mod+r mode "resize"
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-#bar {
-#        status_command i3status
-#}
 
 # screen locker
 bindsym $mod+p exec --no-startup-id i3lock-fancy-multimonitor --blur=0x16
@@ -227,6 +220,13 @@ workspace $ws8 output HDMI-0
 
 # window settings
 
+# gap between windows
+gaps inner 5
+
+# window borders
+default_border pixel 0
+default_floating_border pixel 2
+
 # WS2
 assign [class="whatsapp-nativefier-d40211"] $ws2
 assign [class="Signal"] $ws2
@@ -246,12 +246,6 @@ for_window [class="VeraCrypt" title="^VeraCrypt$"] move container to workspace $
 
 # WS9
 assign [class="vlc"] $ws9
-
-# gap between windows
-gaps inner 5
-
-# remove window border
-for_window [class="^.*"] border pixel 0
 
 exec $HOME/.config/i3/startup_applications.sh
 
