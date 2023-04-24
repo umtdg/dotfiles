@@ -165,10 +165,10 @@ bindsym Shift+Print exec flameshot full -p $HOME/Images/screenshots
 bindsym $mod+Print exec shutter -a --min_at_startup
 
 # Control only Spotify with media keys
-bindsym XF86AudioPlay  exec playerctl --player=cider play-pause
-bindsym XF86AudioPause exec playerctl --player=cider play-pause
-bindsym XF86AudioNext  exec playerctl --player=cider next
-bindsym XF86AudioPrev  exec playerctl --player=cider previous
+bindsym XF86AudioPlay  exec playerctl --player=spotify play-pause
+bindsym XF86AudioPause exec playerctl --player=spotify play-pause
+bindsym XF86AudioNext  exec playerctl --player=spotify next
+bindsym XF86AudioPrev  exec playerctl --player=spotify previous
 
 # polkit agent
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
