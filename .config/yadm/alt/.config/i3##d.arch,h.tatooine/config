@@ -82,16 +82,19 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws0 "0:browsing"
-set $ws1 "1:work"
-set $ws2 "2:comm"
-set $ws3 "3:work"
-set $ws4 "4:tools"
-set $ws5 "5:misc"
-set $ws6 "6:misc"
-set $ws7 "7:misc"
-set $ws8 "8:misc"
-set $ws9 "9:misc"
+# left
+set $ws0 "0"
+set $ws1 "1"
+# center
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+# right
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
 
 # switch to workspace
 bindsym $mod+0 workspace number $ws0
@@ -205,18 +208,20 @@ exec_always --no-startup-id picom --config $HOME/.config/compton.conf &
 exec_always --no-startup-id "/usr/bin/setxkbmap -layout us,tr -option caps:swapescape"
 bindsym $mod+m exec "xkb-switch -n"
 
-# assign odd workspaces to primary monitor
-# and assign even workspaces to secondary monitor
-workspace $ws1 output HDMI-1
-workspace $ws3 output HDMI-1
-workspace $ws5 output HDMI-1
-workspace $ws7 output HDMI-1
-workspace $ws9 output HDMI-1
+# Workspace monitors
+# left
 workspace $ws0 output HDMI-0
-workspace $ws2 output HDMI-0
-workspace $ws4 output HDMI-0
-workspace $ws6 output HDMI-0
-workspace $ws8 output HDMI-0
+workspace $ws1 output HDMI-0
+# center
+workspace $ws2 output DP-4
+workspace $ws3 output DP-4
+workspace $ws4 output DP-4
+workspace $ws5 output DP-4
+workspace $ws6 output DP-4
+# right
+workspace $ws7 output HDMI-1
+workspace $ws8 output HDMI-1
+workspace $ws9 output HDMI-1
 
 # window settings
 
@@ -228,24 +233,24 @@ default_border pixel 0
 default_floating_border pixel 2
 
 # WS2
-assign [class="whatsapp-nativefier-d40211"] $ws2
-assign [class="Signal"] $ws2
-for_window [class="zoom"] move container to workspace $ws2
-for_window [class="Microsoft Teams - Preview"] move container to workspace $ws2
-assign [class="teams-for-linux"] $ws2
-assign [class="discord"] $ws2
+assign [class="whatsapp-nativefier-d40211"] $ws7
+assign [class="Signal"] $ws7
+for_window [class="zoom"] move container to workspace $ws7
+for_window [class="Microsoft Teams - Preview"] move container to workspace $ws7
+assign [class="teams-for-linux"] $ws7
+assign [class="discord"] $ws7
 
 # WS4
-for_window [class="Spotify"] move container to workspace $ws4
-assign [class="thunderbird"] $ws4
-assign [class="easyeffects"] $ws4
-assign [class="Pavucontrol"] $ws4
-assign [class="qBittorrent"] $ws4
-# assign [class="VeraCrypt"] $ws4
-for_window [class="VeraCrypt" title="^VeraCrypt$"] move container to workspace $ws4
+for_window [class="Spotify"] move container to workspace $ws8
+assign [class="thunderbird"] $ws8
+assign [class="easyeffects"] $ws8
+assign [class="Pavucontrol"] $ws8
+assign [class="qBittorrent"] $ws8
+# assign [class="VeraCrypt"] $ws8
+for_window [class="VeraCrypt" title="^VeraCrypt$"] move container to workspace $ws8
 
 # WS9
-assign [class="vlc"] $ws9
+assign [class="vlc"] $ws6
 
 exec $HOME/.config/i3/startup_applications.sh
 

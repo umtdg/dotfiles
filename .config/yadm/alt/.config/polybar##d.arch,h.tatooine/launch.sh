@@ -22,8 +22,8 @@ done
 export MOBOTEMP="$HWMON_PATH_MOBO_NCT/temp1_input"
 
 export CPUTEMP="$HWMON_PATH_K10TEMP/temp1_input"
-export CPUFAN_1="cat $HWMON_PATH_MOBO_NCT/fan1_input" 
-export CPUFAN_2="cat $HWMON_PATH_MOBO_NCT/fan2_input" 
+export CPUFAN_1="cat $HWMON_PATH_MOBO_NCT/fan1_input"
+export CPUFAN_2="cat $HWMON_PATH_MOBO_NCT/fan2_input"
 
 # export GPUTEMP="$HWMON_PATH_GPU/temp1_input"
 # export GPUFAN="$HWMON_PATH_GPU/fan1_input"
@@ -33,5 +33,6 @@ export NVME_1="$HWMON_PATH_NVME/temp2_input"
 export NVME_2="$HWMON_PATH_NVME/temp3_input"
 
 polybar --reload mainbar &
-polybar --reload secondbar &
+MONITOR=HDMI-0 polybar --reload secondbar &
+MONITOR=HDMI-1 polybar --reload secondbar &
 
