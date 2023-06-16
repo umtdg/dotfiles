@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+course="${1^^}"
+semester="$2"
+
+regexp="^\s*(${course}\s*\d+)[-]?"
+url_base="https://stars.bilkent.edu.tr/homepage/ajax/plainOfferings.php"
+url="${url_base}?COURSE_CODE=${course}&SEMESTER=${semester}"
+
+echo "$course Offerings:"
+wget_opts=('-q' '-O-' "$url")
+wget "${wget_opts[@]}"  \
+    | html2text         \
+    | grep -P "$regexp" \
+    | cut -d'|' -f1     \
+    | cut -d'-' -f1     \
+    | sort | uniq
+
