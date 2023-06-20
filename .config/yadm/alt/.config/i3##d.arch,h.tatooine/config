@@ -187,7 +187,7 @@ exec --no-startup-id xset -dpms
 # exec --no-startup-id redshift -P -O 5000
 
 # adjust mouse pointer speed
-exec_always --no-startup-id xinput --set-prop "pointer:ASUSTeK ROG GLADIUS II CORE" "Coordinate Transformation Matrix" 0.7 0 0 0 0.7 0 0 0 1
+exec_always --no-startup-id xinput --set-prop "pointer:ASUSTeK ROG GLADIUS II CORE" "Coordinate Transformation Matrix" 0.8 0 0 0 0.8 0 0 0 1
 
 # topbar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
@@ -222,6 +222,10 @@ workspace $ws6 output DP-4
 workspace $ws7 output HDMI-1
 workspace $ws8 output HDMI-1
 workspace $ws9 output HDMI-1
+
+# general settings
+
+mouse_warping none
 
 # window settings
 
