@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+dir="$1"
+inext="$2"
+outext="$3"
+
+if [[ -z "$dir" ]] || [[ -z "$inext" ]] || [[ -z "outext" ]]; then
+    echo "Usage: $(basename -- "$0") [dir] [in format] [out format]"
+    exit 1
+fi
+
+# Get file list
+
+# get from already existing file list
+file_filelist="tmpfilelist_$inext"
+if [[ ! -f "$file_filelist" ]]; then
+    echo "Getting file list"
+    find "$dir" -type f -name "*.$inext" -print0 > "$file_filelist"
+else
+    echo "Reading file list from cached list. Delete '$file_filelist' to re-generate file list"
+fi
+
+files=()
+while IFS=  read -r -d $'\0'; do
+    files+=("$REPLY")
+done < "$file_filelist"
+
+echo
+
+# ffmpeg options
+# -vn: no video
+# -ar 44100: 44100Hz
+# -ac 2: stereo
+# -q:a 2: bit rate between 170 - 210
+ffmpeg_options=(
+   '-vn'
+   '-ar' '44100'
+   '-ac' '2'
+   '-q:a' '2'
+)
+
+# Batch convert and keep directory structure
+for f in "${files[@]}"; do
+    outdir="$(dirname -- "$f")"
+    filename="$(basename -- "$f")"
+    filename="${filename%.*}"
+
+    infile="$f"
+    outfile="$outdir/$filename.$outext"
+
+    printf "%s -> %s -- " "$infile" "$outfile"
+    if ffmpeg -i "$infile" "${ffmpeg_options[@]}" "$outfile" >/dev/null 2>&1; then
+        rm -f "$infile"
+        echo "Done"
+    else
+        echo "Failed"
+    fi
+done
+
