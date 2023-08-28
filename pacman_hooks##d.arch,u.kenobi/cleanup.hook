@@ -1,0 +1,12 @@
+[Trigger]
+Operation = Remove
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Keep the last cache and the currently installed.
+When = PostTransaction
+Exec = /usr/bin/sudo -u kenobi bash -c '/home/kenobi/bin/yaycache'
+
