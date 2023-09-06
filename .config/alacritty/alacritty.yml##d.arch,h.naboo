@@ -8,6 +8,10 @@ env:
 
 window:
   dynamic_title: true
+  padding:
+    x: 5
+    y: 5
+  opacity: 0.8
 
 font:
   normal:
