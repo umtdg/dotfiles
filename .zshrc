@@ -104,7 +104,7 @@ alias diff='diff --color=auto'
 alias ip='ip --color=auto'
 alias wget='wget -q --show-progress'
 alias tmux='tmux -u -2'
-alias top='bpytop'
+alias top='btop'
 
 # Directory shortcuts
 alias cdh='cd ~'
