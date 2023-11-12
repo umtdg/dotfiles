@@ -22,7 +22,7 @@ done
 export MOBOTEMP="$HWMON_PATH_MOBO_NCT/temp1_input"
 
 export CPUTEMP="$HWMON_PATH_K10TEMP/temp1_input"
-export CPUFAN_1="cat $HWMON_PATH_MOBO_NCT/fan1_input"
+export CPUFAN_1="cat $HWMON_PATH_MOBO_NCT/fan4_input"
 export CPUFAN_2="cat $HWMON_PATH_MOBO_NCT/fan2_input"
 
 # export GPUTEMP="$HWMON_PATH_GPU/temp1_input"
