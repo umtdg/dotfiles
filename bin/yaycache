@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-yay_cache="$(yay -Pg | jq -r .buildDir)"
+if [ "$UID" = "0" ]; then
+    yay_cache="$(sudo -u skywalker yay -Pg | jq -r .buildDir)"
+else
+    yay_cache="$(yay -Pg | jq -r .buildDir)"
+fi
+
 pacman_cache='/var/cache/pacman/pkg'
 
 echo "Cache dirs:"
@@ -8,6 +13,6 @@ echo "  $pacman_cache"
 echo "  $yay_cache"
 
 mapfile -t pkgdirs < <(find "$yay_cache" -maxdepth 1 -mindepth 1 -type d)
-pkgidr+=(/var/cache/pacman/pkg)
+pkgdirs+=(/var/cache/pacman/pkg)
 
 paccache -rvk2 "${pkgdirs[@]/#/-c}"
