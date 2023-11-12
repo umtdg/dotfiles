@@ -64,7 +64,15 @@ if [ "$unmount" == "false" ]; then
     fi
 
     echo "Mounting $container_file to $mount_point"
-    sudo veracrypt -t -k "" --pim=0 --protect-hidden=no "$container_file" "$mount_point"
+    mount_opts=(
+        -t
+        -k ""
+        --pim=0
+        --protect-hidden=no
+        "$container_file"
+        "$mount_point"
+    )
+    sudo veracrypt "${mount_opts[@]}"
 else
     echo "Unmounting $container_file"
     sudo veracrypt -t -d "$container_file"
