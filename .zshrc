@@ -29,7 +29,7 @@ source $ZSH/oh-my-zsh.sh
 distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
 
 # Environment variables
-export PATH="$PATH:$HOME/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin"
+export PATH="$PATH:$HOME/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/Downloads/codeql"
 export EDITOR=vim
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
 
