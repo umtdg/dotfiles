@@ -1,11 +1,11 @@
-import = ["/home/ahsoka/.config/alacritty/theme.toml"]
+import = ["~/.config/alacritty/theme.toml"]
 live_config_reload = true
 
 [env]
 TERM = "xterm-256color"
 
 [font]
-size = 7
+size = 9
 
 [font.bold]
 family = "MesloLGS NF"
