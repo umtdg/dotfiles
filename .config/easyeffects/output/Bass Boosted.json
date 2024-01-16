@@ -14,7 +14,7 @@
         "convolver": {
             "input-gain": -2.0,
             "ir-width": 100,
-            "kernel-path": "/home/skywalker/.config/easyeffects/irs/Razor Surround ((48k Z-Edition)) 2.Stereo +20 bass.irs",
+            "kernel-path": "/home/ahsoka/.config/easyeffects/irs/Razor Surround ((48k Z-Edition)) 2.Stereo +20 bass.irs",
             "output-gain": 0.0
         },
         "crossfeed": {

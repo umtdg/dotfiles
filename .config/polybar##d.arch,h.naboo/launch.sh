@@ -6,22 +6,17 @@ killall -q polybar
 # Wait until the processes have been shut down
 while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
-# for hwmon in /sys/class/hwmon/hwmon*; do
-#     hwmon_name=$(cat "$hwmon/name")
-#     case $hwmon_name in
-#         # amdgpu) HWMON_PATH_GPU="$hwmon" ;;
-#         nvme) HWMON_PATH_NVME="$hwmon" ;;
-#         nct6798) HWMON_PATH_MOBO_NCT="$hwmon" ;;
-#         k10temp) HWMON_PATH_K10TEMP="$hwmon" ;;
-#         asusec) HWMON_PATH_ASUSEC="$hwmon" ;;
-#         iwlwifi_1) HWMON_PATH_IWLWIFI="$hwmon" ;;
-#         *) ;;
-#     esac
-# done
+for hwmon in /sys/class/hwmon/hwmon*; do
+    hwmon_name=$(cat "$hwmon/name")
+    case $hwmon_name in
+        coretemp) HWMON_PATH_CORETEMP="$hwmon" ;;
+        *) ;;
+    esac
+done
 
 # export MOBOTEMP="$HWMON_PATH_MOBO_NCT/temp1_input"
 
-# export CPUTEMP="$HWMON_PATH_K10TEMP/temp1_input"
+export CPUTEMP="$HWMON_PATH_CORETEMP/temp1_input"
 # export CPUFAN_1="cat $HWMON_PATH_MOBO_NCT/fan1_input"
 # export CPUFAN_2="cat $HWMON_PATH_MOBO_NCT/fan2_input"
 
@@ -32,6 +27,7 @@ while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 # export NVME_1="$HWMON_PATH_NVME/temp2_input"
 # export NVME_2="$HWMON_PATH_NVME/temp3_input"
 
-polybar --reload mainbar &
+MONITOR=eDP-1 polybar --reload mainbar &
+MONITOR=HDMI-2 polybar --reload mainbar &
 # polybar --reload secondbar &
 

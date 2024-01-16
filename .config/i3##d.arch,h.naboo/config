@@ -198,7 +198,7 @@ exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-ag
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # set background
-exec --no-startup-id feh --bg-scale $HOME/.background
+exec_always --no-startup-id feh --bg-scale $HOME/.background
 
 # launch dunst
 exec_always --no-startup-id dunst -config $HOME/.config/i3/dunst
@@ -215,11 +215,11 @@ bindsym $mod+m exec "xkb-switch -n"
 
 # assign odd workspaces to primary monitor
 # and assign even workspaces to secondary monitor
-workspace $ws1 output eDP-1
-workspace $ws3 output eDP-1
-workspace $ws5 output eDP-1
-workspace $ws7 output eDP-1
-workspace $ws9 output eDP-1
+workspace $ws1 output HDMI-2
+workspace $ws3 output HDMI-2
+workspace $ws5 output HDMI-2
+workspace $ws7 output HDMI-2
+workspace $ws9 output HDMI-2
 workspace $ws0 output eDP-1
 workspace $ws2 output eDP-1
 workspace $ws4 output eDP-1
