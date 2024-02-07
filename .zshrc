@@ -105,6 +105,7 @@ alias ip='ip --color=auto'
 alias wget='wget -q --show-progress'
 alias tmux='tmux -u -2'
 alias top='btop'
+alias ssh_hosts="grep -iP -A1 '^Host\s+' ~/.ssh/config"
 
 # Directory shortcuts
 alias cdh='cd ~'
