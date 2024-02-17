@@ -11,7 +11,7 @@ for hwmon in /sys/class/hwmon/hwmon*; do
     case $hwmon_name in
         # amdgpu) HWMON_PATH_GPU="$hwmon" ;;
         nvme) HWMON_PATH_NVME="$hwmon" ;;
-        nct6798) HWMON_PATH_MOBO_NCT="$hwmon" ;;
+        mt7921_phy0) HWMON_PATH_MOBO_NCT="$hwmon" ;;
         k10temp) HWMON_PATH_K10TEMP="$hwmon" ;;
         asusec) HWMON_PATH_ASUSEC="$hwmon" ;;
         iwlwifi_1) HWMON_PATH_IWLWIFI="$hwmon" ;;
