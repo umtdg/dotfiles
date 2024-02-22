@@ -107,6 +107,7 @@ alias tmux='tmux -u -2'
 alias top='btop'
 alias ssh_hosts="grep -iP -A1 '^Host\s+' ~/.ssh/config"
 alias osinfo='printf "'"%s %s"'" "$(grep "'"^NAME=.*$"'" /etc/os-release | xargs | cut -d"'"="'" -f2)" "$(uname -rm)"'
+alias sysinfo='neofetch --off'
 
 # Directory shortcuts
 alias cdh='cd ~'
