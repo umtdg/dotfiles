@@ -30,8 +30,6 @@ Plug 'mhinz/vim-signify'
 " Color scheme
 Plug 'joshdick/onedark.vim'
 Plug 'rachaeldawn/sweet-dark.vim'
-Plug 'sainnhe/edge'
-Plug 'sainnhe/sonokai'
 Plug 'arzg/vim-colors-xcode'
 
 " Completion engine
@@ -107,6 +105,11 @@ set ls=2 " always show status bar
 set wildmode=list:longest
 set completeopt-=preview
 
+" move cursor to its old location when re-opening a file
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
 " allow plugins by file type
 filetype plugin indent on
 
@@ -119,10 +122,6 @@ set shiftwidth=4
 
 " clear empty spaces at the end of lines on save
 autocmd FileType c,cpp,python,bash,sh autocmd BufWritePre <buffer> :%s/\s\+$//e
-
-" highlight bad whitespace
-highlight BadWhitespace ctermbg=red
-au FileType c,cpp,python,bash,sh match BadWhitespace /\s\+$/
 
 " colors
 syntax on
@@ -137,18 +136,6 @@ endif
 " let g:airline_theme = 'onedark'
 " colorscheme onedark
 
-" sonokai
-" let g:sonokai_style = 'atlantis'
-" let g:sonokai_better_performance = 1
-" let g:airline_theme = 'sonokai'
-" colorscheme sonokai
-
-" edge
-" let g:edge_style = 'aura'
-" let g:edge_better_performance = 1
-" let g:airline_theme = 'edge'
-" colorscheme edge
-
 " xcode
 let g:signify_sign_add = '┃'
 let g:signify_sign_change = '┃'
@@ -162,6 +149,11 @@ let g:xcodedark_emph_idents = 0
 
 colorscheme xcodedark
 
+" highlights
+set cursorline
+au ColorScheme * highlight Cursorline cterm=bold
+au ColorScheme * highlight BadWhitespace ctermbg=red
+au FileType c,cpp,python,bash,sh match BadWhitespace /\s\+$/
 
 " GENERAL SHORTCUTS
 
