@@ -7,7 +7,7 @@ font pango:monospace bold 9
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy-multimonitor --blur=0x16
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy-multimonitor --blur=0x28
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -162,7 +162,7 @@ bindsym $mod+r mode "resize"
 #}
 
 # screen locker
-bindsym $mod+p exec --no-startup-id i3lock-fancy-multimonitor --blur=0x16
+bindsym $mod+p exec --no-startup-id i3lock-fancy-multimonitor --blur=0x28
 
 # Screenshot selected area
 bindsym $mod+Shift+s exec flameshot gui
