@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+echo level "${1-auto}" | sudo tee /proc/acpi/ibm/fan
+
