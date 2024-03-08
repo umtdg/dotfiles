@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import pathlib
+import pydbus
+
+BLUE="%{F#5E81AC}"
+RED="%{#BF616A}"
+
+BT_ICON = ""
+BATTERY_MAP = {
+    10: "󰤾",
+    20: "󰤿",
+    30: "󰥀",
+    40: "󰥁",
+    50: "󰥂",
+    60: "󰥃",
+    70: "󰥄",
+    80: "󰥅",
+    90: "󰥆",
+    100: "󰥈"
+}
+
+DBUS_BLUEZ = "org.bluez"
+DBUS_BLUEZ_DEV1 = "org.bluez.Device1"
+DBUS_BLUEZ_BAT1 = "org.bluez.Battery1"
+
+
+class BluetoothDevice():
+    def __init__(self, name: str, battery: int):
+        self.name = name
+        self.battery = battery
+
+    def __str__(self) -> str:
+        if self.battery > 0:
+            return f"{BATTERY_MAP[self.battery]} {self.name} ({self.battery}%)"
+        else:
+            return self.name
+
+
+def get_connected_devices() -> list:
+    bus = pydbus.SystemBus()
+    adapter = bus.get(DBUS_BLUEZ, "/org/bluez/hci0")
+    manager = bus.get(DBUS_BLUEZ, "/")
+
+    bt_devices = []
+    managed_objs = manager.GetManagedObjects()
+    for path in managed_objs:
+        dev = managed_objs[path].get(DBUS_BLUEZ_DEV1, {})
+        connected = dev.get("Connected", False)
+
+        if not connected: continue
+
+        bat = managed_objs[path].get(DBUS_BLUEZ_BAT1, {})
+
+        name = dev.get("Name", "Unknown")
+        battery = bat.get("Percentage", 0)
+        bt_devices.append(BluetoothDevice(name, battery))
+
+    return bt_devices
+
+
+def get_name_of_device_to_show(dev_list) -> str:
+    polybar = pathlib.Path.home() / ".config" / "polybar"
+    if polybar.is_symlink():
+        polybar = pathlib.Path(polybar.resolve())
+
+    dev_to_show = ""
+    dev_file = polybar / ".bt"
+
+    dev_file.touch(exist_ok=True)
+
+    with dev_file.open("r") as f:
+        dev_to_show = f.readline().strip()
+
+    if dev_to_show == "":
+        dev_to_show = dev_list[0].name
+
+    with dev_file.open("w") as f:
+        f.write(f"{dev_to_show}\n")
+
+    return dev_to_show
+
+
+def main():
+    devices = get_connected_devices()
+    dev_name = get_name_of_device_to_show(devices)
+    for dev in devices:
+        if dev.name != dev_name: continue
+        print(dev)
+
+
+if __name__ == "__main__":
+    main()
+

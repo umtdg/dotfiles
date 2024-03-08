@@ -28,10 +28,16 @@ output="$icon"
 dev_mac="$(bluetoothctl info | grep 'Device' | cut -d' ' -f2)"
 if [ "$dev_mac" != '(null)' ]; then
     percentage="$(bluetoothctl info | grep 'Battery Percentage' | cut -d'(' -f2 | cut -d ')' -f1)"
-    percentage="$(awk -v n="$percentage" 'BEGIN{print int(n / 10) * 10}')"
-    battery="${battery_map[$percentage]}"
+    if [ "$percentage" != '0' ]; then
+        percentage="$(awk -v n="$percentage" 'BEGIN{print int(n / 10) * 10}')"
+        battery="${battery_map[$percentage]}"
+        percentage="${percentage}%"
+    else
+        battery="${battery_map[100]}"
+        percentage=""
+    fi
 
-    output="$icon $battery $percentage%"
+    output="$icon $battery $percentage"
 fi
 
 echo "$output"
