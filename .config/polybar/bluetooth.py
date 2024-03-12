@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 
 import argparse
+import cmd
 import fcntl
 import os
 import pathlib
 import pydbus
+import sys
 import tempfile
 
 from subprocess import run, CalledProcessError
 
 BLUE="%{F#5E81AC}"
-RED="%{#BF616A}"
+RED="%{F#BF616A}"
+ORANGE="%{F#D08770}"
 
 BT_ICON = ""
 BATTERY_MAP = {
@@ -29,6 +32,7 @@ BATTERY_MAP = {
 DBUS_BLUEZ = "org.bluez"
 DBUS_BLUEZ_DEV1 = "org.bluez.Device1"
 DBUS_BLUEZ_BAT1 = "org.bluez.Battery1"
+DBUS_BLUEZ_ADAPTER = "/org/bluez/hci0"
 
 POLYBAR_CFG = pathlib.Path.home() / ".config" / "polybar"
 if POLYBAR_CFG.is_symlink():
@@ -54,10 +58,16 @@ class BluetoothDevice():
             return self.name
 
 
-def get_connected_devices() -> list:
+def get_bluez_dbus():
     bus = pydbus.SystemBus()
-    adapter = bus.get(DBUS_BLUEZ, "/org/bluez/hci0")
+    adapter = bus.get(DBUS_BLUEZ, DBUS_BLUEZ_ADAPTER)
     manager = bus.get(DBUS_BLUEZ, "/")
+
+    return bus, adapter, manager
+
+
+def get_connected_devices() -> list:
+    _, _, manager = get_bluez_dbus()
 
     bt_devices = []
     managed_objs = manager.GetManagedObjects()
@@ -101,11 +111,35 @@ def get_name_of_device_to_show(dev_list) -> str:
     return dev_to_show
 
 
+def toggle_bluetooth() -> None:
+    _, adapter, _ = get_bluez_dbus()
+    adapter.Powered = not adapter.Powered
+
+
 def print_selected(devices: list) -> None:
+    _, adapter, _ = get_bluez_dbus()
     dev_name = get_name_of_device_to_show(devices)
+
+    if not adapter.Powered:
+        if sys.stdout.isatty():
+            print(f"Powered off")
+        else:
+            print(f"{RED}{BT_ICON} {dev_name}")
+        return
+
     for dev in devices:
         if dev.name != dev_name: continue
-        print(f"{BLUE}{BT_ICON} {dev}")
+
+        if sys.stdout.isatty():
+            print(f"{dev}")
+        else:
+            print(f"{BLUE}{BT_ICON} {dev}")
+        return
+
+    if sys.stdout.isatty():
+        print(f"Device to display is not connected")
+    else:
+        print(f"{ORANGE}{BT_ICON} {dev_name}")
 
 
 def select_dev_to_show(devices) -> None:
@@ -119,10 +153,12 @@ def select_dev_to_show(devices) -> None:
         with open(tmp_name, "r") as tmp:
             p = run(ROFI_ARGS, stdin=tmp, capture_output=True, check=True)
     except CalledProcessError:
-        print("No device selected")
+        if sys.stdout.isatty():
+            print("No device selected")
         exit(1)
     except Exception:
-        print("Errors occured with device selection dialog")
+        if sys.stdout.isatty():
+            print("Errors occured with device selection dialog")
         exit(1)
     finally:
         os.remove(tmp_name)
@@ -130,16 +166,21 @@ def select_dev_to_show(devices) -> None:
     set_name_of_device_to_show(p.stdout.decode("utf-8"))
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-s", "--select-mode", action="store_true", dest="select_mode")
-    parsed = parser.parse_args()
-
-    devices = get_connected_devices()
-    if not parsed.select_mode:
+class BluetoothCmd(cmd.Cmd):
+    def do_display(self, arg):
+        devices = get_connected_devices()
         print_selected(devices)
-    else:
+
+    def do_select(self, arg):
+        devices = get_connected_devices()
         select_dev_to_show(devices)
+
+    def do_toggle(self, arg):
+        toggle_bluetooth()
+
+
+def main():
+    BluetoothCmd().onecmd("".join(sys.argv[1:]))
 
 
 if __name__ == "__main__":
