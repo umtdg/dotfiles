@@ -16,7 +16,7 @@ packages=(
     i3lock i3lock-fancy-multimonitor
     xorg xorg-setxkbmap xkb-switch
     xf86-video-vesa xf86-input-libinput
-    polybar rofi dunst feh flameshot shutter alacritty
+    polybar rofi dunst feh flameshot shutter alacritty blueberry
     firefox thunderbird copyq megasync-bin lxappearance
     teams signal-desktop whatsapp-nativefier spotify discord
     thunar thunar-volman thunar-archive-plugin
