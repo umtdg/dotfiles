@@ -42,8 +42,12 @@ DEV_FILE = POLYBAR_CFG / ".bt"
 ROFI = pathlib.Path.home() / ".config" / "rofi" / "bin" / "rofi_colorful"
 ROFI_ARGS = [
     str(ROFI), "-dmenu",
-    "-p", "Please select Bluetooth device to display"
+    "-p", "BT Device"
 ]
+
+bus = None
+adapter = None
+manager = None
 
 
 class BluetoothDevice():
@@ -59,15 +63,17 @@ class BluetoothDevice():
 
 
 def get_bluez_dbus():
+    global bus, adapter, manager
+
+    if None not in [bus, adapter, manager]: return
+
     bus = pydbus.SystemBus()
     adapter = bus.get(DBUS_BLUEZ, DBUS_BLUEZ_ADAPTER)
     manager = bus.get(DBUS_BLUEZ, "/")
 
-    return bus, adapter, manager
-
 
 def get_connected_devices() -> list:
-    _, _, manager = get_bluez_dbus()
+    get_bluez_dbus()
 
     bt_devices = []
     managed_objs = manager.GetManagedObjects()
@@ -112,12 +118,13 @@ def get_name_of_device_to_show(dev_list) -> str:
 
 
 def toggle_bluetooth() -> None:
-    _, adapter, _ = get_bluez_dbus()
+    get_bluez_dbus()
     adapter.Powered = not adapter.Powered
 
 
 def print_selected(devices: list) -> None:
-    _, adapter, _ = get_bluez_dbus()
+    get_bluez_dbus()
+
     dev_name = get_name_of_device_to_show(devices)
 
     if not adapter.Powered:
