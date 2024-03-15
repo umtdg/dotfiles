@@ -108,7 +108,7 @@ font-3 = "Iosevka Nerd Font:pixelsize=14;3"
 font-4 = "Iosevka Nerd Font:pixelsize=14;3"
 font-5 = "Iosevka Nerd Font:pixelsize=14;3"
 
-modules-right = keyboard sep headset-light notification pulseaudio sep time sep powermenu
+modules-right = keyboard sep bluetooth headset-light notification pulseaudio sep time sep powermenu
 modules-center = tray sep spotify
 modules-left = launcher sep i3 sep title
 
