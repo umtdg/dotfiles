@@ -66,6 +66,8 @@ fi
 
 # Custom aliases
 
+eval $(thefuck --alias)
+
 # Arch Linux specific
 if [[ "$distro" == 'arch' ]]; then
     # pacman/yay
