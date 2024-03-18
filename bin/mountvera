@@ -20,7 +20,7 @@ function usage() {
 }
 
 container_name=""
-container_path="$HOME/ssd500/VeraCryptContainers"
+container_path="$HOME/ssd500/ntfs/VeraCryptContainers"
 container_file=""
 mount_point=""
 unmount=false
