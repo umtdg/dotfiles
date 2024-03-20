@@ -107,7 +107,11 @@ def get_name_of_device_to_show(dev_list) -> str:
 
     DEV_FILE.touch(exist_ok=True)
     with DEV_FILE.open("r") as f:
-        dev_to_show = f.readline().strip()
+        fcntl.flock(f, fcntl.LOCK_EX)
+        try:
+            dev_to_show = f.readline().strip()
+        finally:
+            fcntl.flock(f, fcntl.LOCK_EX)
 
     if dev_to_show == "":
         dev_to_show = dev_list[0].name

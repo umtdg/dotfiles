@@ -391,7 +391,7 @@ click-left = exec blueberry
 click-right = exec ~/.config/polybar/bluetooth.py toggle
 click-middle = exec ~/.config/polybar/bluetooth.py select
 
-interval = 1
+interval = 2
 
 format = "<label> "
 
