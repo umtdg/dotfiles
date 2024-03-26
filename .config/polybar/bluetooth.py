@@ -113,10 +113,9 @@ def get_name_of_device_to_show(dev_list) -> str:
         finally:
             fcntl.flock(f, fcntl.LOCK_EX)
 
-    if dev_to_show == "":
+    if dev_to_show == "" and len(dev_list) > 0:
         dev_to_show = dev_list[0].name
-
-    set_name_of_device_to_show(dev_to_show)
+        set_name_of_device_to_show(dev_to_show)
 
     return dev_to_show
 
@@ -191,7 +190,11 @@ class BluetoothCmd(cmd.Cmd):
 
 
 def main():
-    BluetoothCmd().onecmd("".join(sys.argv[1:]))
+    try:
+        BluetoothCmd().onecmd("".join(sys.argv[1:]))
+    except Exception as e:
+        with (pathlib.Path.home() / "polybar_bt_error.log").open("w+") as f:
+            f.write(f"{e}\n")
 
 
 if __name__ == "__main__":
