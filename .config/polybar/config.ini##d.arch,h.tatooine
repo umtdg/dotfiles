@@ -87,7 +87,7 @@ gpu-power = ${colors.nord12}
 ; |_.__/ \__,_|_|  |___/
 
 [bar/mainbar]
-monitor = "DP-4"
+monitor = "${env:MONITOR}"
 
 enable-ipc = true
 height = 20
@@ -137,7 +137,7 @@ font-3 = "Iosevka Nerd Font:pixelsize=8;3"
 font-4 = "Iosevka Nerd Font:pixelsize=8;3"
 font-5 = "Iosevka Nerd Font:pixelsize=8;3"
 
-modules-right = cpu cputemp mobotemp memory sep gputemp gpufan gpupower sep network sep time sep powermenu
+modules-right = cpu cputemp cpufan1 cpufan2 mobotemp memory sep gputemp gpufan gpupower sep network sep time sep powermenu
 ;modules-center = spotify
 modules-left = launcher sep i3 sep title
 
@@ -205,7 +205,7 @@ interval = 1
 hwmon-path = ${env:CPUTEMP}
 warn-temperature = 85
 
-label = " %temperature-c%"
+label = " %temperature-c% "
 format = <label>
 format-foreground = ${colors.cpu-temp}
 format-prefix-foreground = ${colors.cpu-temp-pfx}
@@ -252,24 +252,28 @@ format-prefix = 
 format-foreground = ${colors.cpu-fan}
 
 [module/gputemp]
-type = custom/script
+type = internal/temperature
 
-interval = 1
-exec = nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader
+hwmon-path = ${env:GPUTEMP}
 
-label = " ﬙ %output%°C "
+label = " ﬙ %temperature-c% "
 format =  <label>
 format-prefix = GPU
 format-foreground = ${colors.cpu-temp}
 format-prefix-foreground = ${colors.cpu-temp-pfx}
 
+label-warn = " ﬙ %temperature-c% "
+format-warn = <label-warn>
+format-warn-prefix = GPU
+format-warn-foreground = ${colors.cpu-temp-warn}
+
 [module/gpufan]
 type = custom/script
 
-exec = nvidia-smi --query-gpu=fan.speed --format=csv,noheader,nounits
+exec = ${env:GPUFAN}
 interval = 1
 
-label = " %output%% "
+label = " %output% RPM "
 format = <label>
 format-prefix = 
 format-foreground = ${colors.cpu-fan}
@@ -277,7 +281,7 @@ format-foreground = ${colors.cpu-fan}
 [module/gpupower]
 type = custom/script
 
-exec = nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits
+exec = ${env:GPUPOWER}
 interval = 1
 
 label = " %output% W"

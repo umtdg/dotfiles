@@ -212,18 +212,18 @@ bindsym $mod+m exec "xkb-switch -n"
 
 # Workspace monitors
 # left
-workspace $ws0 output HDMI-0
-workspace $ws1 output HDMI-0
+workspace $ws0 output HDMI-A-0
+workspace $ws1 output HDMI-A-0
 # center
-workspace $ws2 output DP-4
-workspace $ws3 output DP-4
-workspace $ws4 output DP-4
-workspace $ws5 output DP-4
-workspace $ws6 output DP-4
+workspace $ws2 output DisplayPort-0
+workspace $ws3 output DisplayPort-0
+workspace $ws4 output DisplayPort-0
+workspace $ws5 output DisplayPort-0
+workspace $ws6 output DisplayPort-0
 # right
-workspace $ws7 output HDMI-1
-workspace $ws8 output HDMI-1
-workspace $ws9 output HDMI-1
+workspace $ws7 output DisplayPort-1
+workspace $ws8 output DisplayPort-1
+workspace $ws9 output DisplayPort-1
 
 # general settings
 
