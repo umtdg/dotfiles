@@ -117,8 +117,10 @@ elif [ "$HOST" = 'tatooine' ]; then
 fi
 alias umountssd500='sudo umount -l ~/ssd500/btrfs ~/ssd500/ntfs'
 
-# Directory shortcuts
-alias cdh='cd ~'
+# Git aliases
+gls_preview='echo {} | cut -f 1 -d " " | xargs git show --color=always'
+gls_str="git log --pretty=oneline --abbrev-commit | fzf --ansi --preview '$gls_preview'"
+alias gls="$gls_str"
 
 # NetworkManager aliases
 alias nmc='nmcli c'
