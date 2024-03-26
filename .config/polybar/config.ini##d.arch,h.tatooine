@@ -137,7 +137,7 @@ font-3 = "Iosevka Nerd Font:pixelsize=8;3"
 font-4 = "Iosevka Nerd Font:pixelsize=8;3"
 font-5 = "Iosevka Nerd Font:pixelsize=8;3"
 
-modules-right = cpu cputemp cpufan1 cpufan2 mobotemp memory sep gputemp gpufan gpupower sep network sep time sep powermenu
+modules-right = cpu cputemp mobotemp cpufan1 cpufan2 sep memory sep gputemp gpufan gpupower sep network sep time sep powermenu
 ;modules-center = spotify
 modules-left = launcher sep i3 sep title
 
@@ -205,7 +205,7 @@ interval = 1
 hwmon-path = ${env:CPUTEMP}
 warn-temperature = 85
 
-label = " %temperature-c% "
+label = "%temperature-c% "
 format = <label>
 format-foreground = ${colors.cpu-temp}
 format-prefix-foreground = ${colors.cpu-temp-pfx}
@@ -221,7 +221,7 @@ interval = 1
 hwmon-path = ${env:MOBOTEMP}
 warn-temperature = 60
 
-label = " ﮕ %temperature-c% "
+label = "ﮕ %temperature-c% "
 format =  <label>
 format-foreground = ${colors.cpu-temp}
 
@@ -235,9 +235,8 @@ type = custom/script
 exec = ${env:CPUFAN_1}
 interval = 1
 
-label = " %output% RPM "
+label = " %output% RPM "
 format = <label>
-format-prefix = 
 format-foreground = ${colors.cpu-fan}
 
 [module/cpufan2]
@@ -246,9 +245,8 @@ type = custom/script
 exec = ${env:CPUFAN_2}
 interval = 1
 
-label = " %output% RPM"
+label = " %output% RPM"
 format = <label>
-format-prefix = 
 format-foreground = ${colors.cpu-fan}
 
 [module/gputemp]
@@ -273,9 +271,8 @@ type = custom/script
 exec = ${env:GPUFAN}
 interval = 1
 
-label = " %output% RPM "
+label = " %output% RPM "
 format = <label>
-format-prefix = 
 format-foreground = ${colors.cpu-fan}
 
 [module/gpupower]
@@ -284,9 +281,8 @@ type = custom/script
 exec = ${env:GPUPOWER}
 interval = 1
 
-label = " %output% W"
+label = "臘 %output% W"
 format = <label>
-format-prefix = 臘
 format-foreground = ${colors.gpu-power}
 
 [module/nvme-composite]
@@ -397,15 +393,13 @@ interval = 1
 warn-precentage = 90
 
 format = <label>
-format-prefix = 
 format-foreground = ${colors.memory}
 
 format-warn = <label-warn>
-format-warn-prefix =  
 format-warn-foreground = ${colors.memory-warn}
 
-label = " %percentage_used%% "
-label-warn = " %percentage_used%% "
+label = " %gb_used% / %gb_free%"
+label-warn = " %gb_used% / %gb_free%"
 
 [module/cpu]
 type = internal/cpu
@@ -413,14 +407,18 @@ type = internal/cpu
 interval = 1
 warn-percentage = 80
 
-format = <label>
+format = "<label> "
+format-prefix = CPU
 format-foreground = ${colors.cpu}
+format-prefix-foreground = ${colors.cpu-temp-pfx}
 
-format-warn = <label-warn>
+format-warn = "<label-warn> "
+format-warn-prefix = CPU
 format-warn-foreground = ${colors.cpu-warn}
+format-warn-prefix-foreground = ${colors.cpu-temp-pfx}
 
-label = CPU ﬙ %percentage%%
-label-warn = CPU ﬙ %percentage%%
+label = " ﬙ %percentage%%"
+label-warn = " ﬙ %percentage%%"
 
 [module/network]
 type = internal/network
