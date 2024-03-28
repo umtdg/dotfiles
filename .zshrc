@@ -110,11 +110,10 @@ alias top='btop'
 alias ssh_hosts="grep -iP -A1 '^Host\s+' ~/.ssh/config"
 alias osinfo='printf "'"%s %s"'" "$(grep "'"^NAME=.*$"'" /etc/os-release | xargs | cut -d"'"="'" -f2)" "$(uname -rm)"'
 alias sysinfo='neofetch --off'
-if [ "$HOST" = 'naboo' ]; then
-    alias mountssd500='mountntfs /dev/sda1 ~/ssd500/ntfs && mountbtrfs /dev/sda2 ~/ssd500/btrfs'
-elif [ "$HOST" = 'tatooine' ]; then
-    alias mountssd500='mountntfs /dev/sdb1 ~/ssd500/ntfs && mountbtrfs /dev/sdb2 ~/ssd500/btrfs'
-fi
+
+ntfs_uuid='C64618AA46189CED'
+btrfs_uuid='0a728b50-0a3d-4d75-a52a-8deafed475cd'
+alias mountssd500="mountntfs /dev/disk/by-uuid/$ntfs_uuid ~/ssd500/ntfs && mountbtrfs /dev/disk/by-uuid/$btrfs_uuid ~/ssd500/btrfs"
 alias umountssd500='sudo umount -l ~/ssd500/btrfs ~/ssd500/ntfs'
 
 # Git aliases
