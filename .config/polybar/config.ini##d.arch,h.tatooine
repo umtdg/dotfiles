@@ -398,8 +398,8 @@ format-foreground = ${colors.memory}
 format-warn = <label-warn>
 format-warn-foreground = ${colors.memory-warn}
 
-label = " %gb_used% / %gb_free%"
-label-warn = " %gb_used% / %gb_free%"
+label = " %gb_used% / %gb_total%"
+label-warn = " %gb_used% / %gb_total%"
 
 [module/cpu]
 type = internal/cpu
