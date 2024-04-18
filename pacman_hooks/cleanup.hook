@@ -8,5 +8,5 @@ Target = *
 [Action]
 Description = Keep the last cache and the currently installed.
 When = PostTransaction
-Exec = /usr/bin/sudo -u skywalker bash -c '/home/skywalker/bin/yaycache'
+Exec = /usr/bin/bash 'yaycache'
 
