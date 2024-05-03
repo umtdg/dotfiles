@@ -86,7 +86,7 @@ gpu-power = ${colors.nord12}
 ; | |_) | (_| | |  \__ \
 ; |_.__/ \__,_|_|  |___/
 
-[bar/mainbar]
+[bar/singlebar]
 monitor = "${env:MONITOR}"
 
 enable-ipc = true
@@ -109,7 +109,63 @@ font-4 = "Iosevka Nerd Font:pixelsize=9;3"
 font-5 = "Iosevka Nerd Font:pixelsize=9;3"
 
 modules-right = keyboard sep cpu cputemp sep memory sep network sep notification bluetooth backlight pulseaudio battery sep time sep powermenu
-modules-center = tray spotify
+modules-center = spotify tray
+modules-left = launcher sep i3 sep title
+
+override-redirect = false
+
+[bar/mainbar]
+monitor = "${env:MONITOR}"
+
+enable-ipc = true
+height = 20
+width = 100%
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+border-top-size = 0
+border-bottom-size = 0
+border-color = #696969
+
+line-size = 1
+
+font-0 = "Iosevka Nerd Font:pixelsize=9;3"
+font-1 = "Iosevka Nerd Font:pixelsize=9;3"
+font-2 = "Iosevka Nerd Font:pixelsize=9;3"
+font-3 = "Iosevka Nerd Font:pixelsize=9;3"
+font-4 = "Iosevka Nerd Font:pixelsize=9;3"
+font-5 = "Iosevka Nerd Font:pixelsize=9;3"
+
+modules-right = keyboard sep notification bluetooth backlight pulseaudio battery sep time sep powermenu
+modules-center = tray
+modules-left = launcher sep i3 sep title
+
+override-redirect = false
+
+[bar/secondbar]
+monitor = "${env:MONITOR}"
+
+enable-ipc = true
+height = 20
+width = 100%
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+border-top-size = 0
+border-bottom-size = 0
+border-color = #696969
+
+line-size = 1
+
+font-0 = "Iosevka Nerd Font:pixelsize=9;3"
+font-1 = "Iosevka Nerd Font:pixelsize=9;3"
+font-2 = "Iosevka Nerd Font:pixelsize=9;3"
+font-3 = "Iosevka Nerd Font:pixelsize=9;3"
+font-4 = "Iosevka Nerd Font:pixelsize=9;3"
+font-5 = "Iosevka Nerd Font:pixelsize=9;3"
+
+modules-right = keyboard sep cpu cputemp sep memory sep network sep time sep powermenu
+modules-center = spotify
 modules-left = launcher sep i3 sep title
 
 override-redirect = false
