@@ -32,10 +32,6 @@ opts=(
     --nocleanafter
 )
 
-if [[ "$HOST" == 'tatooine' ]]; then
-    packages+=(nvidia-lts nvidia-utils nvidia-settings)
-fi
-
 yay "${opts[@]}" "${packages[@]}"
 
 icon_dir="$HOME/.icons"

@@ -109,7 +109,7 @@ font-4 = "Iosevka Nerd Font:pixelsize=9;3"
 font-5 = "Iosevka Nerd Font:pixelsize=9;3"
 
 modules-right = keyboard sep cpu cputemp sep memory sep network sep notification bluetooth backlight pulseaudio battery sep time sep powermenu
-modules-center = spotify tray
+modules-center = tray sep spotify
 modules-left = launcher sep i3 sep title
 
 override-redirect = false
