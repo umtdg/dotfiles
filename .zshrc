@@ -110,6 +110,7 @@ alias top='btop'
 alias ssh_hosts="grep -iP -A1 '^Host\s+' ~/.ssh/config"
 alias osinfo='printf "'"%s %s"'" "$(grep "'"^NAME=.*$"'" /etc/os-release | xargs | cut -d"'"="'" -f2)" "$(uname -rm)"'
 alias sysinfo='neofetch --off'
+alias ps_by_mem="ps -e -o pid,rss,comm= | awk '{proc[\$3]+=\$2} END {for (p in proc) {printf \"%-20s %10.2f MB\\n\", p, proc[p]/1024}}' | sort -k2nr | head -20"
 
 ntfs_uuid='C64618AA46189CED'
 btrfs_uuid='0a728b50-0a3d-4d75-a52a-8deafed475cd'
