@@ -239,7 +239,7 @@ default_border pixel 0
 default_floating_border pixel 2
 
 # WS2
-assign [class="whatsapp-nativefier-d40211"] $ws2
+assign [class="[wW]hatsapp"] $ws2
 assign [class="Signal"] $ws2
 for_window [class="zoom"] move container to workspace $ws2
 for_window [class="Microsoft Teams - Preview"] move container to workspace $ws2
