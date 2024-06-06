@@ -34,7 +34,8 @@ Plug 'arzg/vim-colors-xcode'
 
 " Completion engine
 " Needs manual compilation
-Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
+" Plug 'ycm-core/YouCompleteMe', { 'do': './install.py' }
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 " Fuzzy finder for code and files
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': { -> fzf#install() } }
@@ -229,12 +230,12 @@ endif
 
 " YouCompleteMe
 
-let g:ycm_semantic_triggers = {
-            \ 'python': ['re!\w{2}'],
-            \ 'c': ['re!\w{2}'],
-            \ 'cpp': ['re!\w{2}'],
-            \ 'bash': ['re!\w{2}']
-            \ }
+" let g:ycm_semantic_triggers = {
+"            \ 'python': ['re!\w{2}'],
+"            \ 'c': ['re!\w{2}'],
+"            \ 'cpp': ['re!\w{2}'],
+"            \ 'bash': ['re!\w{2}']
+"            \ }
 
 
 " Airline
