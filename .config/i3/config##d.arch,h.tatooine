@@ -176,7 +176,7 @@ bindsym XF86AudioNext  exec playerctl --player=spotify next
 bindsym XF86AudioPrev  exec playerctl --player=spotify previous
 
 # polkit agent
-exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec_always --no-startup-id /usr/lib/polkit-kde-authentication-agent-1
 
 # align monitors
 # exec --no-startup-id xrandr --output HDMI-1 --right-of HDMI-0
