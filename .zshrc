@@ -29,34 +29,7 @@ source $ZSH/oh-my-zsh.sh
 distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
 
 # Environment variables
-export PATH="$PATH:$HOME/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/.cargo/bin:/usr/local/bin:$HOME/Downloads/codeql"
-export EDITOR=vim
-export MANPAGER="less -R --use-color -Dd+r -Du+b"
-
-# ArchLinux specific env variables
-if [[ "$distro" == 'arch' ]]; then
-    # MEGA directory
-    if [[ "$HOST" == 'tatooine' ]]; then
-        export MEGANZ="$HOME/localdisk/Documents/mega"
-    else
-        export MEGANZ="$HOME/mega"
-    fi
-
-    export COURSES_FILE="$MEGANZ/.courses.json"
-
-    # SSH Agent
-    export SSH_AUTH_SOCK=$HOME/.1password/agent.sock
-fi
-
-# Less colors
-export LESS='-iNRF --use-color -Dd+r$Du+b'
-export LESS_TERMCAP_mb=$'\E[1;31m'
-export LESS_TERMCAP_md=$'\E[1;36m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[01;33m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[1;32m'
-export LESS_TERMCAP_ue=$'\E[0m'
+# Set in ~/.profile
 
 # Zsh cache directory
 ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
