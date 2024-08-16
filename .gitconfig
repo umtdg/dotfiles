@@ -27,3 +27,5 @@
 	program = gpg
 [tag]
 	forceSignAnnotated = false
+[hooks "pre-commit"]
+	enabled = true
