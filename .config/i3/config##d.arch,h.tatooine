@@ -230,10 +230,6 @@ workspace $ws7 output DisplayPort-1
 workspace $ws8 output DisplayPort-1
 workspace $ws9 output DisplayPort-1
 
-# general settings
-
-# mouse_warping none
-
 # window settings
 
 # gap between windows
