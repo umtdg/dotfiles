@@ -68,9 +68,6 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 " NerdTree files and folders browser
 Plug 'preservim/nerdtree'
 
-" Rust support
-Plug 'rust-lang/rust.vim'
-
 " FastFold
 Plug 'Konfekt/FastFold'
 
@@ -326,11 +323,6 @@ nnoremap <Leader>nt    :NERDTreeToggle<CR>
 
 let g:NERDTreeWinPos = 'right'
 
-
-" Rust
-
-" Format rust on buffer save
-autocmd FileType rust autocmd BufWritePre <buffer> :RustFmt
 
 " Syntastic
 
