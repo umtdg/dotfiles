@@ -167,7 +167,7 @@ bindsym Shift+Print exec flameshot full --region 1920x1080+5760+540
 # Screenshot full desktop
 bindsym Ctrl+Shift+Print exec flameshot full -p $HOME/Images/screenshots
 # Screenshot active window
-bindsym $mod+Print exec shutter -a -e "$HOME/Images/screenshots/Screenshot_%F_%H-%M-%S.png"
+bindsym $mod+Print exec shutter -a -e -o "$HOME/Images/screenshots/Screenshot_%F_%H-%M-%S.png"
 
 # Control only Spotify with media keys
 bindsym XF86AudioPlay  exec playerctl --player=spotify play-pause
