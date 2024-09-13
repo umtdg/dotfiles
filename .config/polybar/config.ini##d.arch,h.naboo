@@ -312,7 +312,7 @@ ws-icon-default = X
 
 format = <label-state>
 
-label-focused = %icon%: %name%
+label-focused = %icon%
 label-focused-foreground = ${colors.i3-focused}
 label-focused-underline = ${colors.i3-focused-underline}
 label-focused-padding = 1
