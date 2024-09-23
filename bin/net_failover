@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+
+
+# Colors
+export c_default='\033[0m'
+export c_blue='\033[1;34m'
+export c_magenta='\033[1;35m'
+export c_cyan='\033[1;36m'
+export c_green='\033[1;32m'
+export c_red='\033[1;31m'
+export c_yellow='\033[1;33m'
+
+pfx_debug="${c_green}[DEBUG]${c_default}"
+pfx_info="${c_cyan}[INFO] ${c_default}"
+pfx_warn="${c_yellow}[WARN] ${c_default}"
+pfx_error="${c_red}[ERROR]${c_default}"
+
+# Usage: log [OPTIONS...] [MSG]
+# Options:
+#   -d  --debug             Only print these when $debug is set to true
+#   -v  --verbose           Only print these when $verbose is set to true
+#   -e  --error             Print an error message
+#   -w  --warn,--warning    Print a warning message
+#   -i  --info              Print an informative message
+#   -t  --timestamp         Remove timestamp from each log
+#   -c  --caller            Add caller function to each log
+function log() {
+    msg_pfx=""
+    timestamp="$(date +'%F %T')"
+    caller=""
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -d | --debug) [[ "$debug" == true ]] && msg_pfx="$pfx_debug"; shift; ;;
+            -v | --verbose) [[ "$verbose" == true ]] && msg_pfx="$pfx_info"; shift; ;;
+            -e | --error) msg_pfx="$pfx_error"; shift; ;;
+            -w | --warn | --warning) msg_pfx="$pfx_warn"; shift; ;;
+            -i | --info) msg_pfx="$pfx_info"; shift; ;;
+            -t | --timestamp) timestamp=""; shift; ;;
+            -c | --caller) caller="${FUNCNAME[2]} > ${FUNCNAME[1]}"; shift; ;;
+            *) msg="$1"; shift; ;;
+        esac
+    done
+
+    if [ -n "$msg_pfx" ]; then
+        [[ -n "$caller" ]] && msg_pfx="${msg_pfx} ${c_magenta}[$caller]${c_default}"
+        [[ -n "$timestamp" ]] && msg_pfx="${c_blue}[$timestamp]${c_default} $msg_pfx"
+        echo -e "$msg_pfx $msg"
+    fi
+}
+
+function handle_sigterm() {
+    log -i "SIGTERM received, stopping"
+    done='true'
+}
+
+function handle_sigint() {
+    log -i "SIGINT received, stopping"
+    done='true'
+}
+
+trap handle_sigterm SIGTERM
+trap handle_sigint SIGINT
+
+function usage() {
+    echo "$0 [OPTIONS...]"
+    echo ""
+    echo "Options:"
+    echo "  -v    Verbose"
+    echo "  -n    NetworkManager connection name"
+    echo "  -f    Maximum number of failed pings to consider network down"
+    echo "  -t    Timeout to reset number of failed pings to 0"
+    echo "  -i    Interval in seconds to wait between each ping"
+    echo "  -D    IP address to ping"
+    echo "  -W    Ping timeout (ping -W option)"
+    echo "  -h    Show this message and exit"
+}
+
+
+declare -g verbose='true'
+declare -g debug='false'
+
+declare net_name=""
+
+declare max_fails=3
+declare fail_timeout=3
+declare interval=1
+
+declare gw=""
+declare ping_timeout="0.1"
+
+
+while getopts ":hvn:f:t:i:D:W" arg; do
+    case "$arg" in
+        v) debug='true'; ;;
+        n) net_name="$OPTARG"; ;;
+        f) max_fails="${OPTARG:-3}"; ;;
+        t) fail_timeout="${OPTARG:-3}"; ;;
+        i) interval="${OPTARG:-1}"; ;;
+        D) gw="${OPTARG}"; ;;
+        W) ping_timeout="${OPTARG:-0.1}"; ;;
+        h) usage; exit 0; ;;
+        *) usage; exit 1; ;;
+    esac
+done
+
+[ -z "$net_name" ] \
+    && { use_nm="false"; echo "NetworkManager connection name is missing. Will use arp ping to reconnect"; }
+
+[ -z "$gw" ] \
+    && { echo "Gateway needs to be given"; exit 1; }
+
+declare -a ping_opts=(
+    '-W' "$ping_timeout"
+    '-c' '1'
+    "$gw"
+)
+
+log -i "UID=$UID $0 -n '$net_name' -f '$max_fails' -t '$fail_timeout' -i '$interval' -D '$gw' -W '$ping_timeout'"
+
+declare -g timer=0
+declare -g fail_count=0
+declare -g done='false'
+
+while [ "$done" = 'false' ]; do
+    log -d "ping ${ping_opts[*]}"
+    ping "${ping_opts[@]}" 1>/dev/null 2>&1 && { sleep "$interval"; continue; }
+
+    fail_count=$((fail_count + 1))
+    if [ $fail_count -ge $max_fails ]; then
+        log -e "Connection lost"
+
+        if [ "$use_nm" = 'true' ]; then
+            _out="$(nmcli c down "$net_name" 2>&1)";
+            log -i "nmcli c down: '$_out'"
+
+            _out="$(nmcli c up "$net_name")"
+            log -i "nmcli c up: '$_out'"
+        else
+            _out="$(arping -qc1 "$gw")"
+            log -i "arping -qc1 $gw: '$_out'"
+        fi
+
+        fail_count=0
+    fi
+
+    sleep "$interval"
+    timer=$((timer + 1))
+    if [ $timer -ge $fail_timeout ]; then
+        fail_count=0
+        timer=0
+    fi
+done
+
