@@ -44,8 +44,8 @@ eval $(thefuck --alias)
 # Arch Linux specific
 if [[ "$distro" == 'arch' ]]; then
     # pacman/yay
-    alias yeet="yay -Qq | fzf --multi --preview 'yay -Qi {1}' | xargs -ro yay -Rns"
-    alias pls="yay -Slq | fzf --multi --preview 'yay -Sii {1}' | xargs -ro yay -S"
+    alias yeet="yay -Qq | fzf --multi --preview 'yay -Qi {1}' | xargs -rot yay -Rns"
+    alias pls="yay -Slq | fzf --multi --preview 'yay -Sii {1}' | xargs -rot yay -S"
     alias pkgbysize=$'pacman -Qi | grep -E "^(Name|Installed)" | cut -f2 -d":" | paste -d " " - - | awk \'{ print $2 $3,$1 }\' | sort -rh | less'
 
     alias cdld='cd ~/localdisk/Documents'
