@@ -34,6 +34,7 @@ else
     fi
 
     export COURSES_FILE="$MEGANZ/.courses.json"
+    export TODO_FILE="$MEGANZ/todo.json"
 
     # SSH Agent
     export SSH_AUTH_SOCK=$HOME/.1password/agent.sock
