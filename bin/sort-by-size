@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 export GLOBIGNORE=".:.."
-sudo du -chs "$1"/* 2>/dev/null | sort -hr | head -10
+sudo du -chsx "$1"/* 2>/dev/null | sort -hr | head -10

@@ -159,13 +159,13 @@ bindsym $mod+p exec --no-startup-id i3lock-fancy-multimonitor --blur=0x28
 # Screenshot selected area
 bindsym $mod+Shift+s exec flameshot gui
 # Screenshot left screen
-bindsym Ctrl+Print exec flameshot full --region 1920x1080+0+540
+bindsym Ctrl+Print exec flameshot full --region 1920x1080+0+540 --clipboard
 # Screenshot center screen
-bindsym Print exec flameshot full --region 3840x2160+1920+0
+bindsym Print exec flameshot full --region 3840x2160+1920+0 --clipboard
 # Screenshot right screen
-bindsym Shift+Print exec flameshot full --region 1920x1080+5760+540
+bindsym Shift+Print exec flameshot full --region 1920x1080+5760+540 --clipboard
 # Screenshot full desktop
-bindsym Ctrl+Shift+Print exec flameshot full -p $HOME/Images/screenshots
+bindsym Ctrl+Shift+Print exec flameshot full -p $HOME/Images/screenshots --clipboard
 # Screenshot active window
 bindsym $mod+Print exec shutter -a -e -o "$HOME/Images/screenshots/Screenshot_%F_%H-%M-%S.png"
 

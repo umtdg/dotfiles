@@ -25,6 +25,9 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# NVM
+source /usr/share/nvm/init-nvm.sh
+
 # Get current distro
 distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
 
