@@ -5,19 +5,25 @@ lvim.plugins = {
 
 lvim.colorscheme = "onedark"
 
+lvim.lsp.automatic_servers_installation = false
+
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   {
     name = "black",
     filetypes = { "python" },
+    args = {
+      "--line-length", "80",
+    },
   },
 }
 
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
   {
-    name = "mypy",
-  }
+    name = "flake8",
+    filetypes = { "python" },
+  },
 }
 
 vim.opt.number = true
