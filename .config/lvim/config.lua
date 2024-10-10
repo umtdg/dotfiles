@@ -1,27 +1,28 @@
 lvim.plugins = {
-  { "olimorris/onedarkpro.nvim" },
   { "tpope/vim-surround" },
 }
 
-lvim.colorscheme = "onedark"
+lvim.colorscheme = "lunar"
 
-lvim.lsp.automatic_servers_installation = false
+lvim.lsp.installer.setup.automatic_installation = true
+lvim.lsp.installer.setup.ensure_installed = { "clangd", "pyright" }
 
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   {
-    name = "black",
+    name = "ruff",
     filetypes = { "python" },
-    args = {
-      "--line-length", "80",
-    },
   },
+  {
+    name = "clang_format",
+    filetypes = { "c", "cpp" },
+  }
 }
 
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
   {
-    name = "flake8",
+    name = "ruff",
     filetypes = { "python" },
   },
 }
@@ -34,6 +35,4 @@ vim.opt.hlsearch = true
 
 vim.opt.autoindent = true
 vim.opt.expandtab = true
-
-vim.opt.clipboard.append("unnamedplus")
 
