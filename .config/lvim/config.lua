@@ -1,8 +1,9 @@
 lvim.plugins = {
   { "tpope/vim-surround" },
+  { "olimorris/onedarkpro.nvim" },
 }
 
-lvim.colorscheme = "lunar"
+lvim.colorscheme = "onedark"
 
 lvim.builtin.treesitter.highlight.enable = true
 lvim.builtin.treesitter.ensure_installed = {
