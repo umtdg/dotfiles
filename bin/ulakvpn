@@ -6,6 +6,6 @@ connected=false;
 ping "${ping_opts[@]}" 1>/dev/null 2>&1 && { echo "Already connected"; exit 0; }
 
 while true; do
-    openvpn3 session-start -c ulak;
-    ping "${ping_opts[@]}" 1>/dev/null 2>&1 && exit 0 || openvpn3 session-manage -c ulak -D;
+    nmcli c up -a ulak
+    ping "${ping_opts[@]}" 1>/dev/null 2>&1 && exit 0 || nmcli c down ulak;
 done

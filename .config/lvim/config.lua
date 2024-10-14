@@ -6,6 +6,7 @@ lvim.plugins = {
 lvim.colorscheme = "onedark"
 
 lvim.builtin.treesitter.highlight.enable = true
+lvim.builtin.treesitter.highlight.additional_vim_regex_highlighting = { "python" }
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
   "c", "cpp",
@@ -14,16 +15,16 @@ lvim.builtin.treesitter.ensure_installed = {
 }
 
 lvim.lsp.installer.setup.automatic_servers_installation = true
-lvim.lsp.installer.setup.ensure_installed = {
+vim.list_extend(lvim.lsp.installer.setup.ensure_installed, {
   "bashls",
   "clangd",
   "pyright",
-}
+})
 
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   {
-    name = "ruff",
+    name = "black",
     filetypes = { "python" },
   },
   {
@@ -65,3 +66,5 @@ lvim.autocommands = {
     }
   }
 }
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"

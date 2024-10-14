@@ -154,6 +154,8 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 HISTFILE=~/.zsh_history
 HISTSIZE=5000
 SAVEHIST=20000000
+setopt share_history
+setopt extended_history
 setopt hist_expire_dups_first
 setopt hist_ignore_dups
 setopt hist_ignore_space
