@@ -9,7 +9,8 @@ lvim.builtin.treesitter.highlight.enable = true
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
   "c", "cpp",
-  "python"
+  "python",
+  "rust",
 }
 
 lvim.lsp.installer.setup.automatic_servers_installation = true
@@ -55,3 +56,12 @@ vim.opt.hlsearch = true
 
 vim.opt.autoindent = true
 vim.opt.expandtab = true
+
+lvim.autocommands = {
+  {
+    "BufWinEnter", {
+      pattern = { "*.rs" },
+      command = "setlocal shiftwidth=2 tabstop=2 softtabstop=2"
+    }
+  }
+}
