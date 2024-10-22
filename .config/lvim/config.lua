@@ -26,6 +26,9 @@ formatters.setup {
   {
     name = "black",
     filetypes = { "python" },
+    args = {
+      "--preview",
+    },
   },
   {
     name = "clang_format",
@@ -62,7 +65,7 @@ lvim.autocommands = {
   {
     "BufWinEnter", {
       pattern = { "*.rs" },
-      command = "setlocal shiftwidth=2 tabstop=2 softtabstop=2"
+      command = "setlocal shiftwidth=4 tabstop=4 softtabstop=4"
     }
   }
 }
