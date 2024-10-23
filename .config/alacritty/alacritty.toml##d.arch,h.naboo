@@ -1,3 +1,4 @@
+[general]
 import = ["~/.config/alacritty/theme.toml"]
 live_config_reload = true
 
@@ -19,8 +20,8 @@ style = "Italic"
 family = "MesloLGS NF"
 style = "Regular"
 
-[shell]
-program = "/bin/zsh"
+[terminal]
+shell = "/bin/zsh"
 
 [window]
 dynamic_title = true
