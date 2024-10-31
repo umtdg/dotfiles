@@ -1,6 +1,14 @@
 lvim.plugins = {
   { "tpope/vim-surround" },
   { "olimorris/onedarkpro.nvim" },
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = "kevinhwang91/promise-async",
+    event = "VeryLazy",
+    config = function(_, opts)
+      require("ufo").setup(opts)
+    end
+  },
 }
 
 lvim.colorscheme = "onedark"
@@ -25,9 +33,12 @@ local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   {
     name = "black",
+    command = "black",
     filetypes = { "python" },
     args = {
       "--preview",
+      "--stdin-filename", "$FILENAME",
+      "--quiet", "-",
     },
   },
   {
@@ -52,6 +63,35 @@ linters.setup {
   },
 }
 
+
+vim.opt.foldcolumn = '1'
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.foldingRange = {
+  dynamicRegistration = false,
+  lineFoldingOnly = true,
+}
+local lsps = require('lspconfig').util.available_servers()
+for _, ls in ipairs(lsps) do
+  require('lspconfig')[ls].setup({
+    capabilities = capabilities,
+  })
+end
+local nvim_ufo = require("ufo")
+nvim_ufo.setup({
+  provider_selector = function(bufnr, filetype, buftype)
+    return { 'lsp', 'indent' }
+  end
+})
+
+vim.keymap.set("n", "zR", nvim_ufo.openAllFolds)
+vim.keymap.set("n", "zM", nvim_ufo.closeAllFolds)
+vim.keymap.set("n", "zr", nvim_ufo.openFoldsExceptKinds)
+vim.keymap.set("n", "zm", nvim_ufo.closeFoldsWith)
+
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -63,11 +103,10 @@ vim.opt.expandtab = true
 
 lvim.autocommands = {
   {
-    "BufWinEnter", {
+    "BufWinEnter",
+    {
       pattern = { "*.rs" },
       command = "setlocal shiftwidth=4 tabstop=4 softtabstop=4"
     }
   }
 }
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
