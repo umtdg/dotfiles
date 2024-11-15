@@ -9,6 +9,20 @@ lvim.plugins = {
       require("ufo").setup(opts)
     end
   },
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = "cd app && npm install",
+    config = function()
+      vim.g.mkdp_auto_start = 0
+      vim.g.mkdp_auto_close = 1
+      vim.g.mkdp_refresh_slot = 0
+      vim.g.mkdp_command_for_global = 0
+      vim.g.mkdp_open_to_the_world = 0
+      vim.g.mkdp_browser = '/usr/bin/firefox'
+    end,
+  },
 }
 
 lvim.colorscheme = "onedark"
@@ -110,3 +124,14 @@ lvim.autocommands = {
     }
   }
 }
+
+-- Markdown
+vim.cmd [[
+  let g:mkdp_auto_start = 0
+  let g:mkdp_auto_close = 1
+  let g:mkdp_refresh_slow = 0
+  let g:mkdp_command_for_global = 0
+  let g:mkdp_open_to_the_world = 0
+  let g:mkdp_browser = '/usr/bin/firefox'
+]]
+
