@@ -203,7 +203,7 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec --no-startup-id feh --bg-scale $HOME/.background
 
 # launch dunst
-exec_always --no-startup-id dunst -config $HOME/.config/i3/dunst
+# exec_always --no-startup-id dunst -config $HOME/.config/i3/dunst
 bindsym $mod+n exec dunstctl close
 bindsym $mod+Shift+n exec dunstctl close-all
 bindsym $mod+Control+n exec dunstctl history-pop
