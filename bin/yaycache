@@ -15,4 +15,4 @@ echo "  $yay_cache"
 mapfile -t pkgdirs < <(find "$yay_cache" -maxdepth 1 -mindepth 1 -type d)
 pkgdirs+=(/var/cache/pacman/pkg)
 
-paccache -rvuk2 "${pkgdirs[@]/#/-c}"
+paccache -rvk2 "${pkgdirs[@]/#/-c}"
