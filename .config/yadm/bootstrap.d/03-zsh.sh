@@ -34,7 +34,7 @@ function ubuntu_install() {
 }
 
 function arch_install() {
-    yay -S --needed --noconfirm --noeditmenu --nodiffmenu --nocleanmenu --nocleanafter \
+    yay -S --needed --noconfirm \
         zsh oh-my-zsh-git zsh-theme-powerlevel10k \
         zsh-syntax-highlighting zsh-autosuggestions \
         zsh-fzf-plugin-git
