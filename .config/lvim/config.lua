@@ -63,7 +63,8 @@ lvim.plugins = {
 lvim.colorscheme = "onedark"
 
 lvim.builtin.treesitter.highlight.enable = true
-lvim.builtin.treesitter.highlight.additional_vim_regex_highlighting = { "python" }
+lvim.builtin.treesitter.highlight.additional_vim_regex_highlighting = true
+lvim.builtin.treesitter.indent = true
 lvim.builtin.treesitter.ensure_installed = {
   "bash",
   "c", "cpp",
@@ -71,12 +72,13 @@ lvim.builtin.treesitter.ensure_installed = {
   "rust",
 }
 
-lvim.lsp.installer.setup.automatic_servers_installation = true
-vim.list_extend(lvim.lsp.installer.setup.ensure_installed, {
+local ensure_installed = {
   "bashls",
   "clangd",
-  "pyright",
-})
+  "pyright"
+}
+lvim.lsp.installer.setup.automatic_servers_installation = true
+vim.list_extend(lvim.lsp.installer.setup.ensure_installed, ensure_installed)
 
 local lspconfig = require('lspconfig')
 
