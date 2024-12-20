@@ -23,6 +23,8 @@ lvim.plugins = {
       vim.g.mkdp_browser = '/usr/bin/firefox'
     end,
   },
+  { url = "https://gitlab.com/schrieveslaach/sonarlint.nvim.git" },
+  { "aznhe21/actions-preview" },
 }
 
 lvim.colorscheme = "onedark"
@@ -43,8 +45,9 @@ vim.list_extend(lvim.lsp.installer.setup.ensure_installed, {
   "pyright",
 })
 
-local formatters = require "lvim.lsp.null-ls.formatters"
-formatters.setup {
+local lspconfig = require('lspconfig')
+
+require("lvim.lsp.null-ls.formatters").setup({
   {
     name = "black",
     command = "black",
@@ -59,10 +62,9 @@ formatters.setup {
     name = "clang_format",
     filetypes = { "c", "cpp" },
   },
-}
+})
 
-local linters = require "lvim.lsp.null-ls.linters"
-linters.setup {
+require("lvim.lsp.null-ls.linters").setup({
   {
     name = "ruff",
     filetypes = { "python" },
@@ -75,8 +77,7 @@ linters.setup {
     name = "shellcheck",
     filetypes = { "sh", "bash" },
   },
-}
-
+})
 
 vim.opt.foldcolumn = '1'
 vim.opt.foldlevel = 99
@@ -88,9 +89,10 @@ capabilities.textDocument.foldingRange = {
   dynamicRegistration = false,
   lineFoldingOnly = true,
 }
-local lsps = require('lspconfig').util.available_servers()
+
+local lsps = lspconfig.util.available_servers()
 for _, ls in ipairs(lsps) do
-  require('lspconfig')[ls].setup({
+  lspconfig[ls].setup({
     capabilities = capabilities,
   })
 end
@@ -99,6 +101,20 @@ nvim_ufo.setup({
   provider_selector = function(bufnr, filetype, buftype)
     return { 'lsp', 'indent' }
   end
+})
+
+require('sonarlint').setup({
+  server = {
+    cmd = {
+      'sonarlint-language-server',
+      '-stdio',
+      '-analyzers',
+      vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarcfamily.jar"),
+    }
+  },
+  filetypes = {
+    "cpp"
+  }
 })
 
 vim.keymap.set("n", "zR", nvim_ufo.openAllFolds)
