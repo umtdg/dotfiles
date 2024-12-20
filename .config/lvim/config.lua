@@ -24,7 +24,40 @@ lvim.plugins = {
     end,
   },
   { url = "https://gitlab.com/schrieveslaach/sonarlint.nvim.git" },
-  { "aznhe21/actions-preview" },
+  {
+    "aznhe21/actions-preview.nvim",
+    config = function()
+      local actions_preview = require("actions-preview")
+      actions_preview.setup({
+        -- vim.diff() options
+        diff = {
+          ctxlen = 3,
+        },
+        -- priority list of external command to highlight diff
+        highlight_command = {
+          require("actions-preview.highlight").diff_so_fancy()
+        },
+
+        -- backend priority list
+        backend = { "telescope" },
+
+        telescope = {
+          sorting_strategy = "ascending",
+          layout_strategy = "vertical",
+          layout_config = {
+            width = 0.8,
+            height = 0.9,
+            prompt_position = "top",
+            preview_cutoff = 20,
+            preview_height = function(_, _, max_lines)
+              return max_lines - 15
+            end,
+          }
+        }
+      })
+      vim.keymap.set({ "v", "n" }, "<leader>lc", actions_preview.code_actions)
+    end,
+  },
 }
 
 lvim.colorscheme = "onedark"
@@ -110,10 +143,12 @@ require('sonarlint').setup({
       '-stdio',
       '-analyzers',
       vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarcfamily.jar"),
+      vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarpython.jar"),
     }
   },
   filetypes = {
-    "cpp"
+    "cpp",
+    "python"
   }
 })
 
