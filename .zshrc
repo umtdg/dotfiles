@@ -98,6 +98,14 @@ gls_preview='echo {} | cut -f 1 -d " " | xargs git show --color=always'
 gls_str="git log --pretty=oneline --abbrev-commit | fzf --ansi --preview '$gls_preview'"
 alias gls="$gls_str"
 
+# Yadm aliases
+alias ya='yadm add'
+alias yfa='yadm fetch --all --tags --prune --jobs=10'
+alias ypr='yadm pull --rebase'
+alias yst='yadm status'
+alias ypsup='yadm push --set-upstream origin main'
+alias ypsupf='yadm push --set-upstream origin +main'
+
 # NetworkManager aliases
 alias nmc='nmcli c'
 alias nml='nmcli c show'
