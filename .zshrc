@@ -100,6 +100,7 @@ alias gls="$gls_str"
 
 # Yadm aliases
 alias ya='yadm add'
+alias yd='yadm diff'
 alias yfa='yadm fetch --all --tags --prune --jobs=10'
 alias ypr='yadm pull --rebase'
 alias yst='yadm status'
