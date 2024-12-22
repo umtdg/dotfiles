@@ -138,21 +138,21 @@ nvim_ufo.setup({
   end
 })
 
-require('sonarlint').setup({
-  server = {
-    cmd = {
-      'sonarlint-language-server',
-      '-stdio',
-      '-analyzers',
-      vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarcfamily.jar"),
-      vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarpython.jar"),
-    }
-  },
-  filetypes = {
-    "cpp",
-    "python"
-  }
-})
+-- require('sonarlint').setup({
+--   server = {
+--     cmd = {
+--       'sonarlint-language-server',
+--       '-stdio',
+--       '-analyzers',
+--       vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarcfamily.jar"),
+--       vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarpython.jar"),
+--     }
+--   },
+--   filetypes = {
+--     "cpp",
+--     "python"
+--   }
+-- })
 
 vim.keymap.set("n", "zR", nvim_ufo.openAllFolds)
 vim.keymap.set("n", "zM", nvim_ufo.closeAllFolds)
