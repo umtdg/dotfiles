@@ -1,0 +1,13 @@
+1password
+docker-credential-pass
+i3lock-fancy-multimonitor
+megasync-bin
+oh-my-zsh-git
+openvpn3
+sddm-theme-sugar-candy-git
+spotify
+vmware-keymaps
+vmware-workstation
+xkb-switch
+zsh-fzf-plugin-git
+zsh-theme-powerlevel10k
