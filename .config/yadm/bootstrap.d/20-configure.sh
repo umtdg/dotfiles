@@ -100,3 +100,6 @@ configure_libinput
 configure_icon_theme
 configure_gtk_theme
 configure_zsh
+configure_vim
+configure_docker
+configure_vmware

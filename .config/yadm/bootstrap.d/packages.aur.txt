@@ -2,8 +2,8 @@
 docker-credential-pass
 i3lock-fancy-multimonitor
 megasync-bin
+nvm
 oh-my-zsh-git
-openvpn3
 sddm-theme-sugar-candy-git
 spotify
 vmware-keymaps

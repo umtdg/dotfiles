@@ -48,6 +48,7 @@ rofi
 sddm
 shutter
 signal-desktop
+thefuck
 thunar
 thunar-archive-plugin
 thunar-volman
