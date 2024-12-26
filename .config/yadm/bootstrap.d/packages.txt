@@ -44,6 +44,7 @@ polkit-gnome
 polkit-qt5
 polybar
 python
+ripgrep
 rofi
 sddm
 shutter
@@ -53,6 +54,7 @@ thunar
 thunar-archive-plugin
 thunar-volman
 thunderbird
+tree-sitter-cli
 veracrypt
 vlc
 wget
