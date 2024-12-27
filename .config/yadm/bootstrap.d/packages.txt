@@ -21,6 +21,11 @@ gnupg
 gvim
 i3-gaps
 i3lock
+jdk-openjdk
+jdk11-openjdk
+jdk17-openjdk
+jre8-openjdk
+jre8-openjdk-headless
 libbs2b
 libpipewire
 libpulse

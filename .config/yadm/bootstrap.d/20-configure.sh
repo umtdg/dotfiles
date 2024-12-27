@@ -41,9 +41,8 @@ function configure_sddm() {
   log -i "Enabling SSDM service"
   sudo systemctl enable sddm.service
 
-  sddm_themes_dir='/usr/share/sddm/themes'
-
   log -i "Changing SDDM theme background"
+  sddm_themes_dir='/usr/share/sddm/themes'
   HOME_ESCAPED=${HOME//\//\\\/};
   sudo sed -i "s/^Background=\(.*\)$/Background=\"$HOME_ESCAPED\/.background\"/g" "$sddm_themes_dir/Sugar-Candy/theme.conf"
 
@@ -52,9 +51,9 @@ function configure_sddm() {
 }
 
 function configure_libinput() {
-  if [[ "$HOSTNAME" == 'naboo' ]]; then
+  file='/etc/X11/xorg.conf.d/30-touchpad.conf'
+  if [[ "$HOSTNAME" == 'naboo' ]] && ! grep -iq 'Section "InputClass"' "$file"; then
     log -i "Creating libinput config for touchpad"
-    file='/etc/X11/xorg.conf.d/30-touchpad.conf'
     {
       echo 'Section "InputClass"'
       echo "    Identifier \"$(sudo libinput list-devices | grep -i '^device:.*touchpad' | cut -d: -f2 | xargs)\""
