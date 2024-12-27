@@ -2,6 +2,19 @@
 
 source common.sh
 
+function usage() {
+  echo 'l | libinput  configure libinput'
+  echo 'i | icon      configure icon theme'
+  echo 'g | gtk       configure gtk theme'
+  echo 's | sddm      configure sddm'
+  echo 'z | zsh       configure zsh'
+  echo 'v | vim       configure vim'
+  echo 'L | lvim      configure lvim'
+  echo 'd | docker    configure docker'
+  echo 'S | services  enable and start required systemctl services'
+  echo 'h | help      show this help message and exit'
+}
+
 function configure_icon_theme() {
   log -i "Configuring icon and cursor theme"
 
@@ -29,20 +42,13 @@ function configure_sddm() {
   sudo systemctl enable sddm.service
 
   sddm_themes_dir='/usr/share/sddm/themes'
-  log -w "Manually download Sugar Candy SDDM theme from 'https://store.kde.org/p/1312658' and enter the file path"
-  read -r -p "Path to downloaded file (leave empty to skip): " archive_path
 
-  if [ -n "$archive_path" ]; then
-    log -i "Installing SDDM theme from archive $archive_path"
-    sudo tar -xvf "$archive_path" -C "$sddm_themes_dir"
+  log -i "Changing SDDM theme background"
+  HOME_ESCAPED=${HOME//\//\\\/};
+  sudo sed -i "s/^Background=\(.*\)$/Background=\"$HOME_ESCAPED\/.background\"/g" "$sddm_themes_dir/Sugar-Candy/theme.conf"
 
-    log -i "Changing SDDM theme background"
-    HOME_ESCAPED=${HOME//\//\\\/};
-    sudo sed -i "s/^Background=\(.*\)$/Background=\"$HOME_ESCAPED\/.background\"/g" "$sddm_themes_dir/"
-
-    log -i "Copying SDDM config"
-    sudo install -Dm 644 -t /etc/sddm.conf.d ~/sddm.conf.d/*
-  fi
+  log -i "Copying SDDM config"
+  sudo install -Dm 644 -t /etc/sddm.conf.d ~/sddm.conf.d/*
 }
 
 function configure_libinput() {
@@ -68,7 +74,7 @@ function configure_zsh() {
   log -i "Installing ZSH theme '$zsh_theme' and plugins ${zsh_plugins[*]} to $zsh_custom_dir"
   sudo ln -sfv "/usr/share/zsh-theme-$zsh_theme" "$zsh_custom_dir/themes/$zsh_theme"
   for plugin in "${zsh_plugins[@]}"; do
-    sudo ln -sfv "/usr/share/zsh/$plugin" "$zsh_custom_dir/plugins/$plugin"
+    sudo ln -sfv "/usr/share/zsh/plugins/$plugin" "$zsh_custom_dir/plugins/$plugin"
   done
 
   log -i "Changing $USER's shell"
@@ -78,7 +84,9 @@ function configure_zsh() {
 function configure_vim() {
   log -i "Vim first run"
   vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
+}
 
+function configure_lvim() {
   log -i "Install LunarVim Nightly"
   bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
 }
@@ -88,18 +96,50 @@ function configure_docker() {
   sudo usermod -aG docker "$USER"
 }
 
-function configure_vmware() {
-  log -i "Enabling VmWare network and usbarbitrator services"
-  sudo systemctl enable --now \
-    vmware-networks-configuration.service \
-    vmware-networks.service \
-    vmware-usbarbitrator.service
+function configure_services() {
+  log -i "Enabling and starting vmware-networks service"
+  sudo systemctl enable --now vmware-networks.service
+
+  log -i "Enabling and starting vmware-networks-configuration service"
+  sudo systemctl enable --now vmware-networks-configuration.service
+
+  log -i "Enabling and starting Vmware vmware-usbarbitrator"
+  sudo systemctl enable --now vmware-usbarbitrator.service
+
+  log -i "Enabling and starting pipewire service"
+  systemctl --user enable --now pipewire
+
+  log -i "Enabling and starting pipewire-pulse service"
+  systemctl --user enable --now pipewire-pulse
+
+  log -i "Enabling and starting bluetooth service"
+  sudo systemctl enable --now bluetooth
 }
 
-configure_libinput
-configure_icon_theme
-configure_gtk_theme
-configure_zsh
-configure_vim
-configure_docker
-configure_vmware
+declare -A commands=(
+  ['l']='configure_libinput'
+  ['i']='configure_icon_theme'
+  ['g']='configure_gtk_theme'
+  ['s']='configure_sddm'
+  ['z']='configure_zsh'
+  ['v']='configure_vim'
+  ['L']='configure_lvim'
+  ['d']='configure_docker'
+  ['S']='configure_services'
+)
+
+while true; do
+  read -r -p 'configure> ' choice
+
+  if [ -n "${commands[$choice]}" ]; then
+    "${commands[$choice]}"
+    continue
+  fi
+
+  case "$choice" in
+    h|help) usage; ;;
+    q|quit) exit 0; ;;
+    *) echo "Unkown option: $choice"; exit 1; ;;
+  esac
+done
+
