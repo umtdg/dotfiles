@@ -74,9 +74,6 @@ Plug 'Konfekt/FastFold'
 " SimpylFold
 Plug 'tmhedberg/SimpylFold'
 
-" CMake
-Plug 'cdelledonne/vim-cmake'
-
 call plug#end()
 
 if vim_plug_just_installed
