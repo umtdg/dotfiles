@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Alacritty</name>
+	<unique-id>1623680142017117-1</unique-id>
+	<command>/usr/bin/alacritty --working-directory %f</command>
+	<description>Alacritty</description>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+</actions>
