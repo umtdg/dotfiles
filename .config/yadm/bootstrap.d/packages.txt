@@ -56,6 +56,7 @@ python
 python-pydbus
 ripgrep
 rofi
+rsync
 sddm
 shutter
 signal-desktop
