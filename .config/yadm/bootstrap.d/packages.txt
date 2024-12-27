@@ -26,6 +26,7 @@ jdk11-openjdk
 jdk17-openjdk
 jre8-openjdk
 jre8-openjdk-headless
+jq
 libbs2b
 libpipewire
 libpulse
