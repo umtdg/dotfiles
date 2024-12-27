@@ -12,6 +12,7 @@ function usage() {
   echo 'L | lvim      configure lvim'
   echo 'd | docker    configure docker'
   echo 'S | services  enable and start required systemctl services'
+  echo 'x | x11       configure X11'
   echo 'h | help      show this help message and exit'
 }
 
@@ -115,16 +116,32 @@ function configure_services() {
   sudo systemctl enable --now bluetooth
 }
 
+function configure_x11() {
+  log -i "Creating XDG user directories"
+  xdg-user-dirs-update --force
+}
+
 declare -A commands=(
   ['l']='configure_libinput'
+  ['libinput']='configure_libinput'
   ['i']='configure_icon_theme'
+  ['icon']='configure_icon_theme'
   ['g']='configure_gtk_theme'
+  ['gtk']='configure_gtk_theme'
   ['s']='configure_sddm'
+  ['sddm']='configure_sddm'
   ['z']='configure_zsh'
+  ['zsh']='configure_zsh'
   ['v']='configure_vim'
+  ['vim']='configure_vim'
   ['L']='configure_lvim'
+  ['lvim']='configure_lvim'
   ['d']='configure_docker'
+  ['docker']='configure_docker'
   ['S']='configure_services'
+  ['service']='configure_services'
+  ['x']='configure_x11'
+  ['x11']='configure_x11'
 )
 
 while true; do
