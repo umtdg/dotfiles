@@ -86,6 +86,15 @@ ln_opts=('-s')
 
 for gtk in "${!gtk_dirs[@]}"; do
   theme_gtk_dir="$theme_dir/$gtk"
+  config_gtk_dir="${gtk_dirs[$gtk]}"
+
+  if [ -e "$config_gtk_dir" ] || [ "$force" = 'yes' ]; then
+    continue
+  fi
+
+  echo "Remove existing $config_gtk_dir and create directory"
+  rm -rf "$config_gtk_dir"
+  mkdir -p "$config_gtk_dir"
   [ ! -d "$theme_gtk_dir" ] && { echo "Skipping missing '$gtk'"; continue; }
 
   echo -e "\nInstalling for $gtk"
