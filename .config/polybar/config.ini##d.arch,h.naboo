@@ -199,12 +199,12 @@ label-empty = "Desktop"
 
 [module/time]
 type = internal/date
-interval = 10
+interval = 1
 
 format = <label>
 format-foreground = ${colors.time}
 
-time = "%I:%M %p"
+time = "%I:%M:%S %p"
 date = "%a, %d %b %Y"
 
 label = %date% - %time%
