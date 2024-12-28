@@ -88,13 +88,13 @@ for gtk in "${!gtk_dirs[@]}"; do
   theme_gtk_dir="$theme_dir/$gtk"
   config_gtk_dir="${gtk_dirs[$gtk]}"
 
-  if [ -e "$config_gtk_dir" ] || [ "$force" = 'yes' ]; then
-    continue
-  fi
+  if [ -e "$config_gtk_dir" ] && [ ! -d "$config_gtk_dir" ]; then
+    [ "$force" = 'no' ] && continue
 
-  echo "Remove existing $config_gtk_dir and create directory"
-  rm -rf "$config_gtk_dir"
-  mkdir -p "$config_gtk_dir"
+    log -i "Remove existing $config_gtk_dir and creating as directory"
+    rm -rf "$config_gtk_dir"
+    mkdir -p "$config_gtk_dir"
+  fi
   [ ! -d "$theme_gtk_dir" ] && { echo "Skipping missing '$gtk'"; continue; }
 
   echo -e "\nInstalling for $gtk"
