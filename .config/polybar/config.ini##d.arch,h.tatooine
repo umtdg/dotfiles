@@ -95,18 +95,18 @@ width = 100%
 
 background = ${colors.background}
 foreground = ${colors.foreground}
-border-top-size = 0
+border-top-size = 5
 border-bottom-size = 0
 border-color = #00000000
 
 line-size = 1
 
-font-0 = "Iosevka Nerd Font:pixelsize=14;3"
-font-1 = "Iosevka Nerd Font:pixelsize=14;3"
-font-2 = "Iosevka Nerd Font:pixelsize=14;3"
-font-3 = "Iosevka Nerd Font:pixelsize=14;3"
-font-4 = "Iosevka Nerd Font:pixelsize=14;3"
-font-5 = "Iosevka Nerd Font:pixelsize=14;3"
+font-0 = "Iosevka Nerd Font:pixelsize=14;2"
+font-1 = "Iosevka Nerd Font:pixelsize=14;2"
+font-2 = "Iosevka Nerd Font:pixelsize=14;2"
+font-3 = "Iosevka Nerd Font:pixelsize=14;2"
+font-4 = "Iosevka Nerd Font:pixelsize=14;2"
+font-5 = "Iosevka Nerd Font:pixelsize=14;2"
 
 modules-right = keyboard sep bluetooth headset-light notification pulseaudio sep time sep powermenu
 modules-center = tray sep spotify
@@ -124,18 +124,18 @@ width = 100%
 background = ${colors.background}
 foreground = ${colors.foreground}
 
-border-top-size = 0
+border-top-size = 3
 border-bottom-size = 0
 bordor-color = #0000
 
 line-size = 1
 
-font-0 = "Iosevka Nerd Font:pixelsize=8;3"
-font-1 = "Iosevka Nerd Font:pixelsize=8;3"
-font-2 = "Iosevka Nerd Font:pixelsize=8;3"
-font-3 = "Iosevka Nerd Font:pixelsize=8;3"
-font-4 = "Iosevka Nerd Font:pixelsize=8;3"
-font-5 = "Iosevka Nerd Font:pixelsize=8;3"
+font-0 = "Iosevka Nerd Font:pixelsize=9;2"
+font-1 = "Iosevka Nerd Font:pixelsize=9;2"
+font-2 = "Iosevka Nerd Font:pixelsize=9;2"
+font-3 = "Iosevka Nerd Font:pixelsize=9;2"
+font-4 = "Iosevka Nerd Font:pixelsize=9;2"
+font-5 = "Iosevka Nerd Font:pixelsize=9;2"
 
 modules-right = cpu cputemp mobotemp cpufan1 cpufan2 sep memory sep gputemp gpufan gpupower sep network sep time sep powermenu
 ;modules-center = spotify
