@@ -8,116 +8,68 @@
  */
 
 configuration {
-	font:							"FantasqueSansMono Nerd Font 12";
-    show-icons:                     false;
-	icon-theme: 					"Papirus";
-    drun-display-format:            "{name}";
-    disable-history:                false;
-	sidebar-mode: 					false;
+  font: "Iosevka Nerd Font 12";
+  show-icons: false;
+  icon-theme: "Papirus-Dark";
+  drun-display-format: "{name}";
+  disable-history: false;
+  sidebar-mode: false;
 }
 
 @import "styles/colors.rasi"
 
 window {
-    transparency:                   "real";
-    background-color:               @background;
-    text-color:                     @foreground;
-    border-radius:                  0px;
-    height:                         28.5%;
-    width:                          50%;
-    location:                       center;
-    x-offset:                       0;
-    y-offset:                       0;
-}
-
-prompt {
-    enabled: 						true;
-    padding:                        0.5% 0.5% 0.5% 0%;
-	background-color: 				@background-alt;
-	text-color: 					@foreground;
-}
-
-textbox-prompt-colon {
-	expand: 						false;
-	str: 							"System |";
-	background-color: 				@background-alt;
-	text-color: 					@foreground;
-    padding:                        0.5% 0.5% 0.5% 0%;
-}
-
-inputbar {
-	children: 						[ textbox-prompt-colon, prompt ];
-    background-color:               @background-alt;
-    text-color:                     @foreground;
-    expand:                         false;
-    border:                  		0% 0.2% 0.2% 0%;
-    border-radius:                  0% 100% 100% 100%;
-    border-color:                  	@border;
-    margin:                         0% 21.3% 0% 0%;
-    padding:                        0.5%;
-    position:                       center;
+  transparency: "real";
+  background-color: @background;
+  text-color: @foreground;
+  border-radius: 12px;
+  width: 30%;
+  location: center;
+  x-offset: 0;
+  y-offset: 0;
 }
 
 listview {
-    background-color:               @background;
-    margin:                         0% 0% 0% 0%;
-    spacing:                        2%;
-    cycle:                          true;
-    dynamic:                        true;
-    layout:                         horizontal;
+  background-color: @background;
+  margin: 0%;
+  spacing: 2px;
+  border: 0;
+  cycle: true;
+  flow: horizontal;
+  columns: 4;
+  scrollbar: false;
+  lines: 1;
 }
 
 mainbox {
-    background-color:               @background;
-    children:                       [ inputbar, listview ];
-    spacing:                        3.5%;
-    padding:                        4% 0% 0% 2%;
+  background-color: @background;
+  children: [ listview];
+  spacing: 0.5%;
+  padding: 1% 0.5% 1% 0.5%;
 }
 
 element {
-    background-color:               @background-alt;
-    text-color:                     @foreground;
-    orientation:                    horizontal;
-    border-radius:                  100%;
+  background-color: @element;
+  text-color: @foreground;
+  orientation: horizontal;
+}
+
+element selected,
+element selected.normal,
+element selected.active,
+element selected.urgent, {
+  background-color: @element;
+  border: 0px 0px 4px 0px;
+  border-radius: 8px;
+  border-color: @border-selected;
 }
 
 element-text {
-    background-color: 				#00000000;
-    text-color:       				inherit;
-	font:							"feather 32";
-    expand:                         true;
-    horizontal-align:               0.5;
-    vertical-align:                 0.5;
-    margin:                         4.5% 2.7% 4.5% 2.7%;
-}
-
-element normal.urgent,
-element alternate.urgent {
-    background-color:               @urgent;
-    text-color:                     @foreground;
-    border-radius:                  0.2%;
-}
-
-element normal.active,
-element alternate.active {
-    background-color:               @background-alt;
-    text-color:                     @foreground;
-}
-
-element selected {
-    background-color:               @selected;
-    text-color:                     @foreground;
-    border:                  		0% 0.4% 0.4% 0%;
-    border-radius:                  100%;
-    border-color:                  	@border;
-}
-
-element selected.urgent {
-    background-color:               @urgent;
-    text-color:                     @foreground;
-}
-
-element selected.active {
-    background-color:               @background-alt;
-    color:                          @foreground;
+  background-color: #00000000;
+  text-color: inherit;
+  font: "Iosevka Nerd Font 24";
+  expand: true;
+  horizontal-align: 0.485;
+  vertical-align: 0.5;
+  margin: 1%;
 }
