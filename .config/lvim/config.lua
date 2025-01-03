@@ -75,23 +75,25 @@ lvim.builtin.treesitter.ensure_installed = {
 local ensure_installed = {
   "bashls",
   "clangd",
-  "pyright"
+  "pyright",
 }
-lvim.lsp.installer.setup.automatic_servers_installation = true
-vim.list_extend(lvim.lsp.installer.setup.ensure_installed, ensure_installed)
+local skipped_servers = {
+  "ruff",
+  "ruff_lsp",
+}
+-- vim.list_extend(lvim.lsp.installer.setup.ensure_installed, ensure_installed)
+-- vim.list_extend(lvim.lsp.installer.setup.skipped_servers, skipped_servers)
+-- vim.list_extend(lvim.lsp.automatic_configuration.ensure_installed, ensure_installed)
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, skipped_servers)
+-- lvim.lsp.installer.setup.automatic_servers_installation = true
 
 local lspconfig = require('lspconfig')
 
-require("lvim.lsp.null-ls.formatters").setup({
+local formatters = require("lvim.lsp.null-ls.formatters")
+formatters.setup({
   {
     name = "black",
-    command = "black",
-    filetypes = { "python" },
-    args = {
-      "--preview",
-      "--stdin-filename", "$FILENAME",
-      "--quiet", "-",
-    },
+    filetype = { "python" },
   },
   {
     name = "clang_format",
@@ -99,10 +101,14 @@ require("lvim.lsp.null-ls.formatters").setup({
   },
 })
 
-require("lvim.lsp.null-ls.linters").setup({
+local linters = require("lvim.lsp.null-ls.linters")
+linters.setup({
   {
-    name = "ruff",
+    command = "flake8",
     filetypes = { "python" },
+    args = {
+      "--exit-zero" -- This is necessary, otherwise flake8 exits and doesn't start back up after formatting
+    },
   },
   {
     name = "checkmake",
@@ -110,9 +116,16 @@ require("lvim.lsp.null-ls.linters").setup({
   },
   {
     name = "shellcheck",
+    args = { "--severity", "warning" },
     filetypes = { "sh", "bash" },
   },
 })
+
+lvim.format_on_save.enabled = false
+lvim.format_on_save = {
+  pattern = { "*.py" },
+  timeout = 2000,
+}
 
 vim.opt.foldcolumn = '1'
 vim.opt.foldlevel = 99
@@ -187,4 +200,3 @@ vim.cmd [[
   let g:mkdp_open_to_the_world = 0
   let g:mkdp_browser = '/usr/bin/firefox'
 ]]
-
