@@ -33,7 +33,7 @@ COLORS=('#EC7875' '#61C766' '#FDD835' '#42A5F5' '#BA68C8' '#4DD0E1' '#00B19F' \
 ACCENT="#A3BE8CFF"
 
 # overwrite colors file
-cat > $dir/colors.rasi <<- EOF
+cat > "$dir/colors.rasi" <<- EOF
 	/* colors */
 
 	* {
@@ -49,4 +49,4 @@ EOF
 # themes=($(ls -p --hide="launcher.sh" --hide="colors.rasi" $dir))
 # theme="${themes[$(( $RANDOM % 12 ))]}"
 
-rofi -no-lazy-grab -show-icons -show drun -modi drun -theme $dir/"$theme"
+rofi -no-lazy-grab -show-icons -show drun -modi drun -theme "$dir/$theme"
