@@ -1,10 +1,7 @@
 #!/usr/bin/bash
 
 function list_containers() {
-    for f in $(ls -1 "$container_path"); do
-        filename="$(basename $f)"
-        echo "${filename%.*}"
-    done
+    find "$container_path" -type f -name '*.vc' -print 2>/dev/null
 }
 
 function usage() {
@@ -12,6 +9,7 @@ function usage() {
     echo ''
     echo 'Options:'
     echo '  -c | -f | -n    Name of the VeraCrypt container'
+    echo '  -d              Directory containing VeraCrypt container'
     echo '  -m              Where to mount the container'
     echo '  -u              Unmount instead of mount'
     echo '  -l              Print list of VeraCrypt containers'
@@ -20,20 +18,22 @@ function usage() {
 }
 
 container_name=""
-container_path="$HOME/ssd500/ntfs/VeraCryptContainers"
+container_path=""
 container_file=""
 mount_point=""
-unmount=false
+unmount='false'
+do_list='false'
 
-args="$(getopt -o c:f:n:m:ulLh --name "$0" -- "$@")"
+args="$(getopt -o c:f:n:d:m:ulLh --name "$0" -- "$@")"
 eval set -- "$args"
 
 while true; do
     case "$1" in
         -c | -f | -n) container_name="$2"; shift 2; ;;
+        -d) container_path="$2"; shift 2; ;;
         -m) mount_point="$2"; shift 2; ;;
-        -u) unmount=true; shift; ;;
-        -l) list_containers; exit 0; ;;
+        -u) unmount='true'; shift; ;;
+        -l) do_list='true'; shift; ;;
         -L) veracrypt -t -l; exit 0; ;;
         -h) usage; exit 0; ;;
         --) shift; break; ;;
@@ -46,9 +46,16 @@ if [ -z "$mount_point" ]; then
     mount_point="$HOME/$container_name"
 fi
 
+[ -z "$container_path" ] && container_path="$HOME/ssd500/ntfs/VeraCryptContainers"
+
+if [ "$do_list" == 'true' ]; then
+  list_containers
+  exit 0
+fi
+
 case "$container_name" in
-    *.hc) ;;
-    *) container_name="$container_name.hc"; ;;
+    *.vc) ;;
+    *) container_name="$container_name.vc"; ;;
 esac
 
 container_file="$container_path/$container_name"
