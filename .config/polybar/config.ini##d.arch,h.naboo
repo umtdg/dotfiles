@@ -178,9 +178,9 @@ override-redirect = false
                                          
 [module/launcher]
 type = custom/text
-content = " "
-content-margin = 1
-content-foreground = ${colors.arch-logo}
+filter = " "
+filter-margin = 1
+filter-foreground = ${colors.arch-logo}
 click-left = ~/.config/rofi/bin/launcher_colorful
 
 [module/tray]
@@ -280,9 +280,9 @@ label-volume = " %percentage%%"
 [module/powermenu]
 type = custom/text
 
-content = "   "
-content-foreground = ${colors.powermenu}
-content-padding = 0
+filter = "   "
+filter-foreground = ${colors.powermenu}
+filter-padding = 0
 
 click-left = /home/ahsoka/.config/rofi/bin/powermenu
 
@@ -411,10 +411,10 @@ label-layout = "%layout%"
 
 [module/sep]
 type = custom/text
-content = "|"
-content-background = ${colors.background}
-content-foreground = ${colors.sep}
-content-padding = 1
+filter = "|"
+filter-background = ${colors.background}
+filter-foreground = ${colors.sep}
+filter-padding = 1
 
 [module/spotify]
 type = custom/script

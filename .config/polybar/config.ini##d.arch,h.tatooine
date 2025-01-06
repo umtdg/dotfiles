@@ -149,9 +149,9 @@ modules-left = launcher sep i3 sep title
                                          
 [module/launcher]
 type = custom/text
-content = " "
-content-margin = 1
-content-foreground = ${colors.arch-logo}
+format = " "
+format-margin = 1
+format-foreground = ${colors.arch-logo}
 click-left = ~/.config/rofi/bin/launcher_colorful
 
 [module/tray]
@@ -333,9 +333,9 @@ format-warn-foreground = ${colors.cpu-temp-warn}
 [module/powermenu]
 type = custom/text
 
-content = "   "
-content-foreground = ${colors.powermenu}
-content-padding = 0
+format = "   "
+format-foreground = ${colors.powermenu}
+format-padding = 0
 
 click-left = /home/skywalker/.config/rofi/bin/powermenu
 
@@ -456,10 +456,10 @@ label-layout = %layout%
 
 [module/sep]
 type = custom/text
-content = "|"
-content-background = ${colors.background}
-content-foreground = ${colors.sep}
-content-padding = 1
+format = "|"
+format-background = ${colors.background}
+format-foreground = ${colors.sep}
+format-padding = 1
 
 [module/spotify]
 type = custom/script
