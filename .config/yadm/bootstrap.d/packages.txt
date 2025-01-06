@@ -4,7 +4,9 @@ alsa-utils
 base-devel
 brightnessctl
 blueberry
+calc
 calf
+cmake
 copyq
 curl
 docker
