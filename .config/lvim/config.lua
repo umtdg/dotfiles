@@ -23,7 +23,6 @@ lvim.plugins = {
       vim.g.mkdp_browser = '/usr/bin/firefox'
     end,
   },
-  { url = "https://gitlab.com/schrieveslaach/sonarlint.nvim.git" },
   {
     "aznhe21/actions-preview.nvim",
     config = function()
@@ -81,11 +80,7 @@ local skipped_servers = {
   "ruff",
   "ruff_lsp",
 }
--- vim.list_extend(lvim.lsp.installer.setup.ensure_installed, ensure_installed)
--- vim.list_extend(lvim.lsp.installer.setup.skipped_servers, skipped_servers)
--- vim.list_extend(lvim.lsp.automatic_configuration.ensure_installed, ensure_installed)
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, skipped_servers)
--- lvim.lsp.installer.setup.automatic_servers_installation = true
 
 local lspconfig = require('lspconfig')
 
@@ -150,22 +145,6 @@ nvim_ufo.setup({
     return { 'lsp', 'indent' }
   end
 })
-
--- require('sonarlint').setup({
---   server = {
---     cmd = {
---       'sonarlint-language-server',
---       '-stdio',
---       '-analyzers',
---       vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarcfamily.jar"),
---       vim.fn.expand("$MASON/share/sonarlint-analyzers/sonarpython.jar"),
---     }
---   },
---   filetypes = {
---     "cpp",
---     "python"
---   }
--- })
 
 vim.keymap.set("n", "zR", nvim_ufo.openAllFolds)
 vim.keymap.set("n", "zM", nvim_ufo.closeAllFolds)
