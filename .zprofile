@@ -21,7 +21,7 @@ append_path "$HOME/.yarn/bin"
 export PATH
 
 # Auxiliary
-export EDITOR=vim
+export EDITOR=nvim
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
 
 # ArchLinux specific env variables
