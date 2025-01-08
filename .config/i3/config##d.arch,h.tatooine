@@ -182,8 +182,8 @@ exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-ag
 # exec --no-startup-id xrandr --output HDMI-1 --right-of HDMI-0
 
 # disable screen saver and DPMS
-exec --no-startup-id xset s off
-exec --no-startup-id xset -dpms
+# exec --no-startup-id xset s off
+# exec --no-startup-id xset -dpms
 
 # reduce blue light
 # exec --no-startup-id redshift -P -O 5000
