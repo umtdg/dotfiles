@@ -35,9 +35,11 @@ libpulse
 lsp-plugins
 lxappearance
 mlocate
+neofetch
 neovim
 net-tools
 nodejs
+noto-fonts
 npm
 openssh
 openvpn
