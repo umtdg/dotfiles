@@ -1,0 +1,61 @@
+layout {
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:compact-bar"
+        }
+        children
+        pane size=1 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+
+    pane_template name="blancer_pane" {
+        cwd "/mnt/ssd500/btrfs/Projects/blancer"
+    }
+
+    tab name="Edit and Run" {
+        blancer_pane name="Editor" {
+            command "zsh"
+            args "-c" "source venv/$USER/bin/activate && nvim"
+        }
+        floating_panes {
+            blancer_pane name="Run" {
+                command "zsh" 
+                args "-c" "source venv/$USER/bin/activate && python -m blancer"
+                start_suspended true
+            }
+            pane name="PostgreSQL Client" {
+                command "psql"
+                args "-U" "blancer" "-d" "blancer"
+                start_suspended true
+            }
+            pane name="Start PostgreSQL Service" {
+                command "sudo"
+                args "systemctl" "start" "postgresql"
+                close_on_exit true
+            }
+        }
+    }
+
+    tab name="Lazygit" {
+        blancer_pane {
+            command "lazygit"
+            start_suspended true
+        }
+    }
+
+    tab name="Lint and Format" {
+        pane split_direction="vertical" {
+            blancer_pane {
+                command "zsh"
+                args "-c" "source venv/$USER/bin/activate && flake8 . --count --exit-zero --statistics"
+                start_suspended true
+            }
+            blancer_pane {
+                command "zsh"
+                args "-c" "source venv/$USER/bin/activate && black --check --verbose ./blancer"
+                start_suspended true
+            }
+        }
+    }
+}
