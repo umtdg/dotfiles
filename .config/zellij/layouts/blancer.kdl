@@ -10,7 +10,7 @@ layout {
     }
 
     pane_template name="blancer_pane" {
-        cwd "/mnt/ssd500/btrfs/Projects/blancer"
+        cwd "/mnt/ssd500/ntfs/Projects/blancer"
     }
 
     tab name="Edit and Run" {
