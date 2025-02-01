@@ -127,6 +127,9 @@ alias dockyeet='docker system prune -fa'
 alias dockbuild='docker build -f ./Dockerfile -t'
 alias dockpush='docker push'
 
+# ZSH functions (Found under ~/.zsh/functions)
+autoload -Uz incognito
+
 # ZSH options
 setopt autocd
 setopt interactivecomments
