@@ -15,10 +15,8 @@ distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
 # PATH
 append_path "$HOME/bin"
 append_path "$HOME/.local/bin"
-append_path "$HOME/go/bin"
 append_path "$HOME/.cargo/bin"
 append_path "$HOME/.yarn/bin"
-export PATH
 
 # Auxiliary
 export EDITOR=nvim
@@ -49,4 +47,12 @@ export LESS_TERMCAP_so=$'\E[01;33m'
 export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[1;32m'
 export LESS_TERMCAP_ue=$'\E[0m'
+
+# Go env
+export GOPATH="$HOME/.go"
+export GOBIN="$GOPATH/bin"
+append_path "$GOBIN"
+
+# Export PATH at the end to allow modification in multpile places
+export PATH
 
