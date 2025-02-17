@@ -422,7 +422,7 @@ label-warn = " ﬙ %percentage%%"
 
 [module/network]
 type = internal/network
-interface = eno1
+interface = wlp11s0
 
 interval = 1.0
 accumulate-stats = true
