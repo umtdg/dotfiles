@@ -29,33 +29,59 @@ eval set -- "$args"
 
 while true; do
     case "$1" in
-        -c | -f | -n) container_name="$2"; shift 2; ;;
-        -d) container_path="$2"; shift 2; ;;
-        -m) mount_point="$2"; shift 2; ;;
-        -u) unmount='true'; shift; ;;
-        -l) do_list='true'; shift; ;;
-        -L) veracrypt -t -l; exit 0; ;;
-        -h) usage; exit 0; ;;
-        --) shift; break; ;;
-        *) echo "Unknown option $1"; exit 1; ;;
+    -c | -f | -n)
+        container_name="$2"
+        shift 2
+        ;;
+    -d)
+        container_path="$2"
+        shift 2
+        ;;
+    -m)
+        mount_point="$2"
+        shift 2
+        ;;
+    -u)
+        unmount='true'
+        shift
+        ;;
+    -l)
+        do_list='true'
+        shift
+        ;;
+    -L)
+        veracrypt -t -l
+        exit 0
+        ;;
+    -h)
+        usage
+        exit 0
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *)
+        echo "Unknown option $1"
+        exit 1
+        ;;
     esac
 done
-
 
 if [ -z "$mount_point" ]; then
     mount_point="$HOME/$container_name"
 fi
 
-[ -z "$container_path" ] && container_path="$HOME/ssd500/ntfs/VeraCryptContainers"
+[ -z "$container_path" ] && container_path="/mnt/ssd500/ntfs/VeraCryptContainers"
 
 if [ "$do_list" == 'true' ]; then
-  list_containers
-  exit 0
+    list_containers
+    exit 0
 fi
 
 case "$container_name" in
-    *.vc) ;;
-    *) container_name="$container_name.vc"; ;;
+*.vc) ;;
+*) container_name="$container_name.vc" ;;
 esac
 
 container_file="$container_path/$container_name"
@@ -84,4 +110,3 @@ else
     echo "Unmounting $container_file"
     sudo veracrypt -t -d "$container_file"
 fi
-
