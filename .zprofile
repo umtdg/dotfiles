@@ -1,12 +1,19 @@
 # ~/.zprofile
 
 # This function API is accessible to scripts in /etc/profile.d
-append_path () {
+function append_path() {
     case ":$PATH:" in
         *:"$1":*)
             ;;
         *)
             PATH="${PATH:+$PATH:}$1"
+    esac
+}
+
+function prepend_path() {
+    case ":$PATH:" in
+        *:"$1":*) ;;
+        *) PATH="$1${PATH:+:$PATH}" ;;
     esac
 }
 
@@ -17,6 +24,9 @@ append_path "$HOME/bin"
 append_path "$HOME/.local/bin"
 append_path "$HOME/.cargo/bin"
 append_path "$HOME/.yarn/bin"
+
+# ccache needs to be prepended to be prioritized over usual gcc/clang
+prepend_path "/usr/lib/ccache/bin"
 
 # Auxiliary
 export EDITOR=nvim
