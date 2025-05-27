@@ -1,32 +1,32 @@
 # ~/.zprofile
 
 # This function API is accessible to scripts in /etc/profile.d
-function append_path() {
-    case ":$PATH:" in
-        *:"$1":*)
-            ;;
-        *)
-            PATH="${PATH:+$PATH:}$1"
-    esac
-}
+function insert_path() {
+    local new_path="$1"
+    local prepend="$2"
 
-function prepend_path() {
     case ":$PATH:" in
-        *:"$1":*) ;;
-        *) PATH="$1${PATH:+:$PATH}" ;;
+        *:"$new_path":*) ;;
+        *)
+            if [ -z "$prepend" ]; then
+                PATH="${PATH:+$PATH:}$new_path"
+            else
+                PATH="$new_path${PATH:+:$PATH}$new_path"
+            fi
+            ;;
     esac
 }
 
 distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
 
 # PATH
-append_path "$HOME/bin"
-append_path "$HOME/.local/bin"
-append_path "$HOME/.cargo/bin"
-append_path "$HOME/.yarn/bin"
+insert_path "$HOME/bin"
+insert_path "$HOME/.local/bin"
+insert_path "$HOME/.cargo/bin"
+insert_path "$HOME/.yarn/bin"
 
 # ccache needs to be prepended to be prioritized over usual gcc/clang
-prepend_path "/usr/lib/ccache/bin"
+insert_path "/usr/lib/ccache/bin" 1
 
 # Auxiliary
 export EDITOR=nvim
@@ -61,7 +61,7 @@ export LESS_TERMCAP_ue=$'\E[0m'
 # Go env
 export GOPATH="$HOME/.go"
 export GOBIN="$GOPATH/bin"
-append_path "$GOBIN"
+insert_path "$GOBIN"
 
 # Export PATH at the end to allow modification in multpile places
 export PATH
