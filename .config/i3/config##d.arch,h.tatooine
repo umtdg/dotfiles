@@ -175,6 +175,9 @@ bindsym XF86AudioPause exec playerctl --player=spotify play-pause
 bindsym XF86AudioNext  exec playerctl --player=spotify next
 bindsym XF86AudioPrev  exec playerctl --player=spotify previous
 
+# Turn off headset lights
+bindsym $mod+Ctrl+h       exec headsetcontrol -l 0
+
 # polkit agent
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
