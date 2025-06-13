@@ -214,7 +214,7 @@ bindsym $mod+Control+n exec dunstctl history-pop
 exec_always --no-startup-id picom --config $HOME/.config/compton.conf &
 
 # keyboard layouts
-exec_always --no-startup-id "/usr/bin/setxkbmap -layout us,tr -option caps:swapescape"
+exec_always --no-startup-id "/usr/bin/setxkbmap -layout us,tr"
 bindsym $mod+m exec "xkb-switch -n"
 
 # Workspace monitors
