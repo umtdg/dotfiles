@@ -63,6 +63,13 @@ export GOPATH="$HOME/.go"
 export GOBIN="$GOPATH/bin"
 insert_path "$GOBIN"
 
+# nnn
+export NNN_PLUG='c:fzcd;o:fzopen'
+export NNN_FIFO='/tmp/nnn.fifo'
+
+BLK="0b" CHR="0b" DIR="0c" EXE="0a" REG="00" HARDLINK="00" SYMLINK="0e" MISSING="00" ORPHAN="09" FIFO="0f" SOCK="0d" OTHER="00"
+export NNN_FCOLORS="$BLK$CHR$DIR$EXE$REG$HARDLINK$SYMLINK$MISSING$ORPHAN$FIFO$SOCK$OTHER"
+
 # Export PATH at the end to allow modification in multpile places
 export PATH
 
