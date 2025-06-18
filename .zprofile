@@ -11,7 +11,7 @@ function insert_path() {
             if [ -z "$prepend" ]; then
                 PATH="${PATH:+$PATH:}$new_path"
             else
-                PATH="$new_path${PATH:+:$PATH}$new_path"
+                PATH="$new_path${PATH:+:$PATH}"
             fi
             ;;
     esac
