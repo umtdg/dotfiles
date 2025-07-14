@@ -88,11 +88,6 @@ alias osinfo='printf "'"%s %s"'" "$(grep "'"^NAME=.*$"'" /etc/os-release | xargs
 alias sysinfo='neofetch --off'
 alias ps_by_mem="ps -eo pid,rss,comm= | awk '{proc[\$3]+=\$2} END {for (p in proc) {printf \"%-30s %10.2f MB\\n\", p, proc[p]/1024}}' | sort -k2nr | head -20"
 
-ntfs_uuid='C64618AA46189CED'
-btrfs_uuid='434d2f2b-0784-460b-aab2-21c80d454d5f'
-alias mountssd500="mountntfs /dev/disk/by-uuid/$ntfs_uuid /mnt/ssd500/ntfs && mountbtrfs /dev/disk/by-uuid/$btrfs_uuid /mnt/ssd500/btrfs"
-alias umountssd500='sudo umount -l /mnt/ssd500/btrfs /mnt/ssd500/ntfs'
-
 # Git aliases
 gls_preview='echo {} | cut -f 1 -d " " | xargs git show --color=always'
 gls_str="git log --pretty=oneline --abbrev-commit | fzf --ansi --preview '$gls_preview'"

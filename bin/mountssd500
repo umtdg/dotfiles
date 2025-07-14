@@ -1,0 +1,99 @@
+#!/usr/bin/bash
+
+declare NTFS_UUID='C64618AA46189CED'
+declare NTFS_TARGET='/mnt/ssd500/ntfs'
+declare NTFS_MOUNT='false'
+
+declare BTRFS_UUID='434d2f2b-0784-460b-aab2-21c80d454d5f'
+declare BTRFS_TARGET='/mnt/ssd500/btrfs'
+declare BTRFS_MOUNT='false'
+
+declare UMOUNT='false'
+
+function usage() {
+    echo "Usage: $0 [OPTIONS]"
+    echo ''
+    echo '[OPTIONS]'
+    echo '-n  | --ntfs          Mount NTFS'
+    echo '-b  | --btrfs         Mount BTRFS'
+    echo "-nu | --ntfs-uuid     NTFS device UUID (default: $NTFS_UUID)"
+    echo "-bu | --btrfs-uuid    BTRFS device UUID (default: $BTRFS_UUID)"
+    echo "-nt | --ntfs-target   NTFS mount point (default: $NTFS_TARGET)"
+    echo "-bt | --btrfs-target  BTRFS mount point (default: $BTRFS_TARGET)"
+    echo '-u  | --umount        Umount instead of mount'
+    echo '-h  | --help          Show this help message and exit'
+}
+
+function check_mounted() {
+    local mounted='false'
+    mountpoint "$1" >/dev/null 2>&1 && mounted='true'
+
+    echo "$mounted"
+}
+
+function mount_ntfs() {
+    local mounted
+    mounted="$(check_mounted "$NTFS_TARGET")"
+
+    if [ "$UMOUNT" = 'false' ] && [ "$mounted" = 'false' ]; then
+        sudo mount -v \
+            -t ntfs-3g \
+            -o rw,relatime,nofail,x-gvfs-show,uid=1000,gid=1000,dmask=022,fmask=133 \
+            "/dev/disk/by-uuid/$NTFS_UUID" "$NTFS_TARGET"
+    elif [ "$UMOUNT" = 'true' ] && [ "$mounted" = 'true' ]; then
+        sudo umount -v "$NTFS_TARGET"
+    fi
+}
+
+function mount_btrfs() {
+    local mounted
+    mounted="$(check_mounted "$BTRFS_TARGET")"
+
+    if [ "$UMOUNT" = 'false' ] && [ "$mounted" = 'false' ]; then
+        sudo mount -v \
+            -t btrfs \
+            -o rw,relatime,ssd,space_cache=v2,subvolid=5,subvol=/, \
+            "/dev/disk/by-uuid/$BTRFS_UUID" "$BTRFS_TARGET"
+    elif [ "$UMOUNT" = 'true' ] && [ "$mounted" = 'true' ]; then
+        sudo umount -v "$BTRFS_TARGET"
+    fi
+}
+
+while [ -n "$1" ]; do
+    case "$1" in
+    -n | --ntfs) NTFS_MOUNT='true' ;;
+    -b | --btrfs) BTRFS_MOUNT='true' ;;
+    -nu | --ntfs-uuid)
+        shift
+        NTFS_UUID="$1"
+        ;;
+    -bu | --btrfs-uuid)
+        shift
+        BTRFS_UUID="$1"
+        ;;
+    -nt | --ntfs-target)
+        shift
+        NTFS_TARGET="$1"
+        ;;
+    -bt | --btrfs-target)
+        shift
+        BTRFS_TARGET="$1"
+        ;;
+    -u | --umount) UMOUNT='true' ;;
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    *)
+        echo "Unknown arg $1" >&2
+        exit 1
+        ;;
+    esac
+    shift
+done
+
+[ "$NTFS_MOUNT" = 'true' ] && mount_ntfs
+
+[ "$BTRFS_MOUNT" = 'true' ] && mount_btrfs
+
+exit 0

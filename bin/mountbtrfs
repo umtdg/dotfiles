@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-sudo mount -t btrfs -o rw,relatime,ssd,space_cache=v2,subvolid=5,subvol=/, "$1" "$2"
-

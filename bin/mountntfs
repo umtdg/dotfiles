@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-sudo mount -t ntfs-3g -o rw,relatime,nofail,x-gvfs-show,uid=1000,gid=1000,dmask=022,fmask=133 "$1" "$2"
