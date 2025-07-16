@@ -32,7 +32,7 @@ $ cd yadm
 
 Then do
 ```
-$ yadm clone https://umtdg.com/dotfiles.git
+$ yadm clone https://github.com/umtdg/dotfiles.git
 ```
 
 ### Yadm Bootstrap
