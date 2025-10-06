@@ -1,7 +1,15 @@
-[url "https://aur.archlinux.org/"]
-	insteadOf = "aur:"
+[url "git@github.com:"]
+	insteadof = "github:"
+[url "git@gitlab.com:"]
+	insteadof = "gitlab:"
+
 [url "git@github.com:umtdg/"]
 	insteadof = "umtdg:"
+
+[url "git@gitlab.archlinux.org/"]
+	insteadof = "gitlab.arch:"
+[url "https://aur.archlinux.org/"]
+	insteadOf = "aur:"
 
 [color]
 	ui = true
