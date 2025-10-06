@@ -194,10 +194,6 @@ exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-ag
 # reduce blue light
 # exec --no-startup-id redshift -P -O 5000
 
-# disable natural scrolling on wireless mouse
-exec_always --no-startup-id xinput set-prop 'pointer:Logitech Wireless Mouse' 'libinput Natural Scrolling Enabled' 0
-exec_always --no-startup-id xinput set-prop 'pointer:Elan Touchpad' 'libinput Natural Scrolling Enabled' 1
-
 # topbar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
