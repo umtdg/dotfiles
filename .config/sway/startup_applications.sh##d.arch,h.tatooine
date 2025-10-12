@@ -1,0 +1,12 @@
+#!/bin/bash
+
+sleep 1
+
+# no-gui apps
+swaymsg 'exec copyq'
+swaymsg 'exec megasync'
+
+swaymsg 'workspace 2; exec alacritty' && sleep 1
+swaymsg 'exec spotify' && sleep 1
+swaymsg 'exec thunderbird' && sleep 1
+swaymsg 'exec easyeffects' && sleep 1
