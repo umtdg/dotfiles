@@ -257,13 +257,7 @@ assign [app_id="easyeffects"] $ws8
 bar {
         position top
 
-        status_command while date +'%Y-%m-%d %X'; do sleep 1; done
-
-        colors {
-                statusline #ffffff
-                background #323232
-                inactive_workspace #32323200 #32323200 #5c5c5c
-        }
+        swaybar_command waybar
 }
 
 exec $HOME/.config/sway/startup_applications.sh
