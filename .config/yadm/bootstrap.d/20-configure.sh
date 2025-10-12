@@ -9,19 +9,19 @@ function usage() {
   echo 's | sddm      configure sddm'
   echo 'z | zsh       configure zsh'
   echo 'v | vim       configure vim'
-  echo 'L | lvim      configure lvim'
   echo 'd | docker    configure docker'
   echo 'S | services  enable and start required systemctl services'
   echo 'x | x11       configure X11'
   echo 'h | help      show this help message and exit'
 }
 
+# TODO: Find a way to automatically download Sweet Cursors
 function configure_icon_theme() {
   log -i "Configuring icon and cursor theme"
 
   log -i "Creating directories"
   icons_dir="$HOME/.icons"
-  mkdir -p "$icons_dir"
+  mkdir -pv "$icons_dir"
 
   log -w "Manually download Sweet Cursors from 'https://www.gnome-look.org/p/1393084' and enter the file path"
   read -r -p "Path to downloaded file (leave empty to skip): " archive_path
@@ -51,6 +51,7 @@ function configure_sddm() {
   sudo install -Dm 644 -t /etc/sddm.conf.d ~/sddm.conf.d/*
 }
 
+# TODO: This should be changed to adapt the new fixed configuration
 function configure_libinput() {
   file='/etc/X11/xorg.conf.d/30-touchpad.conf'
   if [[ "$HOSTNAME" == 'naboo' ]] && ! grep -iq 'Section "InputClass"' "$file"; then
@@ -84,11 +85,6 @@ function configure_zsh() {
 function configure_vim() {
   log -i "Vim first run"
   vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'
-}
-
-function configure_lvim() {
-  log -i "Install LunarVim Nightly"
-  bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
 }
 
 function configure_docker() {
@@ -134,8 +130,6 @@ declare -A commands=(
   ['zsh']='configure_zsh'
   ['v']='configure_vim'
   ['vim']='configure_vim'
-  ['L']='configure_lvim'
-  ['lvim']='configure_lvim'
   ['d']='configure_docker'
   ['docker']='configure_docker'
   ['S']='configure_services'
