@@ -14,6 +14,11 @@ xorg
 xorg-server
 xorg-setxkbmap
 
+# wayland
+wayland
+wlroots
+xorg-xwayland
+
 # audio
 alsa-lib
 alsa-utils
@@ -46,6 +51,8 @@ python-pydbus
 rofi
 sddm
 shutter
+sway
+swaylock
 xdg-user-dirs
 
 # file manager
