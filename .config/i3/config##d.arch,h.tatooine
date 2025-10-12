@@ -191,14 +191,6 @@ exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-ag
 # reduce blue light
 # exec --no-startup-id redshift -P -O 5000
 
-# adjust mouse pointer speed
-# we need to set "Accel Profile Enabled" to "flat" (0 1) and
-# adjust "Accel Speed" to our liking as changing "Coordinate Transformation Matrix"
-# results in wrong mouse position after mouse warp
-exec_always --no-startup-id xinput --set-prop "pointer:ASUSTeK ROG GLADIUS II CORE" "libinput Accel Profile Enabled" 0 1
-exec_always --no-startup-id xinput --set-prop "pointer:ASUSTeK ROG GLADIUS II CORE" "libinput Accel Speed" -0.2
-# exec_always --no-startup-id xinput --set-prop "pointer:ASUSTeK ROG GLADIUS II CORE" "Coordinate Transformation Matrix" 0.6 0 0 0 0.6 0 0 0 1
-
 # topbar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
