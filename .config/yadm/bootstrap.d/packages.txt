@@ -38,6 +38,7 @@ blueberry
 dunst
 feh
 flameshot
+grim
 i3-gaps
 i3lock
 noto-fonts
@@ -47,11 +48,13 @@ picom
 polkit
 polkit-gnome
 polybar
+python-i3ipc
 python-pydbus
 rofi
 sddm
 shutter
 sway
+sway-contrib
 swaylock
 xdg-user-dirs
 
