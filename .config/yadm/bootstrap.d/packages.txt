@@ -45,6 +45,7 @@ noto-fonts
 orchis-theme
 papirus-icon-theme
 picom
+pinentry
 polkit
 polkit-gnome
 polybar
@@ -55,7 +56,10 @@ sddm
 shutter
 sway
 sway-contrib
+swaybg
 swaylock
+xdg-desktop-portal-gtk
+xdg-desktop-portal-wlr
 xdg-user-dirs
 
 # file manager
