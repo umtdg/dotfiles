@@ -245,10 +245,8 @@ bindsym $mod+Ctrl+h exec headsetcontrol -l 0
 # | WORKSPACE ASSIGNMENTS |
 # +-----------------------+
 
-assign [class="vlc"] $ws6
-assign [class="Signal"] $ws7
-assign [class="discord"] $ws7
-for_window [class="Spotify"] move container to workspace $ws8
+assign [app_id="signal"] $ws7
+assign [app_id="spotify"] $ws8
 assign [app_id="thunderbird"] $ws8
 assign [app_id="easyeffects"] $ws8
 
