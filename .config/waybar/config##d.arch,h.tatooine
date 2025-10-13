@@ -1,0 +1,140 @@
+{
+    "height": 20,
+    "spacing": 2,
+
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+        "sway/scratchpad",
+        "sway/window",
+    ],
+
+    "modules-center": [
+        "tray",
+        "custom/spotify",
+    ],
+
+    "modules-right": [
+        "idle_inhibitor",
+        "sway/language",
+        "cpu",
+        "temperature",
+        "memory",
+        "network",
+        "backlight",
+        "pulseaudio",
+        "battery",
+        "clock",
+        "custom/power",
+    ],
+
+    // Sway Modules
+    "sway/mode": {
+        "format": "<span style=\"italic\"></span>",
+    },
+
+    "sway/scratchpad": {
+        "format": "{icon} {count}",
+        "show-empty": false,
+        "format-icons": ["", ""],
+        "tooltip": true,
+        "tooltip-format": "{app}: {title}",
+    },
+
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": "",
+        },
+    },
+
+    "tray": {
+        "spacing": 3,
+    },
+
+    "clock": {
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format": "{:%a, %d %b %Y - %T}",
+    },
+
+    "cpu": {
+        "format": "﬙  {usage}%",
+        "tooltip": false,
+    },
+
+    "temperature": {
+        // "hwmon-path": "",
+        "critical-threshold": 90,
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", ""],
+    },
+
+    "memory": {
+        "format": "  {}%",
+    },
+
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["", "", "", "", "", "", "", "", ""],
+    },
+
+    "battery": {
+        "bat": "BAT0",
+        "states": {
+            "full": 95,
+            "good": 85,
+            "warning": 50,
+            "critical": 25,
+        },
+
+        "format": "{icon}  {capacity}%",
+        "format-full": "{icon}  {capacity}%",
+        "format-charging": "  {capacity}%",
+        "format-plugged": "  {capacity}%",
+        "format-alt": "{icon}  {time}",
+        "format-icons": ["", "", "", "", ""],
+    },
+
+    "network": {
+        "format-wifi": "  {essid} ({signalStrength}%)",
+        "format-ethernet": "  {ipaddr}/{cidr}",
+        "format-linked": "  {ifname} (No IP)",
+        "format-disconnected": "⚠  WELL FUCK",
+        "format-alt": "{ifname} - {ipaddr}/{cidr}",
+        "tooltip-format": "  {ifname} via {gwaddr}",
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}% {format_source}",
+        "format-muted": "{icon} {format_source}",
+        "format-source": " {volume}%",
+        "format-source-muted": "",
+        "format-bluetooth": "{icon} {volume}% {format_source}",
+        "format-bluetooth-muted": "{icon} {format_source}",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""],
+        },
+    },
+
+    "custom/spotify": {
+        "format": "  {text}",
+        "return-type": "text",
+        "max-length": 40,
+        "escape": true,
+        "interval": 1,
+        "exec": "playerctl --player=spotify metadata --format '{{artist}} - {{title}}'",
+        "on-click": "playerctl --player=spotify previous",
+        "on-click-middle": "playerctl --player=spotify play-pause",
+        "on-click-right": "playerctl --player=spotify next",
+        "tooltip": false,
+    },
+}
+
+// vim: ft=jsonc sw=4 et
