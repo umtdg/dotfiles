@@ -59,7 +59,7 @@ case $chosen in
       fi
       ;;
     "$lock")
-      i3lock-fancy-multimonitor --blur=0x28
+      swaylock -e -f -i $HOME/.lock.png
       ;;
     "$logout")
       ans=$(confirm_exit &)
