@@ -1,6 +1,7 @@
 [General]
 buttons=@Invalid()
 contrastOpacity=188
+disabledGrimWarning=true
 disabledTrayIcon=false
 drawColor=#ff0000
 drawFontSize=8
@@ -11,6 +12,7 @@ savePath=/home/skywalker/Images/screenshots
 savePathFixed=true
 showStartupLaunchMessage=true
 startupLaunch=true
+useGrimAdapter=true
 
 [Shortcuts]
 TYPE_ARROW=A
