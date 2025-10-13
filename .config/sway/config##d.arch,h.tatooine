@@ -253,7 +253,6 @@ assign [app_id="easyeffects"] $ws8
 # | START APPLICATIONS |
 # +--------------------+
 
-# TODO: waybar
 bar {
         position top
 
