@@ -16,7 +16,7 @@ xorg-setxkbmap
 
 # wayland
 wayland
-wlroots
+wlroots0.19
 xorg-xwayland
 
 # audio
@@ -95,7 +95,6 @@ cmake
 docker
 docker-buildx
 docker-compose
-jdk-openjdk
 jdk11-openjdk
 jdk21-openjdk
 neovim
