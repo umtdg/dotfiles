@@ -10,19 +10,20 @@ set $right l
 set $term alacritty
 
 # workspaces
-# left monitor
 set $ws0 "0"
 set $ws1 "1"
-# center monitor
 set $ws2 "2"
 set $ws3 "3"
 set $ws4 "4"
 set $ws5 "5"
 set $ws6 "6"
-# right monitor
 set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9"
+
+# outputs
+set $output_left eDP-1
+set $output_right HDMI-2
 
 # super key
 set $mod Mod4
@@ -35,44 +36,35 @@ set $mod Mod4
 # turn off displays after 15 minutes, and turn back on when resumed
 # lock before going to sleep
 exec swayidle -w \
-        timeout 600 'swaylock -e -f -i $HOME/.lock.png' \
-        timeout 900 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+        timeout 300 'swaylock -e -f -i $HOME/.lock.png' \
+        timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
         before-sleep 'swaylock -e -f -i $HOME/.lock.png'
 
 # display configuration
-output DisplayPort-0 {
-        mode 3840x2160@60.00Hz
+output $output_left {
+        mode 1920x1070@74.97Hz
         pos 1920 0
 }
 
-output DisplayPort-1 {
-        mode 1920x1080@74.97Hz
-        pos 4480 180
-}
-
-output HDMI-A-0 {
-        mode 1920x1080@74.97Hz
+output $output_right {
+        mode 1920x1080@60.02Hz
         pos 0 180
 }
 
 # background
-output * bg ~/.background fill
+output "*" bg ~/.background fill
 
 # display workspace assignment
-# left
-workspace $ws0 output HDMI-A-0
-workspace $ws1 output HDMI-A-0
-# center
-workspace $ws2 output DisplayPort-0
-workspace $ws3 output DisplayPort-0
-workspace $ws4 output DisplayPort-0
-workspace $ws5 output DisplayPort-0
-workspace $ws6 output DisplayPort-0
-# right
-workspace $ws7 output DisplayPort-1
-workspace $ws8 output DisplayPort-1
-workspace $ws9 output DisplayPort-1
-
+workspace $ws0 output $output_left
+workspace $ws1 output $output_left
+workspace $ws7 output $output_left
+workspace $ws8 output $output_left
+workspace $ws9 output $output_left
+workspace $ws2 output $output_right
+workspace $ws3 output $output_right
+workspace $ws4 output $output_right
+workspace $ws5 output $output_right
+workspace $ws6 output $output_right
 
 # input configuration
 input type:keyboard {
@@ -89,6 +81,13 @@ gaps inner 5
 # window borders
 default_border pixel 0
 default_floating_border pixel 2
+
+# titlebar
+titlebar_border_thickness 1
+titlebar_padding 5 2
+
+# opacity
+exec /usr/share/sway-contrib/inactive-windows-transparency.py -o 0.9 -f 1.0 -g
 
 # +---------------+
 # | SWAY BINDINGS |
@@ -243,9 +242,8 @@ assign [class="vlc"] $ws6
 assign [class="Signal"] $ws7
 assign [class="discord"] $ws7
 for_window [class="Spotify"] move container to workspace $ws8
-assign [class="thunderbird"] $ws8
-assign [class="easyeffects"] $ws8
-assign [class="qBittorrent"] $ws8
+assign [app_id="thunderbird"] $ws8
+assign [app_id="easyeffects"] $ws8
 
 # +--------------------+
 # | START APPLICATIONS |
