@@ -42,13 +42,13 @@ exec swayidle -w \
 
 # display configuration
 output $output_left {
-        mode 1920x1070@74.97Hz
-        pos 1920 0
+        mode 1920x1080@60.02Hz
+        pos 0 0
 }
 
 output $output_right {
-        mode 1920x1080@60.02Hz
-        pos 0 180
+        mode 1920x1080@74.97Hz
+        pos 1920 0
 }
 
 # background
@@ -221,6 +221,7 @@ bindsym $mod+Tab exec --no-startup-id "~/.config/rofi/bin/window_switcher &"
 bindsym $mod+Shift+Escape exec --no-startup-id "$HOME/.config/rofi/bin/powermenu &"
 
 # TODO: screenshots
+bindsym $mod+Shift+s exec flameshot gui
 
 # dunst keybinds
 bindsym $mod+n exec dunstctl close
@@ -246,6 +247,8 @@ assign [app_id="spotify"] $ws8
 assign [app_id="thunderbird"] $ws8
 assign [app_id="easyeffects"] $ws8
 
+for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disable, move absolute position 0 0
+
 # +--------------------+
 # | START APPLICATIONS |
 # +--------------------+
@@ -260,4 +263,4 @@ exec $HOME/.config/sway/startup_applications.sh
 
 include /etc/sway/config.d
 
-# vim: set filetype=swayconfig sw=8 et
+# vim: set filetype=swayconfig sw=8 et:
