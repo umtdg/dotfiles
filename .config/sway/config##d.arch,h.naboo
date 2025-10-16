@@ -76,7 +76,9 @@ input type:keyboard {
 font pango:monospace bold 9
 
 # gap between windows
+smart_gaps on
 gaps inner 5
+gaps outer 5
 
 # window borders
 default_border pixel 0
@@ -254,9 +256,11 @@ for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disa
 # +--------------------+
 
 bar {
+        swaybar_command /home/ahsoka/.config/waybar/launch.sh
+
         position top
 
-        swaybar_command waybar
+        gaps 5
 }
 
 exec $HOME/.config/sway/startup_applications.sh

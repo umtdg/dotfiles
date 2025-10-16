@@ -4,8 +4,6 @@
 
     "modules-left": [
         "sway/workspaces",
-        "sway/mode",
-        "sway/scratchpad",
         "sway/window",
     ],
 
@@ -18,27 +16,27 @@
         "idle_inhibitor",
         "sway/language",
         "cpu",
-        "temperature",
+        "temperature#cpu",
         "memory",
         "network",
         "backlight",
         "pulseaudio",
-        "battery",
+        "battery#bat0",
         "clock",
         "custom/power",
     ],
 
-    // Sway Modules
-    "sway/mode": {
-        "format": "<span style=\"italic\"></span>",
+    "sway/workspaces": {
+        "format": "{name}",
     },
 
-    "sway/scratchpad": {
-        "format": "{icon} {count}",
-        "show-empty": false,
-        "format-icons": ["", ""],
-        "tooltip": true,
-        "tooltip-format": "{app}: {title}",
+    "sway/window": {
+        "format": "{title}",
+    },
+
+    "sway/language": {
+        "tooltip": false,
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
     },
 
     "idle_inhibitor": {
@@ -51,27 +49,61 @@
 
     "tray": {
         "spacing": 3,
+        "reverse-direction": true,
     },
 
     "clock": {
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": "{:%a, %d %b %Y - %T}",
+        "format": "{:%a, %d %b %Y - %H:%M}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color=\"#E0AF68\"><b>{}</b></span>",
+                "days": "<span color=\"#A9B1D6\"><b>{}</b></span>",
+                "weeks": "<span color=\"#7AA2F7\"><b>W{}</b></span>",
+                "weekdays": "<span color=\"#7DCFFF\"><b>{}</b></span>",
+                "today": "<span color=\"#F7768E\"><b><u>{}</u></b></span>"
+            },
+            "actions": {
+                "on-scroll-up": "shift_up",
+                "on-scroll-down": "shift_down",
+            },
+        },
     },
 
     "cpu": {
-        "format": "﬙  {usage}%",
+        "interval": 3,
+        "states": {
+            "heavy": 60,
+            "medium": 30,
+            "light": 0,
+        },
+        "format": "󰻠  {usage}%",
         "tooltip": false,
     },
 
-    "temperature": {
-        // "hwmon-path": "",
-        "critical-threshold": 90,
-        "format": "{icon} {temperatureC}°C",
-        "format-icons": ["", "", ""],
+    "temperature#cpu": {
+        "hwmon-path": "${CPUTEMP}",
+        "critical-threshold": 80,
+        "interval": 3,
+        "format": "{icon} CPU {temperatureC}°C",
+        "format-icons": ["", "", "", "", ""],
+        "tooltip": false,
     },
 
     "memory": {
-        "format": "  {}%",
+        "states": {
+            "high": 80,
+            "medium": 50,
+            "low": 0,
+        },
+        "interval": 10,
+        "format": "  {percentage}%",
+        "tooltip": true,
+        "tooltip-format": "{used:0.1f}GiB used out of {total:0.1f}GiB",
     },
 
     "backlight": {
@@ -79,46 +111,56 @@
         "format-icons": ["", "", "", "", "", "", "", "", ""],
     },
 
-    "battery": {
+    "battery#bat0": {
         "bat": "BAT0",
+        "adapter": "AC",
         "states": {
-            "full": 95,
-            "good": 85,
             "warning": 50,
             "critical": 25,
         },
+        "full-at": 95,
+        "interval": 60,
 
-        "format": "{icon}  {capacity}%",
-        "format-full": "{icon}  {capacity}%",
+        "format": "{icon}   {capacity}%",
         "format-charging": "  {capacity}%",
-        "format-plugged": "  {capacity}%",
-        "format-alt": "{icon}  {time}",
+        "format-alt": "{capacity}% {time} left",
         "format-icons": ["", "", "", "", ""],
     },
 
     "network": {
-        "format-wifi": "  {essid} ({signalStrength}%)",
-        "format-ethernet": "  {ipaddr}/{cidr}",
+        "interface": "wlp0s20f3",
+        "interval": 3,
+
+        "format-wifi": "   {essid} ({signalStrength}%)",
+        "format-ethernet": "  {ifname} - {ipaddr}/{cidr}",
         "format-linked": "  {ifname} (No IP)",
-        "format-disconnected": "⚠  WELL FUCK",
+        "format-disconnected": "⚠  Disconnected",
         "format-alt": "{ifname} - {ipaddr}/{cidr}",
-        "tooltip-format": "  {ifname} via {gwaddr}",
+        "tooltip-format": "{ifname} - {ipaddr}/{cidr}",
     },
 
     "pulseaudio": {
-        "format": "{icon} {volume}% {format_source}",
-        "format-muted": "{icon} {format_source}",
+        "scroll-step": 1,
+        "on-click": "pavucontrol",
+        "ignored-sinks": [
+            "Easy Effects Sink",
+        ],
+
+        "format": "{icon}  {volume}% {format_source}",
+        "format-muted": "{icon}  {format_source}",
         "format-source": " {volume}%",
         "format-source-muted": "",
-        "format-bluetooth": "{icon} {volume}% {format_source}",
-        "format-bluetooth-muted": "{icon} {format_source}",
+        "format-bluetooth": " {icon}  {volume}% {format_source}",
+        "format-bluetooth-muted": " {icon}  {format_source}",
         "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
+            "headphone": "󰋋",
+            "headphone-muted": "󰟎",
+            "hands-free": "󰋎",
+            "hands-free-muted": "󰋐",
+            "headset": "󰋎",
+            "headset-muted": "󰋐",
+            "portable": "󰏲",
+            "portable-muted": "󰷯",
             "default": ["", "", ""],
         },
     },
