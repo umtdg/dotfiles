@@ -122,22 +122,6 @@ alias dockyeet='docker system prune -fa'
 alias dockbuild='docker build -f ./Dockerfile -t'
 alias dockpush='docker push'
 
-# Zellij aliases
-function zen() {
-  local layout="$1"
-  local -a opts=()
-  if [ -n "$layout" ]; then
-    opts+=('-n' "$layout" '-s' "$layout")
-  fi
-
-  zellij "${opts[@]}"
-}
-alias ze='zellij'
-alias zea='zellij attach'
-alias zels='zellij ls'
-alias zekill='zellij kill-session'
-alias zedel='zellij delete-session'
-
 # ZSH functions (Found under ~/.zsh/functions)
 autoload -Uz incognito
 
