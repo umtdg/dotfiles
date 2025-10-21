@@ -260,6 +260,8 @@ bar {
         swaybar_command waybar
 }
 
+exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
 exec $HOME/.config/sway/startup_applications.sh
 
 include /etc/sway/config.d
