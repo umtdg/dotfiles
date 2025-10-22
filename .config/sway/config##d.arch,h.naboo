@@ -23,7 +23,7 @@ set $ws9 "9"
 
 # outputs
 set $output_left eDP-1
-set $output_right HDMI-2
+set $output_right HDMI-A-2
 
 # super key
 set $mod Mod4
@@ -267,6 +267,6 @@ exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-ag
 
 exec $HOME/.config/sway/startup_applications.sh
 
-include /etc/sway/config.d
+include /etc/sway/config.d/*
 
 # vim: set filetype=swayconfig sw=8 et:
