@@ -1,11 +1,12 @@
 {
+    "include": [
+        "modules.jsonc"
+    ],
     "height": 20,
     "spacing": 2,
 
     "modules-left": [
         "sway/workspaces",
-        "sway/mode",
-        "sway/scratchpad",
         "sway/window",
     ],
 
@@ -15,124 +16,116 @@
     ],
 
     "modules-right": [
-        "idle_inhibitor",
         "sway/language",
-        "cpu",
-        "temperature",
         "memory",
+        "group/cpuinfo",
+        "group/gpuinfo",
         "network",
-        "backlight",
         "pulseaudio",
-        "battery",
         "clock",
-        "custom/power",
     ],
 
-    // Sway Modules
-    "sway/mode": {
-        "format": "<span style=\"italic\"></span>",
+    "network": {
+        "interface": "wlp11s0",
+        "interval": 3,
+
+        "format-wifi": "   {essid} ({signalStrength}%)",
+        "format-ethernet": "  {ifname} - {ipaddr}/{cidr}",
+        "format-linked": "  {ifname} (No IP)",
+        "format-disconnected": "⚠  Disconnected",
+        "format-alt": "   {bandwidthDownBytes}     {bandwidthUpBytes}",
+        "tooltip-format": "{ifname} - {ipaddr}/{cidr}",
     },
 
-    "sway/scratchpad": {
-        "format": "{icon} {count}",
-        "show-empty": false,
-        "format-icons": ["", ""],
-        "tooltip": true,
-        "tooltip-format": "{app}: {title}",
-    },
-
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": "",
+    "group/cpuinfo": {
+        "orientation": "horizontal",
+        "drawer": {
+            "click-to-reveal": true,
         },
+        "modules": [
+            "cpu",
+            "temperature#cpu",
+            "temperature#mobo",
+            "custom/fan#cpu1",
+            "custom/fan#cpu2",
+        ],
     },
 
-    "tray": {
-        "spacing": 3,
+    "group/gpuinfo": {
+        "orientation": "horizontal",
+        "drawer": {
+            "click-to-reveal": true,
+        },
+        "modules": [
+            "temperature#gpu",
+            "custom/power#gpu",
+            "custom/fan#gpu",
+        ],
     },
 
-    "clock": {
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": "{:%a, %d %b %Y - %T}",
-    },
-
-    "cpu": {
-        "format": "﬙  {usage}%",
+    "temperature#cpu": {
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        "input-filename": "temp1_input",
+        "critical-threshold": 80,
+        "interval": 3,
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", "", "", ""],
         "tooltip": false,
     },
 
-    "temperature": {
-        // "hwmon-path": "",
-        "critical-threshold": 90,
-        "format": "{icon} {temperatureC}°C",
-        "format-icons": ["", "", ""],
-    },
-
-    "memory": {
-        "format": "  {}%",
-    },
-
-    "backlight": {
-        "format": "{icon} {percent}%",
-        "format-icons": ["", "", "", "", "", "", "", "", ""],
-    },
-
-    "battery": {
-        "bat": "BAT0",
-        "states": {
-            "full": 95,
-            "good": 85,
-            "warning": 50,
-            "critical": 25,
-        },
-
-        "format": "{icon}  {capacity}%",
-        "format-full": "{icon}  {capacity}%",
-        "format-charging": "  {capacity}%",
-        "format-plugged": "  {capacity}%",
-        "format-alt": "{icon}  {time}",
-        "format-icons": ["", "", "", "", ""],
-    },
-
-    "network": {
-        "format-wifi": "  {essid} ({signalStrength}%)",
-        "format-ethernet": "  {ipaddr}/{cidr}",
-        "format-linked": "  {ifname} (No IP)",
-        "format-disconnected": "⚠  WELL FUCK",
-        "format-alt": "{ifname} - {ipaddr}/{cidr}",
-        "tooltip-format": "  {ifname} via {gwaddr}",
-    },
-
-    "pulseaudio": {
-        "format": "{icon} {volume}% {format_source}",
-        "format-muted": "{icon} {format_source}",
-        "format-source": " {volume}%",
-        "format-source-muted": "",
-        "format-bluetooth": "{icon} {volume}% {format_source}",
-        "format-bluetooth-muted": "{icon} {format_source}",
-        "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""],
-        },
-    },
-
-    "custom/spotify": {
-        "format": "  {text}",
+    "custom/fan#cpu1": {
+        "format": "  {text}",
         "return-type": "text",
-        "max-length": 40,
         "escape": true,
-        "interval": 1,
-        "exec": "playerctl --player=spotify metadata --format '{{artist}} - {{title}}'",
-        "on-click": "playerctl --player=spotify previous",
-        "on-click-middle": "playerctl --player=spotify play-pause",
-        "on-click-right": "playerctl --player=spotify next",
+        "interval": 3,
+        "exec": "cat /sys/devices/platform/nct6775.656/hwmon/hwmon*/fan1_input",
+        "tooltip": false,
+    },
+
+    "custom/fan#cpu2": {
+        "format": "  {text}",
+        "return-type": "text",
+        "escape": true,
+        "interval": 3,
+        "exec": "cat /sys/devices/platform/nct6775.656/hwmon/hwmon*/fan2_input",
+        "tooltip": false,
+    },
+
+    "temperature#mobo": {
+        "hwmon-path-abs": "/sys/devices/platform/nct6775.656/hwmon",
+        "input-filename": "temp1_input",
+        "critical-threshold": 50,
+        "interval": 3,
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", "", "", ""],
+        "tooltip": false,
+    },
+
+    "temperature#gpu": {
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/hwmon",
+        "input-filename": "temp1_input",
+        "critical-threshold": 80,
+        "interval": 3,
+        "format": "GPU {icon} {temperatureC}°C",
+        "format-icons": ["", "", "", "", ""],
+        "tooltip": false,
+    },
+
+    "custom/power#gpu": {
+        "format": "{text}W",
+        "return-type": "text",
+        "escape": true,
+        "interval": 3,
+        "exec": "awk {print $1/1000000} /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/hwmon/hwmon*/power1_average",
+        "tooltip": false,
+    },
+
+    "custom/fan#gpu": {
+        "format": "  {text}",
+        "return-type": "text",
+        "escape": true,
+        "interval": 3,
+        "exec": "cat /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/hwmon/hwmon*/fan1_input",
         "tooltip": false,
     },
 }

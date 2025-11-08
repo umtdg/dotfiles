@@ -6,10 +6,7 @@
 /*     --primary-fg-color: #D8DEE9; */
 /*     --primary-bg-color: #2E3440; */
 /*     --primary-bg-color-transparent: rgba(46, 52, 64, 0); */
-/**/
-/*     --arch-logo = #1793D1; */
-/*     --spotify-logo = #1DB954; */
-/**/
+
 /*     --red = #BF616A; */
 /*     --green = #A3BE8C; */
 /*     --blue = #5E81AC; */
@@ -39,8 +36,48 @@ button:hover {
     box-shadow: inset 0 -1px #7AA2F7;
 }
 
+/* defaults for every module */
+#workspaces,
+#window,
+#language,
+#idle_inhibitor,
+#tray,
+#clock,
+#backlight,
+#battery,
+#pulseaudio,
+#network,
+#memory,
+#cpu,
+#temperature,
+#custom-fan,
+#custom-power,
+#custom-spotify {
+    padding: 0 5px;
+}
+
+#workspaces:hover,
+#window:hover,
+#language:hover,
+#idle_inhibitor:hover,
+#tray:hover,
+#clock:hover,
+#backlight:hover,
+#battery:hover,
+#pulseaudio:hover,
+#network:hover,
+#memory:hover,
+#cpu:hover,
+#temperature:hover,
+#custom-fan:hover,
+#custom-power:hover,
+#custom-spotify:hover {
+    box-shadow: inset 0 -1px;
+}
+
 /* sway/workspaces */
 #workspaces {
+    padding: 0;
     margin: 0 4px;
 }
 
@@ -72,23 +109,20 @@ button:hover {
 }
 
 /* sway/window */
-#window { }
+#window {
+    padding: 0;
+}
 
 /* sway/language */
 #language {
-    padding: 0 5px;
     color: #FF899D;
 }
 
 /* idle_inhibitor */
-#idle_inhibitor {
-    padding: 0 5px;
-}
+#idle_inhibitor { }
 
 /* tray */
-#tray {
-    padding: 0 5px;
-}
+#tray { }
 
 #tray > .needs-attention {
     box-shadow: inset 0 -1px #FF899D;
@@ -96,71 +130,42 @@ button:hover {
 
 /* clock */
 #clock {
-    padding: 0 5px;
     color: #9ECE6A;
-}
-
-/* cpu */
-#cpu {
-    padding: 0 5px;
-    color: #9ECE6A;
-}
-
-#cpu.heavy {
-    color: #F7768E;
-}
-
-#cpu.medium {
-    color: #E0AF68;
-}
-
-/* temperature */
-#temperature.cpu {
-    padding: 0 5px;
-    color: #9ECE6A;
-}
-
-#temperature.cpu.critical {
-    color: #F7768E;
 }
 
 /* memory */
 #memory {
-    padding: 0 5px;
     color: #9ECE6A;
-}
-
-#memory.high {
-    color: #F7768E;
 }
 
 #memory.medium {
     color: #E0AF68;
 }
 
+#memory.high {
+    color: #F7768E;
+}
+
 /* backlight */
 #backlight {
-    padding: 0 5px;
     color: #BB9AF7;
 }
 
 /* battery */
 #battery.bat0 {
-    padding: 0 5px;
     color: #9ECE6A;
 }
 
-#battery.bat0.warning  {
+#battery.bat0.warning {
     color: #E0AF68;
 }
 
-#battery.bat0.critical  {
+#battery.bat0.critical {
     color: #F7768E;
 }
 
 /* network */
 #network {
-    padding: 0 5px;
     color: #7AA2F7;
 }
 
@@ -170,18 +175,36 @@ button:hover {
 
 /* pulseaudio */
 #pulseaudio {
-    padding: 0 5px;
     color: #E0AF68;
 }
 
-#pulseaudio.bluetooth {
-    color: #7DCFFF;
+/* custom/spotify */
+#custom-spotify { }
+
+/* sensor info */
+#cpu,
+#temperature.cpu,
+#custom-fan.cpu1,
+#custom-fan.cpu2,
+#temperature.mobo,
+#temperature.gpu,
+#custom-fan.gpu,
+#custom-power.gpu {
+    color: #9ECE6A;
 }
 
-/* custom/spotify */
-#custom-spotify {
-    padding: 0 5px;
-    box-shadow: inset 1px 0;
+#cpu.medium {
+    color: #E0AF68;
+}
+
+#cpu.heavy {
+    color: #F7768E;
+}
+
+#temperature.cpu.critical,
+#temperature.mobo.critical,
+#temperature.gpu.critical {
+    color: #F7768E;
 }
 
 /* vim: set sw=4 et: */
