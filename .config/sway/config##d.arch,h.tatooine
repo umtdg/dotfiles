@@ -83,7 +83,9 @@ input type:keyboard {
 font pango:monospace bold 9
 
 # gap between windows
+smart_gaps on
 gaps inner 5
+gaps outer 5
 
 # window borders
 default_border pixel 0
@@ -255,9 +257,11 @@ assign [app_id="easyeffects"] $ws8
 # +--------------------+
 
 bar {
+        swaybar_command waybar
+
         position top
 
-        swaybar_command waybar
+        gaps 5
 }
 
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
