@@ -1,0 +1,134 @@
+{
+    // Sway Modules
+    "sway/workspaces": {
+        "format": "{name}",
+    },
+
+    "sway/window": {
+        "format": "{title}",
+    },
+
+    "sway/language": {
+        "tooltip": false,
+        "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
+    },
+
+    // Other modules
+    "idle_inhibitor": {
+        "format": "{icon} ",
+        "format-icons": {
+            "activated": "",
+            "deactivated": "",
+        },
+    },
+
+    "tray": {
+        "spacing": 3,
+        "reverse-direction": true,
+    },
+
+    "clock": {
+        "format": "{:%a, %d %b %Y - %H:%M}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color=\"#E0AF68\"><b>{}</b></span>",
+                "days": "<span color=\"#A9B1D6\"><b>{}</b></span>",
+                "weeks": "<span color=\"#7AA2F7\"><b>W{}</b></span>",
+                "weekdays": "<span color=\"#7DCFFF\"><b>{}</b></span>",
+                "today": "<span color=\"#F7768E\"><b><u>{}</u></b></span>"
+            },
+            "actions": {
+                "on-scroll-up": "shift_up",
+                "on-scroll-down": "shift_down",
+            },
+        },
+    },
+
+    "pulseaudio": {
+        "scroll-step": 1,
+        "on-click": "pavucontrol",
+        "ignored-sinks": [
+            "Easy Effects Sink",
+        ],
+
+        "format": "{icon}  {volume}% {format_source}",
+        "format-muted": "{icon}  {format_source}",
+        "format-source": " {volume}%",
+        "format-source-muted": "",
+        "format-bluetooth": " {icon}  {volume}% {format_source}",
+        "format-bluetooth-muted": " {icon}  {format_source}",
+        "format-icons": {
+            "headphone": "󰋋",
+            "headphone-muted": "󰟎",
+            "hands-free": "󰋎",
+            "hands-free-muted": "󰋐",
+            "headset": "󰋎",
+            "headset-muted": "󰋐",
+            "portable": "󰏲",
+            "portable-muted": "󰷯",
+            "default": ["", "", ""],
+        },
+    },
+
+    "custom/spotify": {
+        "format": "   {text}",
+        "return-type": "text",
+        "max-length": 40,
+        "escape": true,
+        "interval": 1,
+        "exec": "playerctl --player=spotify metadata --format '{{artist}} - {{title}}'",
+        "on-click": "playerctl --player=spotify previous",
+        "on-click-middle": "playerctl --player=spotify play-pause",
+        "on-click-right": "playerctl --player=spotify next",
+        "tooltip": false,
+    },
+
+    "cpu": {
+        "interval": 3,
+        "states": {
+            "heavy": 70,
+            "medium": 35,
+            "light": 0,
+        },
+        "format": "󰻠  CPU {usage}%",
+        "tooltip": false,
+    },
+
+    "memory": {
+        "interval": 10,
+        "states": {
+            "high": 70,
+            "medium": 50,
+            "low": 0,
+        },
+        "format": "  {used:.2f} GiB ({percentage}%)",
+        "tooltip": true,
+        "tooltip-format": "Used {used:.2f} GiB / {total:.2f} GiB",
+    },
+
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["", "", "", "", "", "", "", "", ""],
+    },
+
+    "battery#bat0": {
+        "bat": "BAT0",
+        "adapter": "AC",
+        "states": {
+            "warning": 50,
+            "critical": 25,
+        },
+        "full-at": 95,
+        "interval": 60,
+
+        "format": "{icon}   {capacity}%",
+        "format-charging": "  {capacity}%",
+        "format-alt": "{capacity}% {time} left",
+        "format-icons": ["", "", "", "", ""],
+    },
+}
