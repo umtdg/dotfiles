@@ -27,7 +27,8 @@
     ],
 
     "temperature#cpu": {
-        "hwmon-path": "${CPUTEMP}",
+        "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
+        "input-filename": "temp1_input",
         "critical-threshold": 80,
         "interval": 3,
         "format": "{icon} {temperatureC}°C",
@@ -43,7 +44,7 @@
         "format-ethernet": "  {ifname} - {ipaddr}/{cidr}",
         "format-linked": "  {ifname} (No IP)",
         "format-disconnected": "⚠  Disconnected",
-        "format-alt": "{ifname} - {ipaddr}/{cidr}",
+        "format-alt": "   {bandwidthDownBytes}     {bandwidthUpBytes}",
         "tooltip-format": "{ifname} - {ipaddr}/{cidr}",
     },
 
