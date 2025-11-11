@@ -95,6 +95,9 @@ default_floating_border pixel 2
 titlebar_border_thickness 1
 titlebar_padding 5 2
 
+# opacity
+exec /usr/share/sway-contrib/inactive-windows-transparency.py -o 0.9 -f 1.0 -g
+
 # +---------------+
 # | SWAY BINDINGS |
 # +---------------+
