@@ -36,6 +36,28 @@
         "tooltip": false,
     },
 
+    "temperature#cpufan1": {
+        "hwmon-path-abs": "/sys/devices/platform/thinkpad_hwmon/hwmon",
+        "input-filename": "fan1_input",
+        "type": "fan",
+        "critical-threshold": 5000,
+        "interval": 3,
+        "format": "{icon}  {fan}",
+        "format-icons": [""],
+        "tooltip": false,
+    },
+
+    "temperature#cpufan2": {
+        "hwmon-path-abs": "/sys/devices/platform/thinkpad_hwmon/hwmon",
+        "input-filename": "fan2_input",
+        "type": "fan",
+        "critical-threshold": 5000,
+        "interval": 3,
+        "format": "{icon}  {fan}",
+        "format-icons": [""],
+        "tooltip": false,
+    },
+
     "network": {
         "interface": "wlp0s20f3",
         "interval": 3,
@@ -56,6 +78,8 @@
         "modules": [
             "cpu",
             "temperature#cpu",
+            "temperature#cpufan1",
+            "temperature#cpufan2",
         ],
     },
 }

@@ -181,15 +181,9 @@ button:hover {
 /* custom/spotify */
 #custom-spotify { }
 
-/* sensor info */
-#cpu,
-#temperature.cpu,
-#custom-fan.cpu1,
-#custom-fan.cpu2,
-#temperature.mobo,
-#temperature.gpu,
-#custom-fan.gpu,
-#custom-power.gpu {
+/* system/hardware/sensor info */
+#cpuinfo,
+#gpuinfo {
     color: #9ECE6A;
 }
 
@@ -201,9 +195,7 @@ button:hover {
     color: #F7768E;
 }
 
-#temperature.cpu.critical,
-#temperature.mobo.critical,
-#temperature.gpu.critical {
+#temperature.critical {
     color: #F7768E;
 }
 
