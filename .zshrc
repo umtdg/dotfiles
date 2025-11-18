@@ -122,6 +122,8 @@ alias dockyeet='docker system prune -fa'
 alias dockbuild='docker build -f ./Dockerfile -t'
 alias dockpush='docker push'
 
+alias mount-backup='sudo mount -t nfs -o nfsvers=3,actimeo=60,nconnect=16,hard,async,fsc 192.168.1.40:/backup /mnt/backup'
+
 # ZSH functions (Found under ~/.zsh/functions)
 autoload -Uz incognito
 
