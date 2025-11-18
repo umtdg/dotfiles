@@ -25,6 +25,10 @@ function configure_icon_theme() {
 function configure_gtk_theme() {
   log -i "Changing Adwaita theme to Orchis-Dark"
   "$HOME/bin/adwaita_theme.sh" -f -t Orchis-Dark
+
+  log -i 'Changing gtk-theme via gsettings'
+  gsettings set org.gnome.desktop.interface gtk-theme 'Orchis-Dark'
+  gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 }
 
 function configure_sddm() {
@@ -175,3 +179,5 @@ configure_x11
 configure_zsh
 configure_vim
 configure_docker
+
+# vim: set filetype=bash sw=2 ts=2 sts=2 et:
