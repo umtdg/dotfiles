@@ -16,6 +16,8 @@ function configure_icon_theme() {
   if [ -n "$archive_path" ]; then
     log -i "Installing Sweet Cursors from archive $archive_path"
     tar -xvf "$archive_path" -C "$icons_dir"
+
+    mkdir -pv "$icons_dir/default"
     ln -sfv "$icons_dir/Sweet-cursors/index.theme" "$icons_dir/default/index.theme"
   fi
 }
@@ -153,6 +155,10 @@ function configure_fstab() {
       echo 'UUID=4E023FFA023FE61D /mnt/windows   ntfs rw,relatime,nofail,exec,x-gvfs-show,uid=1000,gid=1000,umask=022 0 0'
     } | sudo tee -a /etc/fstab
   fi
+}
+
+# TODO: Install spotify via spotify-launcher and create a desktop entry to run via wayland
+function configure_spotify() {
 }
 
 configure_mnt

@@ -1,7 +1,9 @@
 # base
 base-devel
+btrfs-progs
 git
 gnupg
+ntfs-3g
 openssh
 pacman-contrib
 vim
@@ -39,8 +41,6 @@ dunst
 feh
 flameshot
 grim
-i3-gaps
-i3lock
 noto-fonts
 orchis-theme
 papirus-icon-theme
@@ -49,8 +49,6 @@ pinentry
 polkit
 polkit-gnome
 polybar
-python-i3ipc
-python-pydbus
 rofi
 sddm
 shutter
@@ -60,6 +58,7 @@ sway-contrib
 swaybg
 swayidle
 swaylock
+waybar
 xdg-desktop-portal-gtk
 xdg-desktop-portal-wlr
 xdg-user-dirs
@@ -111,4 +110,5 @@ npm
 nvm
 python
 ripgrep
+tmux
 tree-sitter-cli
