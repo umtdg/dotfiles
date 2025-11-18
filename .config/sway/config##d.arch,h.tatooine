@@ -276,6 +276,6 @@ exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-ag
 
 exec $HOME/.config/sway/startup_applications.sh
 
-include /etc/sway/config.d
+include /etc/sway/config.d/*
 
 # vim: set filetype=swayconfig sw=8 et:
