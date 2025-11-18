@@ -48,10 +48,8 @@ picom
 pinentry
 polkit
 polkit-gnome
-polybar
 rofi
 sddm
-shutter
 slurp
 sway
 sway-contrib
