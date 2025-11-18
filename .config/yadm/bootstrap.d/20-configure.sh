@@ -3,7 +3,6 @@
 source common.sh
 
 function usage() {
-  echo 'l | libinput  configure libinput'
   echo 'i | icon      configure icon theme'
   echo 'g | gtk       configure gtk theme'
   echo 's | sddm      configure sddm'
@@ -12,6 +11,7 @@ function usage() {
   echo 'd | docker    configure docker'
   echo 'S | services  enable and start required systemctl services'
   echo 'x | x11       configure X11'
+  echo 'm | mount     configure /mnt'
   echo 'h | help      show this help message and exit'
 }
 
@@ -44,27 +44,11 @@ function configure_sddm() {
 
   log -i "Changing SDDM theme background"
   sddm_themes_dir='/usr/share/sddm/themes'
-  HOME_ESCAPED=${HOME//\//\\\/};
+  HOME_ESCAPED=${HOME//\//\\\/}
   sudo sed -i "s/^Background=\(.*\)$/Background=\"$HOME_ESCAPED\/.background\"/g" "$sddm_themes_dir/Sugar-Candy/theme.conf"
 
   log -i "Copying SDDM config"
   sudo install -Dm 644 -t /etc/sddm.conf.d ~/sddm.conf.d/*
-}
-
-# TODO: This should be changed to adapt the new fixed configuration
-function configure_libinput() {
-  file='/etc/X11/xorg.conf.d/30-touchpad.conf'
-  if [[ "$HOSTNAME" == 'naboo' ]] && ! grep -iq 'Section "InputClass"' "$file"; then
-    log -i "Creating libinput config for touchpad"
-    {
-      echo 'Section "InputClass"'
-      echo "    Identifier \"$(sudo libinput list-devices | grep -i '^device:.*touchpad' | cut -d: -f2 | xargs)\""
-      echo '    Driver "libinput"'
-      echo '    Option "Tapping" "on"'
-      echo '    Option "NaturalScrolling" "true"'
-      echo 'EndSection'
-    } | sudo tee -a "$file"
-  fi
 }
 
 function configure_zsh() {
@@ -117,9 +101,45 @@ function configure_x11() {
   xdg-user-dirs-update --force
 }
 
+function configure_mnt() {
+  log -i 'Creating common mount points'
+  sudo mkdir -pv /mnt/{backup,sandisk,ssd500/{ntfs,btrfs}}
+
+  log -i 'Setting ownership of ntfs/btrfs mount points'
+  sudo chown -R "$USER:$USER" /mnt/ssd500/ntfs
+  sudo chown -R "$USER:$USER" /mnt/ssd500/btrfs
+
+  if [[ "$HOSTNAME" == 'tatooine' ]]; then
+    log -i "Creating host ($HOSTNAME) specific mount points"
+    sudo mkdir -pv /mnt/{localdisk,windows}
+
+    log -i 'Setting ownership of ntfs/btrfs mount points'
+    sudo chown -$ "$USER:$USER" /mnt/localdisk
+    sudo chown -$ "$USER:$USER" /mnt/windows
+  fi
+
+  read -r -p 'Do you want to configure /etc/fstab (y/N)? ' answer
+  [[ "$answer" == [Yy]* ]] && configure_fstab
+}
+
+function configure_fstab() {
+  if [[ "$HOSTNAME" == 'tatooine' ]]; then
+    log -i 'Appending auto-mounts to fstab'
+    {
+      echo
+      echo '# 2 TiB Seagate'
+      echo 'UUID=0698E25298E23FB3 /mnt/localdisk ntfs rw,relatime,nofail,exec,x-gvfs-show,uid=1000,gid=1000,umask=022 0 0'
+    } | sudo tee -a /etc/fstab
+
+    {
+      echo
+      echo '# Windows'
+      echo 'UUID=4E023FFA023FE61D /mnt/windows   ntfs rw,relatime,nofail,exec,x-gvfs-show,uid=1000,gid=1000,umask=022 0 0'
+    } | sudo tee -a /etc/fstab
+  fi
+}
+
 declare -A commands=(
-  ['l']='configure_libinput'
-  ['libinput']='configure_libinput'
   ['i']='configure_icon_theme'
   ['icon']='configure_icon_theme'
   ['g']='configure_gtk_theme'
@@ -136,6 +156,8 @@ declare -A commands=(
   ['service']='configure_services'
   ['x']='configure_x11'
   ['x11']='configure_x11'
+  ['m']='configure_mnt'
+  ['mount']='configure_mnt'
 )
 
 while true; do
@@ -147,9 +169,11 @@ while true; do
   fi
 
   case "$choice" in
-    h|help) usage; ;;
-    q|quit) exit 0; ;;
-    *) echo "Unkown option: $choice"; exit 1; ;;
+  h | help) usage ;;
+  q | quit) exit 0 ;;
+  *)
+    echo "Unkown option: $choice"
+    exit 1
+    ;;
   esac
 done
-
