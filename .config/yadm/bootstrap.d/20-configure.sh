@@ -2,19 +2,6 @@
 
 source common.sh
 
-function usage() {
-  echo 'i | icon      configure icon theme'
-  echo 'g | gtk       configure gtk theme'
-  echo 's | sddm      configure sddm'
-  echo 'z | zsh       configure zsh'
-  echo 'v | vim       configure vim'
-  echo 'd | docker    configure docker'
-  echo 'S | services  enable and start required systemctl services'
-  echo 'x | x11       configure X11'
-  echo 'm | mount     configure /mnt'
-  echo 'h | help      show this help message and exit'
-}
-
 # TODO: Find a way to automatically download Sweet Cursors
 function configure_icon_theme() {
   log -i "Configuring icon and cursor theme"
@@ -117,6 +104,22 @@ function configure_env() {
   } | sudo tee -a /etc/environment
 }
 
+function configure_pam() {
+  log -i 'Configure pam_gnome_keyring.so'
+
+  declare pam_file=/etc/pam.d/login
+  if grep -iq pam_gnome_keyring.so "$pam_file"; then
+    log -i "pam_gnome_keyring.so is already in $pam_file"
+    return
+  fi
+
+  {
+    echo
+    echo 'auth       optional     pam_gnome_keyring.so'
+    echo 'session    optional     pam_gnome_keyring.so auto_start'
+  } | sudo tee -a "$pam_file"
+}
+
 function configure_mnt() {
   log -i 'Creating common mount points'
   sudo mkdir -pv /mnt/{backup,sandisk,ssd500/{ntfs,btrfs}}
@@ -133,9 +136,6 @@ function configure_mnt() {
     sudo chown -$ "$USER:$USER" /mnt/localdisk
     sudo chown -$ "$USER:$USER" /mnt/windows
   fi
-
-  read -r -p 'Do you want to configure /etc/fstab (y/N)? ' answer
-  [[ "$answer" == [Yy]* ]] && configure_fstab
 }
 
 function configure_fstab() {
@@ -155,41 +155,17 @@ function configure_fstab() {
   fi
 }
 
-declare -A commands=(
-  ['i']='configure_icon_theme'
-  ['icon']='configure_icon_theme'
-  ['g']='configure_gtk_theme'
-  ['gtk']='configure_gtk_theme'
-  ['s']='configure_sddm'
-  ['sddm']='configure_sddm'
-  ['z']='configure_zsh'
-  ['zsh']='configure_zsh'
-  ['v']='configure_vim'
-  ['vim']='configure_vim'
-  ['d']='configure_docker'
-  ['docker']='configure_docker'
-  ['S']='configure_services'
-  ['service']='configure_services'
-  ['x']='configure_x11'
-  ['x11']='configure_x11'
-  ['m']='configure_mnt'
-  ['mount']='configure_mnt'
-)
+configure_mnt
+configure_fstab
+configure_env
+configure_pam
+configure_services
 
-while true; do
-  read -r -p 'configure> ' choice
+configure_sddm
+configure_icon_theme 
+configure_gtk_theme 
+configure_x11
 
-  if [ -n "${commands[$choice]}" ]; then
-    "${commands[$choice]}"
-    continue
-  fi
-
-  case "$choice" in
-  h | help) usage ;;
-  q | quit) exit 0 ;;
-  *)
-    echo "Unkown option: $choice"
-    exit 1
-    ;;
-  esac
-done
+configure_zsh
+configure_vim
+configure_docker
