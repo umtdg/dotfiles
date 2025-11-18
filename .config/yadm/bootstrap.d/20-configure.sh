@@ -161,8 +161,21 @@ function configure_fstab() {
   fi
 }
 
-# TODO: Install spotify via spotify-launcher and create a desktop entry to run via wayland
 function configure_spotify() {
+  log -i 'Installing spotify via spotify-launcher'
+  spotify-launcher -v --no-exec
+
+  declare conf_file='/etc/spotify-launcher.conf'
+  log -i "Editing $conf_file for wayland arguments"
+  {
+    echo
+    echo 'extra_arguments = ["--enable-features=UseOzonePlatform", "--ozone-platform=wayland"]'
+  } | sudo tee -a /etc/spotify-launcher.conf
+}
+
+function configure_nvim() {
+  log -i 'Cloning nvim configuration'
+  git clone git@github.com:umtdg/nvim ~/.config/nvim
 }
 
 configure_mnt
@@ -179,5 +192,8 @@ configure_x11
 configure_zsh
 configure_vim
 configure_docker
+
+configure_spotify
+configure_nvim
 
 # vim: set filetype=bash sw=2 ts=2 sts=2 et:
