@@ -101,6 +101,22 @@ function configure_x11() {
   xdg-user-dirs-update --force
 }
 
+function configure_env() {
+  log -i 'Configuring /etc/environment'
+  {
+    echo "XDG_CONFIG_HOME=\"/home/$USER/.config\""
+    echo "XDG_CACHE_HOME=\"/home/$USER/.cache\""
+    echo "XDG_DATA_HOME=\"/home/$USER/.local/share\""
+    echo "XDG_STATE_HOME=\"/home/$USER/.local/state\""
+    echo
+    echo 'XDG_DATA_DIRS="/usr/local/share:/usr/share"'
+    echo 'XDG_CONFIG_DIRS="/etc/xdg"'
+    echo
+    echo 'ELECTRON_OZONE_PLATFORM_HINT=wayland'
+    echo 'QT_QPA_PLATFORM=wayland'
+  } | sudo tee -a /etc/environment
+}
+
 function configure_mnt() {
   log -i 'Creating common mount points'
   sudo mkdir -pv /mnt/{backup,sandisk,ssd500/{ntfs,btrfs}}
