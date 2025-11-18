@@ -52,7 +52,7 @@ output $output_right {
 }
 
 # background
-output "*" bg ~/.background fill
+output * bg $HOME/.background fill
 
 # display workspace assignment
 workspace $ws0 output $output_left
@@ -222,7 +222,7 @@ bindsym $mod+d exec --no-startup-id "~/.config/rofi/bin/launcher_colorful &"
 bindsym $mod+Tab exec --no-startup-id "~/.config/rofi/bin/window_switcher &"
 bindsym $mod+Shift+Escape exec --no-startup-id "$HOME/.config/rofi/bin/powermenu &"
 
-# TODO: screenshots
+# screenshots
 bindsym $mod+Shift+s exec flameshot gui
 
 # dunst keybinds
@@ -258,7 +258,7 @@ for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disa
 # +--------------------+
 
 bar {
-        swaybar_command /home/ahsoka/.config/waybar/launch.sh
+        swaybar_command waybar
 
         position top
 

@@ -229,7 +229,8 @@ bindsym $mod+d exec --no-startup-id "~/.config/rofi/bin/launcher_colorful &"
 bindsym $mod+Tab exec --no-startup-id "~/.config/rofi/bin/window_switcher &"
 bindsym $mod+Shift+Escape exec --no-startup-id "$HOME/.config/rofi/bin/powermenu &"
 
-# TODO: screenshots
+# screenshots
+bindsym $mod+Shift+s exec flameshot gui
 
 # dunst keybinds
 bindsym $mod+n exec dunstctl close
