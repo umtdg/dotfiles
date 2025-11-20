@@ -49,6 +49,7 @@ output $output_left {
 output $output_right {
         mode 1920x1080@74.97Hz
         pos 1920 0
+        scale 1.25
 }
 
 # background
@@ -69,6 +70,12 @@ workspace $ws6 output $output_right
 # input configuration
 input type:keyboard {
         xkb_layout "us,tr"
+}
+
+input type:touchpad {
+        natural_scroll enabled
+        tap enabled
+        tap_button_map lrm
 }
 
 # Font for window titles. Will also be used by the bar unless a different font
