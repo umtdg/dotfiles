@@ -70,11 +70,11 @@ function configure_docker() {
 }
 
 function configure_services() {
+  log -i "Starting vmware-networks-configuration service"
+  sudo systemctl start vmware-networks-configuration.service
+
   log -i "Enabling and starting vmware-networks service"
   sudo systemctl enable --now vmware-networks.service
-
-  log -i "Enabling and starting vmware-networks-configuration service"
-  sudo systemctl enable --now vmware-networks-configuration.service
 
   log -i "Enabling and starting Vmware vmware-usbarbitrator"
   sudo systemctl enable --now vmware-usbarbitrator.service
