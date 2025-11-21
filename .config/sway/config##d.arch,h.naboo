@@ -49,7 +49,6 @@ output $output_left {
 output $output_right {
         mode 1920x1080@74.97Hz
         pos 1920 0
-        scale 1.25
 }
 
 # background
