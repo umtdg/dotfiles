@@ -251,6 +251,7 @@ bindsym $mod+Ctrl+h exec headsetcontrol -l 0
 # +-----------------------+
 
 assign [app_id="signal"] $ws7
+assign [app_id="teams-for-linux"] $ws7
 assign [app_id="spotify"] $ws8
 assign [app_id="org.mozilla.Thunderbird"] $ws8
 assign [app_id="easyeffects"] $ws8
