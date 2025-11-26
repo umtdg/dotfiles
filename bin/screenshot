@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+filename="$HOME/Pictures/Screenshot_$(date +%F_%H-%M-%S).png"
+
+function get_focused_monitor() {
+  declare jq_script='.[] | select(.focused) | .name'
+  swaymsg -t get_outputs | jq -r "$jq_script"
+}
+
+function get_focused_window() {
+  declare jq_script='.. | select(.type?) | select(.focused).rect | "\(.x),\(.y) \(.width)x\(.height)"'
+  swaymsg -t get_tree | jq -r "$jq_script"
+}
+
+function screenshot() {
+  case "$1" in
+    select)
+      grim -g "$(slurp)" -
+      ;;
+    full)
+      grim -
+      ;;
+    monitor)
+      grim -o "$(get_focused_monitor)" -
+      ;;
+    window)
+      grim -g "$(get_focused_window)" -
+      ;;
+    *)
+      grim -
+      ;;
+  esac
+}
+
+screenshot "$1" | tee -a "$filename" | wl-copy

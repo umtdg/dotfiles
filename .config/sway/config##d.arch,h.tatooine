@@ -229,8 +229,17 @@ bindsym $mod+d exec --no-startup-id "~/.config/rofi/bin/launcher_colorful &"
 bindsym $mod+Tab exec --no-startup-id "~/.config/rofi/bin/window_switcher &"
 bindsym $mod+Shift+Escape exec --no-startup-id "$HOME/.config/rofi/bin/powermenu &"
 
-# screenshots
-bindsym $mod+Shift+s exec flameshot gui
+# screenshot selection and copy
+bindsym $mod+Shift+s exec "~/bin/screenshot select"
+
+# screenshot whole desktop
+bindsym Print exec "~/bin/screenshot full"
+
+# screenshot focused monitor
+bindsym $mod+Print exec "~/bin/screenshot monitor"
+
+# screenshot focused window
+bindsym $mod+Shift+Print exec "~/bin/screenshot window"
 
 # dunst keybinds
 bindsym $mod+n exec dunstctl close
