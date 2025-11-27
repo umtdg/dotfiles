@@ -37,16 +37,20 @@ vulkan-radeon
 
 # desktop
 blueberry
+breeze
+breeze-gtk
+breeze-icons
+breeze5
 dunst
 feh
 grim
 noto-fonts
-orchis-theme
-papirus-icon-theme
 picom
 pinentry
 polkit
 polkit-gnome
+qt5ct
+qt6ct
 rofi
 sddm
 slurp

@@ -107,6 +107,7 @@ function configure_env() {
     echo
     echo 'ELECTRON_OZONE_PLATFORM_HINT=wayland'
     echo 'QT_QPA_PLATFORM=wayland'
+    echo 'QT_QPA_PLATFORMTHEME=qt6ct'
   } | sudo tee -a /etc/environment
 }
 
