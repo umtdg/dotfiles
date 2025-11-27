@@ -38,7 +38,7 @@ function configure_sddm() {
   log -i "Changing SDDM theme background"
   sddm_themes_dir='/usr/share/sddm/themes'
   sudo install -Dm 644 ~/.background "$sddm_themes_dir/Backgrounds/Background.png"
-  sudo sed -i "s/^Background=\(.*\)$/Background=\"Background.png\"/g" "$sddm_themes_dir/Sugar-Candy/theme.conf"
+  sudo sed -i "s/^Background=\(.*\)$/Background=\"Backgrounds/Background.png\"/g" "$sddm_themes_dir/Sugar-Candy/theme.conf"
 
   log -i "Copying SDDM config"
   sudo install -Dm 644 -t /etc/sddm.conf.d ~/sddm.conf.d/*
