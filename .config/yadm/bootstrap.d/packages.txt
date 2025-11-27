@@ -39,7 +39,6 @@ vulkan-radeon
 blueberry
 dunst
 feh
-flameshot
 grim
 noto-fonts
 orchis-theme
@@ -67,6 +66,7 @@ thunar-archive-plugin
 thunar-volman
 
 # applications
+7zip
 calc
 copyq
 curl
