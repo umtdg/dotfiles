@@ -6,6 +6,7 @@
 
     "sway/window": {
         "format": "{title}",
+        "max-length": "50",
     },
 
     "sway/language": {
