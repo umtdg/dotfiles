@@ -8,5 +8,5 @@ Target = *
 [Action]
 Description = Keep the last cache and the currently installed.
 When = PostTransaction
-Exec = /usr/bin/bash 'yaycache'
+Exec = /usr/bin/paccache -rvk2 -c /var/cache/pacman/pkg -c ~/build/packages 
 
