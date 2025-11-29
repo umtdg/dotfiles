@@ -46,8 +46,8 @@
             "cpu",
             "temperature#cpu",
             "temperature#mobo",
-            "custom/fan#cpu1",
-            "custom/fan#cpu2",
+            "temperature#cpufan1",
+            "temperature#cpufan2",
         ],
     },
 
@@ -58,8 +58,8 @@
         },
         "modules": [
             "temperature#gpu",
-            "custom/power#gpu",
-            "custom/fan#gpu",
+            "temperature#gpupower",
+            "temperature#gpufan",
         ],
     },
 
@@ -73,21 +73,25 @@
         "tooltip": false,
     },
 
-    "custom/fan#cpu1": {
-        "format": "  {text}",
-        "return-type": "text",
-        "escape": true,
+    "temperature#cpufan1": {
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        "input-filename": "fan1_input",
+        "type": "fan",
+        "critical-threshold": 2500,
         "interval": 3,
-        "exec": "cat /sys/devices/platform/nct6775.656/hwmon/hwmon*/fan1_input",
+        "format": "{icon}  {fan}",
+        "format-icons": [""],
         "tooltip": false,
     },
 
-    "custom/fan#cpu2": {
-        "format": "  {text}",
-        "return-type": "text",
-        "escape": true,
+    "temperature#cpufan2": {
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        "input-filename": "fan2_input",
+        "type": "fan",
+        "critical-threshold": 2000,
         "interval": 3,
-        "exec": "cat /sys/devices/platform/nct6775.656/hwmon/hwmon*/fan2_input",
+        "format": "{icon}  {fan}",
+        "format-icons": [""],
         "tooltip": false,
     },
 
@@ -111,21 +115,24 @@
         "tooltip": false,
     },
 
-    "custom/power#gpu": {
-        "format": "{text}W",
-        "return-type": "text",
-        "escape": true,
+    "temperature#gpupower": {
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/hwmon",
+        "input-filename": "power1_average",
+        "type": "power",
+        "critical-threshold": 375,
         "interval": 3,
-        "exec": "awk {print $1/1000000} /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/hwmon/hwmon*/power1_average",
+        "format": "{power}W",
         "tooltip": false,
     },
 
-    "custom/fan#gpu": {
-        "format": "  {text}",
-        "return-type": "text",
-        "escape": true,
+    "temperature#gpufan": {
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/hwmon",
+        "input-filename": "fan1_input",
+        "type": "fan",
+        "critical-threshold": 1800,
         "interval": 3,
-        "exec": "cat /sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/hwmon/hwmon*/fan1_input",
+        "format": "{icon}  {fan}",
+        "format-icons": [""],
         "tooltip": false,
     },
 }
