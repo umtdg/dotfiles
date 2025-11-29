@@ -1,6 +1,7 @@
 # base
 base-devel
 btrfs-progs
+ccache
 git
 gnupg
 ntfs-3g
