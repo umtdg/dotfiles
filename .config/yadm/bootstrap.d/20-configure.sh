@@ -23,12 +23,14 @@ function configure_icon_theme() {
 }
 
 function configure_gtk_theme() {
-  log -i "Changing Adwaita theme to Orchis-Dark"
-  "$HOME/bin/adwaita_theme.sh" -f -t Orchis-Dark
+  local theme='Breeze-Dark'
+
+  log -i "Changing Adwaita theme to $theme"
+  "$HOME/bin/adwaita_theme.sh" -f -t "$theme"
 
   log -i 'Changing gtk-theme via gsettings'
-  gsettings set org.gnome.desktop.interface gtk-theme 'Orchis-Dark'
-  gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+  gsettings set org.gnome.desktop.interface gtk-theme "$theme"
+  gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 }
 
 function configure_sddm() {
