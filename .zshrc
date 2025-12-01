@@ -105,7 +105,7 @@ alias ypsupf='yadm push --set-upstream origin +main'
 # NetworkManager aliases
 alias nmc='nmcli c'
 alias nml='nmcli c show'
-alias nms='nmcli -c yes -f in-use,bssid,ssid,bars,security d wifi l --rescan yes'
+alias nms='nmcli -c yes -f in-use,bssid,ssid,bars,security,chan,rate d wifi l --rescan yes'
 alias nmccon='nmcli -a d wifi c'
 alias nmcup='nmcli c up'
 alias nmcdown='nmcli c down'
