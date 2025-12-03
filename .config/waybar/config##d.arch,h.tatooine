@@ -74,7 +74,7 @@
     },
 
     "temperature#cpufan1": {
-        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        "hwmon-path-abs": "/sys/devices/platform/nct6775.656/hwmon",
         "input-filename": "fan1_input",
         "type": "fan",
         "critical-threshold": 2500,
@@ -85,10 +85,10 @@
     },
 
     "temperature#cpufan2": {
-        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        "hwmon-path-abs": "/sys/devices/platform/nct6775.656/hwmon",
         "input-filename": "fan2_input",
         "type": "fan",
-        "critical-threshold": 2000,
+        "critical-threshold": 1800,
         "interval": 3,
         "format": "{icon}  {fan}",
         "format-icons": [""],
