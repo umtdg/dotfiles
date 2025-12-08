@@ -6,8 +6,10 @@
 [url "git@github.com:umtdg/"]
 	insteadof = "umtdg:"
 
-[url "git@gitlab.archlinux.org:"]
-	insteadof = "gitlab.arch:"
+[url "git@gitlab.archlinux.org:archlinux/"]
+	insteadof = "arch:"
+[url "git@gitlab.archlinux.org:archlinux/packaging/packages/"]
+	insteadof = "archpkg:"
 [url "ssh://aur@aur.archlinux.org/"]
 	insteadOf = "aur:"
 
