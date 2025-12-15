@@ -28,6 +28,8 @@ insert_path "$HOME/.yarn/bin"
 # ccache needs to be prepended to be prioritized over usual gcc/clang
 insert_path "/usr/lib/ccache/bin" 1
 
+insert_path "$HOME/.nix-profile/bin" 1
+
 # Auxiliary
 export EDITOR=nvim
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
