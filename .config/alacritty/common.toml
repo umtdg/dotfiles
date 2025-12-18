@@ -1,0 +1,28 @@
+[general]
+import = ["~/.config/alacritty/tokyonight_night.toml"]
+live_config_reload = true
+
+[env]
+TERM = "xterm-256color"
+
+[font.bold]
+family = "MonaspiceNe Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "MonaspiceNe Nerd Font"
+style = "Italic"
+
+[font.normal]
+family = "MonaspiceNe Nerd Font"
+style = "Regular"
+
+[terminal]
+shell = "/bin/zsh"
+
+[window]
+dynamic_title = true
+
+[window.padding]
+x = 5
+y = 5
