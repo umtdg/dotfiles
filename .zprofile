@@ -39,12 +39,9 @@ if [[ "$distro" == 'arch' ]]; then
     # MEGA directory
     if [[ "$HOST" == 'tatooine' ]]; then
         export MEGANZ="$HOME/localdisk/Documents/mega"
-else
-    export MEGANZ="$HOME/mega"
+    else
+        export MEGANZ="$HOME/mega"
     fi
-
-    export COURSES_FILE="$MEGANZ/.courses.json"
-    export TODO_FILE="$MEGANZ/todo.json"
 
     # SSH Agent
     export SSH_AUTH_SOCK=$HOME/.1password/agent.sock
