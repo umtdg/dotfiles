@@ -69,6 +69,9 @@ export NNN_FIFO='/tmp/nnn.fifo'
 BLK="0b" CHR="0b" DIR="0c" EXE="0a" REG="00" HARDLINK="00" SYMLINK="0e" MISSING="00" ORPHAN="09" FIFO="0f" SOCK="0d" OTHER="00"
 export NNN_FCOLORS="$BLK$CHR$DIR$EXE$REG$HARDLINK$SYMLINK$MISSING$ORPHAN$FIFO$SOCK$OTHER"
 
+# Android
+export ANDROID_HOME="$HOME/.local/share/android/sdk"
+
 # Export PATH at the end to allow modification in multpile places
 export PATH
 
