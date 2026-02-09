@@ -42,6 +42,7 @@ breeze
 breeze-gtk
 breeze-icons
 breeze5
+chromium
 dunst
 feh
 grim
