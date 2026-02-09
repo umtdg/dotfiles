@@ -45,6 +45,7 @@ breeze5
 dunst
 feh
 grim
+gum
 noto-fonts
 picom
 pinentry
