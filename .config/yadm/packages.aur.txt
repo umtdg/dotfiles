@@ -1,9 +1,0 @@
-1password
-docker-credential-pass
-megasync-bin
-oh-my-zsh-git
-sddm-theme-sugar-candy-git
-vmware-keymaps
-vmware-workstation
-zsh-fzf-plugin-git
-zsh-theme-powerlevel10k
