@@ -67,7 +67,7 @@ in
       export HISTIGNORE="pwd:ls:cd"
 
       # Emacs is my editor
-      export EDITOR="vim"
+      export EDITOR="nvim"
 
       # Always color ls and group directories
       alias ls='ls --color=auto'
