@@ -22,6 +22,7 @@ with pkgs; [
   fzf
   lazygit
   neovim
+  nodejs_24
   python3
   rustc
   virtualenv
