@@ -11,10 +11,14 @@ in
     enable = true;
     autocd = false;
     history = {
+      save = 100000;
+      size = 1000;
       append = true;
+      share = true;
+      extended = true;
+      expireDuplicatesFirst = true;
       ignoreDups = true;
       ignoreSpace = true;
-      save = 10000;
     };
 
     enableCompletion = true;
@@ -22,8 +26,13 @@ in
     syntaxHighlighting.enable = true;
 
     shellAliases = {
+      ls = "ls --color=auto";
       l = "ls --color=auto -lh";
       ll = "ls --color=auto -lhA";
+      grep = "grep --color=auto";
+      diff = "diff --color=auto";
+      ip = "ip -c";
+      wget = "wget -q --show-progress";
     };
 
     plugins = [
@@ -63,14 +72,7 @@ in
       export PATH=$HOME/.npm-packages/bin:$HOME/bin:$PATH
       export PATH=$HOME/.local/share/bin:$PATH
 
-      # Remove history data we don't want to see
-      export HISTIGNORE="pwd:ls:cd"
-
-      # Emacs is my editor
       export EDITOR="nvim"
-
-      # Always color ls and group directories
-      alias ls='ls --color=auto'
     '';
   };
 
@@ -117,63 +119,66 @@ in
 
   vim = {
     enable = true;
-    plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes vim-startify vim-tmux-navigator ];
+    plugins = with pkgs.vimPlugins; [
+      vim-airline
+      vim-airline-themes
+      vim-startify
+      vim-surround
+      vim-fugitive
+      syntastic
+      nerdtree
+    ];
     settings = { ignorecase = true; };
     extraConfig = ''
       "" General
       set number
-      set history=1000
-      set nocompatible
-      set modelines=0
-      set encoding=utf-8
-      set scrolloff=3
-      set showmode
-      set showcmd
-      set hidden
-      set wildmenu
-      set wildmode=list:longest
+      set relativenumber
+
+      set mouse=a
+
+      set noshowmode
+
+      set shiftwidth=4
+      set tabstop=4
+      set softtabstop=4
+      set expandtab
+      set breakindent
+      set autoindent
+
+      set ignorecase
+      set smartcase
+
+      set signcolumn=yes
+
+      set updatetime=250
+      set timeoutlen=300
+
+      set splitright
+      set splitbelow
+
+      set list
+      set listchars=tab::»\
+      set listchars=trail:·
+      set listchars=nbsp:␣
+
       set cursorline
-      set ttyfast
-      set nowrap
-      set ruler
-      set backspace=indent,eol,start
-      set laststatus=2
-      set clipboard=autoselect
+
+      set scrolloff=3
+
+      set confirm
+
+      set incsearch
+      set hlsearch
 
       " Dir stuff
       set nobackup
       set nowritebackup
       set noswapfile
+      set undofile
       set backupdir=~/.config/vim/backups
       set directory=~/.config/vim/swap
 
-      " Relative line numbers for easy movement
-      set relativenumber
-      set rnu
-
-      "" Whitespace rules
-      set tabstop=8
-      set shiftwidth=2
-      set softtabstop=2
-      set expandtab
-
-      "" Searching
-      set incsearch
-      set gdefault
-
-      "" Statusbar
-      set nocompatible " Disable vi-compatibility
-      set laststatus=2 " Always show the statusline
-      let g:airline_theme='bubblegum'
-      let g:airline_powerline_fonts = 1
-
-      "" Local keys and such
-      let mapleader=","
-      let maplocalleader=" "
-
-      "" Change cursor on mode
-      :autocmd InsertEnter * set cul
-      :autocmd InsertLeave * set nocul
+      let mapleader=" "
 
       "" File-type highlighting and configuration
       syntax on
@@ -181,18 +186,16 @@ in
       filetype plugin on
       filetype indent on
 
-      "" Paste from clipboard
-      nnoremap <Leader>, "+gP
+      "" tokyonight-night colors
+      if
+        silent !curl --create-dirs -fLo ~/.vim/colors/tokyonight-night.vim
+          \ https://raw.githubusercontent.com/folke/tokyonight.nvim/refs/heads/main/extras/vim/colors/tokyonight-night.vim
+      endif
 
-      "" Copy from clipboard
-      xnoremap <Leader>. "+y
+      set termguicolors
+      colorscheme tokyonight-night
 
-      "" Move cursor by display lines when wrapping
-      nnoremap j gj
-      nnoremap k gk
-
-      "" Map leader-q to quit out of window
-      nnoremap <leader>q :q<cr>
+      "" Keymaps
 
       "" Move around split
       nnoremap <C-h> <C-w>h
@@ -204,11 +207,8 @@ in
       nnoremap Y y$
 
       "" Move buffers
-      nnoremap <tab> :bnext<cr>
-      nnoremap <S-tab> :bprev<cr>
-
-      "" Like a boss, sudo AFTER opening the file to write
-      cmap w!! w !sudo tee % >/dev/null
+      nnoremap <leader>bn :bnext<cr>
+      nnoremap <leader>bp :bprev<cr>
 
       let g:startify_lists = [
         \ { 'type': 'dir',       'header': ['   Current Directory '. getcwd()] },
@@ -221,8 +221,17 @@ in
         \ '~/Documents',
         \ ]
 
-      let g:airline_theme='bubblegum'
+      let g:airline_theme='onedark'
       let g:airline_powerline_fonts = 1
+
+      let g:surround_no_mappings = 0
+      nmap sd <Plug>Dsurround
+      nmap sr <Plug>Csurround
+      nmap sR <Plug>CSurround
+      nmap sa <Plug>Ysurround
+      nmap sA <Plug>YSurround
+      xmap sa <Plug>VSurround
+      xmap sA <Plug>VgSurround
     '';
   };
 
