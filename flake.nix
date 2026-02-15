@@ -25,7 +25,15 @@
     };
   };
 
-  outputs = { self, darwin, nix-homebrew, homebrew-bundle, homebrew-core, homebrew-cask, home-manager, nixpkgs, disko } @inputs:
+  outputs = {
+    self,
+    darwin,
+    nix-homebrew,
+    homebrew-bundle,
+    homebrew-core, homebrew-cask,
+    home-manager,
+    nixpkgs
+  } @inputs:
     let
       user = "umtdg";
       linuxSystems = [ "x86_64-linux" ];
