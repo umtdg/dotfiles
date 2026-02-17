@@ -23,7 +23,6 @@ with pkgs; [
   lazygit
   neovim
   nodejs_24
-  opencode
   python3
   rustc
   virtualenv

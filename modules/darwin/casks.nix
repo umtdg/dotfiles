@@ -2,6 +2,7 @@ _:
 
 [
   # Development Tools
+  "claude-code"
 
   # Communication Tools
   "discord"

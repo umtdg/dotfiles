@@ -99,20 +99,16 @@
         }
       );
 
-      # nixosConfigurations = nixpkgs.lib.genAttrs linuxSystems (system: nixpkgs.lib.nixosSystem {
-      #   inherit system;
-      #   specialArgs = inputs;
-      #   modules = [
-      #     disko.nixosModules.disko
-      #     home-manager.nixosModules.home-manager {
-      #       home-manager = {
-      #         useGlobalPkgs = true;
-      #         useUserPackages = true;
-      #         users.${user} = import ./modules/nixos/home-manager.nix;
-      #       };
-      #     }
-      #     ./hosts/nixos
-      #   ];
-      # });
+      # Standalone home-manager for Arch Linux hosts
+      homeConfigurations = {
+        "skywalker@tatooine" = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs { system = "x86_64-linux"; };
+          modules = [ ./hosts/arch/tatooine.nix ];
+        };
+        "ahsoka@naboo" = home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs { system = "x86_64-linux"; };
+          modules = [ ./hosts/arch/naboo.nix ];
+        };
+      };
     };
 }

@@ -57,6 +57,10 @@ in
       '';
     };
 
+    envExtra = ''
+      fpath=(~/.zsh/functions(:A) $fpath)
+    '';
+
     initContent = lib.mkBefore ''
       if [[ -r "$HOME/.cache/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
         source "$HOME/.cache/p10k-instant-prompt-''${(%):-%n}.zsh";
@@ -67,12 +71,21 @@ in
         . /nix/var/nix/profiles/default/etc/profile.d/nix.sh
       fi
 
-      # Define variables for directories
-      export PATH=$HOME/.pnpm-packages/bin:$HOME/.pnpm-packages:$PATH
-      export PATH=$HOME/.npm-packages/bin:$HOME/bin:$PATH
-      export PATH=$HOME/.local/share/bin:$PATH
+      export PATH=$HOME/bin:$HOME/.local/share/bin:$PATH
 
       export EDITOR="nvim"
+
+      # Less colors
+      export LESS='-iFNR --use-color -Dd+r$Du+b'
+      export LESS_TERMCAP_mb=$'\E[1;31m'
+      export LESS_TERMCAP_md=$'\E[1;36m'
+      export LESS_TERMCAP_me=$'\E[0m'
+      export LESS_TERMCAP_so=$'\E[01;33m'
+      export LESS_TERMCAP_se=$'\E[0m'
+      export LESS_TERMCAP_us=$'\E[1;32m'
+      export LESS_TERMCAP_ue=$'\E[0m'
+
+      export MANPAGER="less -R --use-color -Dd+r -Du+b"
     '';
   };
 
@@ -117,17 +130,24 @@ in
     };
   };
 
+  lazygit = {
+    enable = true;
+    settings = {
+      customCommands = [
+        {
+          key = "F";
+          command = "git fetch --prune --all";
+          context = "localBranches";
+          description = "Fetch with prune";
+          output = "log";
+        }
+      ];
+    };
+  };
+
   vim = {
     enable = true;
-    plugins = with pkgs.vimPlugins; [
-      vim-airline
-      vim-airline-themes
-      vim-startify
-      vim-surround
-      vim-fugitive
-      syntastic
-      nerdtree
-    ];
+    plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes vim-startify vim-tmux-navigator ];
     settings = { ignorecase = true; };
     extraConfig = ''
       "" General
@@ -138,12 +158,9 @@ in
 
       set noshowmode
 
-      set shiftwidth=4
-      set tabstop=4
-      set softtabstop=4
-      set expandtab
       set breakindent
-      set autoindent
+
+      set undofile
 
       set ignorecase
       set smartcase
@@ -163,22 +180,43 @@ in
 
       set cursorline
 
-      set scrolloff=3
-
-      set confirm
-
-      set incsearch
-      set hlsearch
+      set scrolloff=10
+      s
 
       " Dir stuff
       set nobackup
       set nowritebackup
       set noswapfile
-      set undofile
       set backupdir=~/.config/vim/backups
       set directory=~/.config/vim/swap
 
-      let mapleader=" "
+      " Relative line numbers for easy movement
+      set relativenumber
+      set rnu
+
+      "" Whitespace rules
+      set tabstop=8
+      set shiftwidth=2
+      set softtabstop=2
+      set expandtab
+
+      "" Searching
+      set incsearch
+      set gdefault
+
+      "" Statusbar
+      set nocompatible " Disable vi-compatibility
+      set laststatus=2 " Always show the statusline
+      let g:airline_theme='bubblegum'
+      let g:airline_powerline_fonts = 1
+
+      "" Local keys and such
+      let mapleader=","
+      let maplocalleader=" "
+
+      "" Change cursor on mode
+      :autocmd InsertEnter * set cul
+      :autocmd InsertLeave * set nocul
 
       "" File-type highlighting and configuration
       syntax on
@@ -186,16 +224,18 @@ in
       filetype plugin on
       filetype indent on
 
-      "" tokyonight-night colors
-      if
-        silent !curl --create-dirs -fLo ~/.vim/colors/tokyonight-night.vim
-          \ https://raw.githubusercontent.com/folke/tokyonight.nvim/refs/heads/main/extras/vim/colors/tokyonight-night.vim
-      endif
+      "" Paste from clipboard
+      nnoremap <Leader>, "+gP
 
-      set termguicolors
-      colorscheme tokyonight-night
+      "" Copy from clipboard
+      xnoremap <Leader>. "+y
 
-      "" Keymaps
+      "" Move cursor by display lines when wrapping
+      nnoremap j gj
+      nnoremap k gk
+
+      "" Map leader-q to quit out of window
+      nnoremap <leader>q :q<cr>
 
       "" Move around split
       nnoremap <C-h> <C-w>h
@@ -207,8 +247,11 @@ in
       nnoremap Y y$
 
       "" Move buffers
-      nnoremap <leader>bn :bnext<cr>
-      nnoremap <leader>bp :bprev<cr>
+      nnoremap <tab> :bnext<cr>
+      nnoremap <S-tab> :bprev<cr>
+
+      "" Like a boss, sudo AFTER opening the file to write
+      cmap w!! w !sudo tee % >/dev/null
 
       let g:startify_lists = [
         \ { 'type': 'dir',       'header': ['   Current Directory '. getcwd()] },
@@ -221,17 +264,8 @@ in
         \ '~/Documents',
         \ ]
 
-      let g:airline_theme='onedark'
+      let g:airline_theme='bubblegum'
       let g:airline_powerline_fonts = 1
-
-      let g:surround_no_mappings = 0
-      nmap sd <Plug>Dsurround
-      nmap sr <Plug>Csurround
-      nmap sR <Plug>CSurround
-      nmap sa <Plug>Ysurround
-      nmap sA <Plug>YSurround
-      xmap sa <Plug>VSurround
-      xmap sA <Plug>VgSurround
     '';
   };
 
@@ -247,32 +281,6 @@ in
 
       env.TERM = "xterm-256color";
 
-      # Fix for shell path when launching from desktop
-      # When launching from desktop, $SHELL may point to /bin/zsh instead of
-      # the Nix-managed shell, causing environment issues
-      terminal.shell = {
-        program = "${pkgs.zsh}/bin/zsh";
-      };
-
-      font = let
-        family = if pkgs.stdenv.hostPlatform.isDarwin then "Iosevka" else "Iosevka Nerd Font";
-        size = if pkgs.stdenv.hostPlatform.isDarwin then 14 else 10;
-      in {
-        normal = {
-          inherit family;
-          style = "Regular";
-        };
-        italic = {
-          inherit family;
-          style = "Italic";
-        };
-        bold = {
-          inherit family;
-          style = "Bold";
-        };
-        inherit size;
-      };
-
       window = {
         dynamic_title = true;
         padding = {
@@ -286,18 +294,7 @@ in
   ssh = {
     enable = true;
     enableDefaultConfig = false;
-    # includes = [
-    #   (lib.mkIf pkgs.stdenv.hostPlatform.isLinux
-    #     "/home/${user}/.ssh/config_external"
-    #   )
-    #   (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
-    #     "/Users/${user}/.ssh/config_external"
-    #   )
-    # ];
     matchBlocks = {
-      "*" = lib.hm.dag.entryBefore ["github.com" "gitlab.com" "gitlab.archlinux.org" "aur.archlinux.org"] {
-        identityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
-      };
       "github.com" = {
         user = "git";
         identitiesOnly = true;
@@ -318,18 +315,6 @@ in
         identitiesOnly = true;
         identityFile = "~/.ssh/id_arch_aur.pub";
       };
-      # Example SSH configuration for GitHub
-      # "github.com" = {
-      #   identitiesOnly = true;
-      #   identityFile = [
-      #     (lib.mkIf pkgs.stdenv.hostPlatform.isLinux
-      #       "/home/${user}/.ssh/id_github"
-      #     )
-      #     (lib.mkIf pkgs.stdenv.hostPlatform.isDarwin
-      #       "/Users/${user}/.ssh/id_github"
-      #     )
-      #   ];
-      # };
     };
   };
 
