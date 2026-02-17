@@ -57,15 +57,15 @@
         '')}/bin/${scriptName}";
       };
       mkLinuxApps = system: {
+        "bootstrap" = mkApp "bootstrap" system;
         "build-switch" = mkApp "build-switch" system;
-        "clean" = mkApp "build-switch" system;
-        "install" = mkApp "build-switch" system;
+        "clean" = mkApp "clean" system;
       };
       mkDarwinApps = system: {
         "build" = mkApp "build" system;
         "build-switch" = mkApp "build-switch" system;
-        "clean" = mkApp "build-switch" system;
-        "install" = mkApp "build-switch" system;
+        "clean" = mkApp "clean" system;
+        "install" = mkApp "install" system;
       };
     in
     {
