@@ -58,7 +58,7 @@ in
     };
 
     envExtra = ''
-      fpath=(~/.zsh/functions(:A) $fpath)
+      [[ -d ~/.zsh/functions ]] && fpath=(~/.zsh/functions(:A) $fpath)
     '';
 
     initContent = lib.mkBefore ''
