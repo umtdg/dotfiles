@@ -2,9 +2,6 @@
 
 let
   user = "umtdg";
-  sharedFiles = import ../shared/files.nix { inherit config pkgs; };
-  additionalFiles = import ./files.nix { inherit user config pkgs; };
-  sharedPrograms = import ../shared/home-manager.nix { inherit config pkgs lib; };
 in
 {
   imports = [
@@ -30,66 +27,42 @@ in
   home-manager = {
     useGlobalPkgs = true;
     users.${user} = { pkgs, config, lib, ... }: {
+      imports = [ ../shared/home-manager.nix ];
+
       home = {
         enableNixpkgsReleaseCheck = false;
         packages = pkgs.callPackage ./packages.nix {};
-        file = lib.mkMerge [
-          sharedFiles
-          additionalFiles
-        ];
+        file = import ./files.nix { inherit user config pkgs; };
         stateVersion = "23.11";
       };
 
-      programs = sharedPrograms // {
-        # Darwin-specific: use nix-managed zsh to avoid desktop launch issues
-        alacritty = lib.recursiveUpdate sharedPrograms.alacritty {
-          settings = {
-            terminal.shell.program = "${pkgs.zsh}/bin/zsh";
-            font = {
-              normal = { family = "Iosevka"; style = "Regular"; };
-              italic = { family = "Iosevka"; style = "Italic"; };
-              bold = { family = "Iosevka"; style = "Bold"; };
-              size = 14;
-            };
+      # Darwin-specific: use nix-managed zsh to avoid desktop launch issues
+      programs.alacritty = {
+        settings = {
+          terminal.shell.program = "${pkgs.zsh}/bin/zsh";
+          font = {
+            normal = { family = "Iosevka"; style = "Regular"; };
+            italic = { family = "Iosevka"; style = "Italic"; };
+            bold = { family = "Iosevka"; style = "Bold"; };
+            size = 14;
           };
         };
+      };
 
-        zsh = lib.recursiveUpdate sharedPrograms.zsh {
-          initContent = lib.mkBefore ''
-            if [[ -r "$HOME/.cache/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-              source "$HOME/.cache/p10k-instant-prompt-''${(%):-%n}.zsh";
-            fi
+      programs.zsh = {
+        envExtra = lib.mkAfter ''
+          insert_path "$HOME/.pnpm-packages" 1
+          insert_path "$HOME/.pnpm-packages/bin" 1
+          insert_path "$HOME/.npm-packages/bin" 1
 
-            if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
-              . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-              . /nix/var/nix/profiles/default/etc/profile.d/nix.sh
-            fi
+          export PATH
+        '';
+      };
 
-            export PATH=$HOME/.pnpm-packages/bin:$HOME/.pnpm-packages:$PATH
-            export PATH=$HOME/.npm-packages/bin:$HOME/bin:$PATH
-            export PATH=$HOME/.local/share/bin:$PATH
-
-            export EDITOR="nvim"
-
-            # Less colors
-            export LESS='-iFNR --use-color -Dd+r$Du+b'
-            export LESS_TERMCAP_mb=$'\E[1;31m'
-            export LESS_TERMCAP_md=$'\E[1;36m'
-            export LESS_TERMCAP_me=$'\E[0m'
-            export LESS_TERMCAP_so=$'\E[01;33m'
-            export LESS_TERMCAP_se=$'\E[0m'
-            export LESS_TERMCAP_us=$'\E[1;32m'
-            export LESS_TERMCAP_ue=$'\E[0m'
-
-            export MANPAGER="less -R --use-color -Dd+r -Du+b"
-          '';
-        };
-
-        ssh = lib.recursiveUpdate sharedPrograms.ssh {
-          matchBlocks = {
-            "*" = lib.hm.dag.entryBefore ["github.com" "gitlab.com" "gitlab.archlinux.org" "aur.archlinux.org"] {
-              identityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
-            };
+      programs.ssh = {
+        matchBlocks = {
+          "*" = {
+            identityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
           };
         };
       };

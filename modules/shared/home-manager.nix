@@ -6,8 +6,9 @@ let
   email = "umu7d9@gmail.com";
 in
 {
-  # Shared shell configuration
-  zsh = {
+  home.file = import ./files.nix { inherit config pkgs; };
+
+  programs.zsh = {
     enable = true;
     autocd = false;
     history = {
@@ -57,21 +58,27 @@ in
       '';
     };
 
-    envExtra = ''
+    envExtra = lib.mkBefore ''
+      function insert_path() {
+        local new_path="$1"
+        local prepend="$2"
+
+        case ":$PATH:" in
+          *:"$new_path":*) ;;
+          *)
+            if [ -z "$prepend" ]; then
+              PATH="''${PATH:+$PATH:}''${new_path}"
+            else
+              PATH="''${new_path}''${PATH:+:$PATH}"
+            fi
+            ;;
+        esac
+      }
+
       [[ -d ~/.zsh/functions ]] && fpath=(~/.zsh/functions(:A) $fpath)
-    '';
 
-    initContent = lib.mkBefore ''
-      if [[ -r "$HOME/.cache/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-        source "$HOME/.cache/p10k-instant-prompt-''${(%):-%n}.zsh";
-      fi
-
-      if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
-        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-        . /nix/var/nix/profiles/default/etc/profile.d/nix.sh
-      fi
-
-      export PATH=$HOME/bin:$HOME/.local/share/bin:$PATH
+      insert_path "$HOME/.local/share/bin"
+      export PATH
 
       export EDITOR="nvim"
 
@@ -87,24 +94,49 @@ in
 
       export MANPAGER="less -R --use-color -Dd+r -Du+b"
     '';
+
+    initContent = lib.mkBefore ''
+      if [[ -r "$HOME/.cache/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+        source "$HOME/.cache/p10k-instant-prompt-''${(%):-%n}.zsh";
+      fi
+
+      if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+        . /nix/var/nix/profiles/default/etc/profile.d/nix.sh
+      fi
+    '';
   };
 
-  git = {
+  programs.git = {
     enable = true;
     ignores = [ "*.swp" ];
+
+    signing = {
+      key = "7ACF523C6B63264D!";
+      signByDefault = true;
+    };
 
     settings = {
       user = {
         email = email;
         name = name;
       };
+
       color = {
         ui = true;
         diff = "always";
       };
+
       init = {
         defaultBranch = "main";
       };
+
+      merge.tool = "vimdiff";
+
+      diff.wsErrorHighlight = "all";
+
+      tag.forceSignAnnotated = false;
+
       url = {
         "git@github.com:" = {
           insteadof = "github:";
@@ -130,7 +162,7 @@ in
     };
   };
 
-  lazygit = {
+  programs.lazygit = {
     enable = true;
     settings = {
       customCommands = [
@@ -145,7 +177,7 @@ in
     };
   };
 
-  vim = {
+  programs.vim = {
     enable = true;
     plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes vim-startify vim-tmux-navigator ];
     settings = { ignorecase = true; };
@@ -269,7 +301,7 @@ in
     '';
   };
 
-  alacritty = {
+  programs.alacritty = {
     enable = true;
     settings = {
       general = {
@@ -291,7 +323,7 @@ in
     };
   };
 
-  ssh = {
+  programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
     matchBlocks = {
@@ -318,30 +350,8 @@ in
     };
   };
 
-  tmux = {
+  programs.tmux = {
     enable = true;
-    plugins = with pkgs.tmuxPlugins; [
-      vim-tmux-navigator
-      {
-        plugin = resurrect; # Used by tmux-continuum
-
-        # Use XDG data directory
-        # https://github.com/tmux-plugins/tmux-resurrect/issues/348
-        extraConfig = ''
-          set -g @resurrect-dir '$HOME/.cache/tmux/resurrect'
-          set -g @resurrect-capture-pane-contents 'on'
-          set -g @resurrect-pane-contents-area 'visible'
-        '';
-      }
-      {
-        plugin = continuum;
-        extraConfig = ''
-          set -g @continuum-restore 'on'
-          set -g @continuum-save-interval '5' # minutes
-        '';
-      }
-    ];
-
     terminal = "tmux-256color";
     historyLimit = 50000;
     clock24 = true;
