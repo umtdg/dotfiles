@@ -20,6 +20,7 @@ with pkgs; [
   # Development
   cargo
   fzf
+  jdk21_headless
   lazygit
   neovim
   nodejs_24
