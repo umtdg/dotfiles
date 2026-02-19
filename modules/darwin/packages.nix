@@ -25,6 +25,7 @@ with pkgs; [
   nodejs_24
   python3
   rustc
+  tree-sitter
   virtualenv
 
   # Terminal
