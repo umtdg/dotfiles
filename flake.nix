@@ -25,38 +25,52 @@
     };
   };
 
-  outputs = {
-    self,
-    darwin,
-    nix-homebrew,
-    homebrew-bundle,
-    homebrew-core, homebrew-cask,
-    home-manager,
-    nixpkgs
-  } @inputs:
+  outputs =
+    {
+      self,
+      darwin,
+      nix-homebrew,
+      homebrew-bundle,
+      homebrew-core,
+      homebrew-cask,
+      home-manager,
+      nixpkgs,
+    }@inputs:
     let
-      user = "umtdg";
-      linuxSystems = [ "x86_64-linux" ];
+      user = "%USER%";
+      archSystems = [ "x86_64-linux" ];
       darwinSystems = [ "aarch64-darwin" ];
-      forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
-      devShell = system: let pkgs = nixpkgs.legacyPackages.${system}; in {
-        default = with pkgs; mkShell {
-          nativeBuildInputs = with pkgs; [ bashInteractive git ];
-          shellHook = with pkgs; ''
-            export EDITOR=vim
-          '';
+      forAllSystems = f: nixpkgs.lib.genAttrs (archSystems ++ darwinSystems) f;
+      devShell =
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default =
+            with pkgs;
+            mkShell {
+              nativeBuildInputs = with pkgs; [
+                bashInteractive
+                git
+              ];
+              shellHook = ''
+                export EDITOR=nvim
+              '';
+            };
         };
-      };
       mkApp = scriptName: system: {
         type = "app";
-        program = "${(nixpkgs.legacyPackages.${system}.writeScriptBin scriptName ''
-          #!/usr/bin/env bash
-          PATH=${nixpkgs.legacyPackages.${system}.git}/bin:$PATH
-          echo "Running ${scriptName} for ${system}"
-          exec ${self}/apps/${system}/${scriptName}
-        '')}/bin/${scriptName}";
+        program = "${
+          (nixpkgs.legacyPackages.${system}.writeScriptBin scriptName ''
+            #!/usr/bin/env bash
+            PATH=${nixpkgs.legacyPackages.${system}.git}/bin:$PATH
+            echo "Running ${scriptName} for ${system}"
+            exec ${self}/apps/${system}/${scriptName}
+          '')
+        }/bin/${scriptName}";
       };
-      mkLinuxApps = system: {
+      mkArchApps = system: {
         "bootstrap" = mkApp "bootstrap" system;
         "build-switch" = mkApp "build-switch" system;
         "clean" = mkApp "clean" system;
@@ -70,11 +84,14 @@
     in
     {
       devShells = forAllSystems devShell;
-      apps = nixpkgs.lib.genAttrs linuxSystems mkLinuxApps // nixpkgs.lib.genAttrs darwinSystems mkDarwinApps;
+      apps =
+        nixpkgs.lib.genAttrs archSystems mkArchApps // nixpkgs.lib.genAttrs darwinSystems mkDarwinApps;
 
-      darwinConfigurations = nixpkgs.lib.genAttrs darwinSystems (system: let
-        user = "umtdg";
-      in
+      darwinConfigurations = nixpkgs.lib.genAttrs darwinSystems (
+        system:
+        let
+          user = "%USER%";
+        in
         darwin.lib.darwinSystem {
           inherit system;
           specialArgs = inputs;
@@ -98,17 +115,5 @@
           ];
         }
       );
-
-      # Standalone home-manager for Arch Linux hosts
-      homeConfigurations = {
-        "skywalker@tatooine" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { system = "x86_64-linux"; };
-          modules = [ ./hosts/arch/tatooine.nix ];
-        };
-        "ahsoka@naboo" = home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { system = "x86_64-linux"; };
-          modules = [ ./hosts/arch/naboo.nix ];
-        };
-      };
     };
 }

@@ -1,7 +1,7 @@
-{ config, pkgs, lib, home-manager, ... }:
+{ pkgs, ... }:
 
 let
-  user = "umtdg";
+  user = "%USER%";
 in
 {
   imports = [
@@ -18,10 +18,6 @@ in
   homebrew = {
     enable = true;
     casks = pkgs.callPackage ./casks.nix {};
-
-    masApps = {
-      # "wireguard" = 1451685025;
-    };
   };
 
   home-manager = {
@@ -33,39 +29,10 @@ in
         enableNixpkgsReleaseCheck = false;
         packages = pkgs.callPackage ./packages.nix {};
         file = import ./files.nix { inherit user config pkgs; };
-        stateVersion = "23.11";
+        stateVersion = "25.11";
       };
 
-      # Darwin-specific: use nix-managed zsh to avoid desktop launch issues
-      programs.alacritty = {
-        settings = {
-          terminal.shell.program = "${pkgs.zsh}/bin/zsh";
-          font = {
-            normal = { family = "Iosevka"; style = "Regular"; };
-            italic = { family = "Iosevka"; style = "Italic"; };
-            bold = { family = "Iosevka"; style = "Bold"; };
-            size = 14;
-          };
-        };
-      };
-
-      programs.zsh = {
-        envExtra = lib.mkAfter ''
-          insert_path "$HOME/.pnpm-packages" 1
-          insert_path "$HOME/.pnpm-packages/bin" 1
-          insert_path "$HOME/.npm-packages/bin" 1
-
-          export PATH
-        '';
-      };
-
-      programs.ssh = {
-        matchBlocks = {
-          "*" = {
-            identityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
-          };
-        };
-      };
+      programs = import ./programs.nix { inherit pkgs lib; };
 
       manual.manpages.enable = false;
     };

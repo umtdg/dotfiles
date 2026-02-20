@@ -1,10 +1,11 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
-let user = "umtdg"; in
-
+let
+  user = "%USER";
+in
 {
   imports = [
-    ../../modules/darwin/home-manager.nix
+    ../../modules/darwin/home.nix
     ../../modules/shared
   ];
 
@@ -12,14 +13,24 @@ let user = "umtdg"; in
     package = pkgs.nix;
 
     settings = {
-      trusted-users = [ "@admin" "${user}" ];
-      substituters = [ "https://nix-community.cachix.org" "https://cache.nixos.org" ];
+      trusted-users = [
+        "@admin"
+        "${user}"
+      ];
+      substituters = [
+        "https://nix-community.cachix.org"
+        "https://cache.nixos.org"
+      ];
       trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
     };
 
     gc = {
       automatic = true;
-      interval = { Weekday = 0; Hour = 2; Minute = 0; };
+      interval = {
+        Weekday = 0;
+        Hour = 2;
+        Minute = 0;
+      };
       options = "--delete-older-than 30d";
     };
 
@@ -27,7 +38,6 @@ let user = "umtdg"; in
       experimental-features = nix-command flakes
     '';
   };
-
 
   environment.systemPackages = (import ../../modules/shared/packages.nix { inherit pkgs; });
 
