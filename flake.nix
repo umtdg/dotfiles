@@ -37,7 +37,7 @@
       nixpkgs,
     }@inputs:
     let
-      user = "%USER%";
+      user = "umtdg";
       archSystems = [ "x86_64-linux" ];
       darwinSystems = [ "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs (archSystems ++ darwinSystems) f;
@@ -90,7 +90,7 @@
       darwinConfigurations = nixpkgs.lib.genAttrs darwinSystems (
         system:
         let
-          user = "%USER%";
+          user = "umtdg";
         in
         darwin.lib.darwinSystem {
           inherit system;

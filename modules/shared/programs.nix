@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 let
-  name = "%NAME%";
-  email = "%EMAIL%";
+  name = "Umut Dag";
+  email = "umu7d9@gmail.com";
 in
 {
   zsh = {

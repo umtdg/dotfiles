@@ -1,11 +1,11 @@
 { pkgs, ... }:
 
 let
-  user = "%USER";
+  user = "umtdg";
 in
 {
   imports = [
-    ../../modules/darwin/home.nix
+    ../../modules/darwin/home-manager.nix
     ../../modules/shared
   ];
 
@@ -39,7 +39,7 @@ in
     '';
   };
 
-  environment.systemPackages = {};
+  environment.systemPackages = [];
 
   system = {
     checks.verifyNixPath = false;

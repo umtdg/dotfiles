@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 let
-  user = "%USER%";
+  user = "umtdg";
 in
 {
   imports = [
