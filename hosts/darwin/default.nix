@@ -39,7 +39,7 @@ in
     '';
   };
 
-  environment.systemPackages = (import ../../modules/shared/packages.nix { inherit pkgs; });
+  environment.systemPackages = {};
 
   system = {
     checks.verifyNixPath = false;
