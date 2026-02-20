@@ -1,6 +1,8 @@
+# Darwin Module
 
 ## Layout
-```
+
+```text
 .
 ├── dock               # MacOS dock configuration
 ├── casks.nix          # List of homebrew casks
@@ -8,4 +10,5 @@
 ├── files.nix          # Non-Nix, static configuration files (now immutable!)
 ├── home-manager.nix   # Defines user programs
 ├── packages.nix       # List of packages to install for MacOS
+├── programs.nix       # List of programs configured via Home Manager
 ```
