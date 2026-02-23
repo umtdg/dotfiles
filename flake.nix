@@ -117,12 +117,13 @@
         }
       );
 
-      homeConfigurations = nixpkgs.lib.genAttrs homeConfigurationUsers (user: {
-        ${user} = home-manager.lib.homeManagerConfiguration {
+      homeConfigurations = nixpkgs.lib.genAttrs homeConfigurationUsers (
+        user:
+        home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
 
           modules = [ ./modules/${user}/home-manager.nix ];
-        };
-      });
+        }
+      );
     };
 }
