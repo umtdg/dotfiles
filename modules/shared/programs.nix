@@ -114,8 +114,7 @@ in
 
     settings = {
       user = {
-        email = email;
-        name = name;
+        inherit name email;
       };
 
       color = {

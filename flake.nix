@@ -38,9 +38,9 @@
     }@inputs:
     let
       user = "umtdg";
-      archSystems = [ "x86_64-linux" ];
+      linuxSystems = [ "x86_64-linux" ];
       darwinSystems = [ "aarch64-darwin" ];
-      forAllSystems = f: nixpkgs.lib.genAttrs (archSystems ++ darwinSystems) f;
+      forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
       devShell =
         system:
         let
@@ -70,7 +70,7 @@
           '')
         }/bin/${scriptName}";
       };
-      mkArchApps = system: {
+      mkLinuxApps = system: {
         "bootstrap" = mkApp "bootstrap" system;
         "build-switch" = mkApp "build-switch" system;
         "clean" = mkApp "clean" system;
@@ -85,7 +85,7 @@
     {
       devShells = forAllSystems devShell;
       apps =
-        nixpkgs.lib.genAttrs archSystems mkArchApps // nixpkgs.lib.genAttrs darwinSystems mkDarwinApps;
+        nixpkgs.lib.genAttrs linuxSystems mkLinuxApps // nixpkgs.lib.genAttrs darwinSystems mkDarwinApps;
 
       darwinConfigurations = nixpkgs.lib.genAttrs darwinSystems (
         system:
@@ -113,6 +113,20 @@
             }
             ./hosts/darwin
           ];
+        }
+      );
+
+      homeConfigurations = nixpkgs.lib.genAttrs linuxSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          "ulakbulut" = home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+
+            modules = [ ./modules/ubuntu/home-manager.nix ];
+          };
         }
       );
     };
