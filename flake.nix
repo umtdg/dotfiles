@@ -117,18 +117,12 @@
         }
       );
 
-      homeConfigurations = nixpkgs.lib.genAttrs linuxSystems (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        {
-          "ulakbulut" = home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
+      homeConfigurations = nixpkgs.lib.genAttrs homeConfigurationUsers (user: {
+        ${user} = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
 
-            modules = [ ./modules/ulakbulut/home-manager.nix ];
-          };
-        }
-      );
+          modules = [ ./modules/${user}/home-manager.nix ];
+        };
+      });
     };
 }
