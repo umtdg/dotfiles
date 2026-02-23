@@ -4,6 +4,8 @@ let
   user = "ulakbulut";
 in
 {
+  imports = [ ../shared/home-manager.nix ];
+
   home = {
     username = user;
     homeDirectory = "/home/${user}";
