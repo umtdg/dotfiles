@@ -10,4 +10,4 @@ home-manager build --flake .#$USER
 echo -e "${YELLOW}Cleaning up...${NC}"
 unlink ./result
 
-echo -e "${GREEN}Switch to new generation complete!${NC}"
+echo -e "${GREEN}Building complete!${NC}"
