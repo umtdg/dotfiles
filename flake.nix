@@ -37,7 +37,7 @@
       nixpkgs,
     }@inputs:
     let
-      user = "umtdg";
+      homeConfigurationUsers = [ "ulakbulut" ];
       linuxSystems = [ "x86_64-linux" ];
       darwinSystems = [ "aarch64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs (linuxSystems ++ darwinSystems) f;
@@ -72,6 +72,7 @@
       };
       mkLinuxApps = system: {
         "bootstrap" = mkApp "bootstrap" system;
+        "build" = mkApp "build" system;
         "build-switch" = mkApp "build-switch" system;
         "clean" = mkApp "clean" system;
       };
@@ -125,7 +126,7 @@
           "ulakbulut" = home-manager.lib.homeManagerConfiguration {
             inherit pkgs;
 
-            modules = [ ./modules/ubuntu/home-manager.nix ];
+            modules = [ ./modules/ulakbulut/home-manager.nix ];
           };
         }
       );

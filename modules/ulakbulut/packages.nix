@@ -22,5 +22,6 @@ with pkgs; [
 
     # Terminal
     tmux
+    zsh
     zsh-powerlevel10k
 ]

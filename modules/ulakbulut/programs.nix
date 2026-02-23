@@ -6,7 +6,7 @@ let
 in
 {
   alacritty = {
-    enabled = false;
+    enable = false;
   };
 
   git = {
