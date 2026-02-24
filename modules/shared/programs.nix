@@ -74,6 +74,7 @@ in
       [[ -d ~/.zsh/functions ]] && fpath=(~/.zsh/functions(:A) $fpath)
 
       insert_path "$HOME/.local/share/bin"
+      insert_path "$HOME/.nix-profile/bin" 1
       export PATH
 
       export EDITOR="nvim"
