@@ -74,6 +74,7 @@ thunar-volman
 
 # applications
 7zip
+btop
 calc
 copyq
 curl
@@ -81,10 +82,12 @@ ffmpeg
 firefox
 mlocate
 openvpn
+ripgrep
 rsync
 signal-desktop
 spotify-launcher
 thunderbird
+tmux
 unzip
 vlc
 wget
@@ -111,9 +114,6 @@ docker-compose
 jdk11-openjdk
 jdk21-openjdk
 neovim
-npm
 nvm
 python
-ripgrep
-tmux
 tree-sitter-cli
