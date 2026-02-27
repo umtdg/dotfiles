@@ -19,6 +19,8 @@ with pkgs; [
 
   # Development
   cargo
+  docker
+  docker-compose
   fzf
   jdk21_headless
   lazygit

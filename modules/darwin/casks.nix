@@ -3,6 +3,7 @@ _:
 [
   # Development Tools
   "claude-code"
+  "homebrew/cask/docker"
 
   # Communication Tools
   "discord"
