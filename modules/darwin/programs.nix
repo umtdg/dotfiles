@@ -20,6 +20,10 @@
       insert_path "$HOME/.pnpm-packages/bin" 1
       insert_path "$HOME/.npm-packages/bin" 1
 
+      export ANDROID_HOME="$HOME/Library/Android/sdk"
+      insert_path "$ANDROID_HOME/emulator"
+      insert_path "$ANDROID_HOME/platform-tools"
+
       export PATH
     '';
   };
