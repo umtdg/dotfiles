@@ -30,6 +30,7 @@ with pkgs; [
   rustc
   tree-sitter
   virtualenv
+  watchman
 
   # Terminal
   alacritty
