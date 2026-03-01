@@ -3,7 +3,7 @@
 with pkgs; [
   # General Packages
   btop
-  coreutils
+  # coreutils
   curl
   dockutil
   fd
