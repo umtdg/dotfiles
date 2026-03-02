@@ -251,9 +251,6 @@ bindsym Ctrl+Alt+space exec 1password --quick-access
 # | COMPUTER SPECIFIC BINDINGS |
 # +----------------------------+
 
-# turn off headset lights
-bindsym $mod+Ctrl+h exec headsetcontrol -l 0
-
 # +-----------------------+
 # | WORKSPACE ASSIGNMENTS |
 # +-----------------------+

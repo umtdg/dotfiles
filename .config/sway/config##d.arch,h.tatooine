@@ -23,8 +23,8 @@ set $ws9 "9"
 
 # outputs
 set $output_left HDMI-A-1
-set $output_center DP-1
-set $output_right DP-2
+set $output_center DP-2
+set $output_right DP-1
 
 # super key
 set $mod Mod4
@@ -43,14 +43,17 @@ exec swayidle -w \
 
 # display configuration
 output $output_center {
-        mode 3840x2160@60.00Hz
+        mode 3840x2160@239.996Hz
         pos 1920 0
         scale 2
+        render_bit_depth 10
+        hdr off
 }
 
 output $output_right {
-        mode 1920x1080@74.97Hz
+        mode 3840x2160@60Hz
         pos 3840 0
+        scale 2
 }
 
 output $output_left {
@@ -255,6 +258,9 @@ bindsym Ctrl+Alt+space exec 1password --quick-access
 
 # turn off headset lights
 bindsym $mod+Ctrl+h exec headsetcontrol -l 0
+
+# toggle hdr
+bindsym $mod+Shift+o exec swaymsg 'output $output_center hdr toggle'
 
 # +-----------------------+
 # | WORKSPACE ASSIGNMENTS |
