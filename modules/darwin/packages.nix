@@ -26,6 +26,7 @@ with pkgs; [
   lazygit
   neovim
   nodejs_24
+  pnpm
   python3
   rustc
   tree-sitter
