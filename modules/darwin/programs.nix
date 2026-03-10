@@ -35,4 +35,12 @@
       };
     };
   };
+
+  git = {
+    settings = {
+      gpg = {
+        program = "${pkgs.gnupg}/bin/gpg";
+      };
+    };
+  };
 }

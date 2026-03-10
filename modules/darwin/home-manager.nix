@@ -45,12 +45,11 @@ in
     entries = [
       { path = "${pkgs.alacritty}/Applications/Alacritty.app/"; }
       { path = "/Applications/Firefox.app"; }
+      { path = "/Applications/Thunderbird.app"; }
       { path = "/Applications/Spotify.app"; }
       { path = "/Applications/WhatsApp.app"; }
       { path = "/Applications/Signal.app"; }
       { path = "/Applications/1Password.app"; }
-      { path = "/Applications/ExpressVPN.app"; }
-      { path = "/Applications/Xcode.app"; }
     ];
   };
 }
