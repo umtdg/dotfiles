@@ -19,12 +19,15 @@ with pkgs; [
 
   # Development
   cargo
+  ccache
+  cmake
   docker
   docker-compose
   fzf
   jdk21_headless
   lazygit
   neovim
+  ninja
   nodejs_24
   pnpm
   python3
