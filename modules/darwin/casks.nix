@@ -3,13 +3,17 @@ _:
 [
   # Development Tools
   "claude-code"
-  "homebrew/cask/docker"
+  "docker-desktop"
 
   # Communication Tools
   "discord"
 
   # Utility Tools
   "1password"
+  "proton-drive"
+  "proton-mail"
+  "proton-pass"
+  "protonvpn"
   "thunderbird"
 
   # Entertainment Tools
