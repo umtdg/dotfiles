@@ -1,7 +1,8 @@
-1password
 docker-credential-pass
-megasync-bin
 oh-my-zsh-git
+proton-mail-bin
+proton-pass-bin
+proton-pass-cli-bin
 sddm-theme-sugar-candy-git
 vmware-keymaps
 vmware-workstation

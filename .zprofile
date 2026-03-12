@@ -35,7 +35,7 @@ export EDITOR=nvim
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
 
 # SSH Agent
-export SSH_AUTH_SOCK="$HOME/.ssh/proton-pass-agent.sock"
+eval $(ssh-agent -s)
 
 # Less colors
 export LESS='-iFNR --use-color -Dd+r$Du+b'

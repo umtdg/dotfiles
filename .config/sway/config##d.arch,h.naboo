@@ -244,8 +244,8 @@ bindsym $mod+n exec dunstctl close
 bindsym $mod+Shift+n exec dunstctl close-all
 bindsym $mod+Control+n exec dunstctl history-pop
 
-# 1password
-bindsym Ctrl+Alt+space exec 1password --quick-access
+# load ssh keys from proton-pass
+bindsym $mod+Ctrl+l exec pass-cli ssh-agent load --vault-name 'SSH Keys'
 
 # +----------------------------+
 # | COMPUTER SPECIFIC BINDINGS |
@@ -258,7 +258,7 @@ bindsym Ctrl+Alt+space exec 1password --quick-access
 assign [app_id="signal"] $ws7
 assign [app_id="teams-for-linux"] $ws7
 assign [app_id="spotify"] $ws8
-assign [app_id="org.mozilla.Thunderbird"] $ws8
+assign [app_id="Proton Pass"] $ws8
 assign [app_id="easyeffects"] $ws8
 
 for_window [class="Pinentry-gtk"] floating enable
@@ -280,8 +280,6 @@ bar {
 }
 
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-
-exec --no-startup-id /usr/bin/pass-cli ssh-agent start --vault-name 'SSH Keys' --socket-path "$HOME/.ssh/proton-pass-agent.sock"
 
 exec $HOME/.config/sway/startup_applications.sh
 

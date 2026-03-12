@@ -52,6 +52,7 @@ picom
 pinentry
 polkit
 polkit-gnome
+proton-vpn-gtk-app
 qt5ct
 qt6ct
 rofi
