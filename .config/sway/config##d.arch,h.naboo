@@ -258,7 +258,9 @@ bindsym $mod+Ctrl+l exec pass-cli ssh-agent load --vault-name 'SSH Keys'
 assign [app_id="signal"] $ws7
 assign [app_id="teams-for-linux"] $ws7
 assign [app_id="spotify"] $ws8
+assign [app_id="org.mozilla.Thunderbird"] $ws8
 assign [app_id="Proton Pass"] $ws8
+assign [app_id="proton-bridge"] $ws8
 assign [app_id="easyeffects"] $ws8
 
 for_window [class="Pinentry-gtk"] floating enable

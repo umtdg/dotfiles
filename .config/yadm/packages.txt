@@ -53,6 +53,7 @@ pinentry
 polkit
 polkit-gnome
 proton-vpn-gtk-app
+protonmail-bridge
 qt5ct
 qt6ct
 rofi

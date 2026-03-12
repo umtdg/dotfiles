@@ -1,6 +1,5 @@
 docker-credential-pass
 oh-my-zsh-git
-proton-mail-bin
 proton-pass-bin
 proton-pass-cli-bin
 sddm-theme-sugar-candy-git
