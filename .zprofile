@@ -34,18 +34,8 @@ insert_path "$HOME/.nix-profile/bin" 1
 export EDITOR=nvim
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
 
-# ArchLinux specific env variables
-if [[ "$distro" == 'arch' ]]; then
-    # MEGA directory
-    if [[ "$HOST" == 'tatooine' ]]; then
-        export MEGANZ="$HOME/localdisk/Documents/mega"
-    else
-        export MEGANZ="$HOME/mega"
-    fi
-
-    # SSH Agent
-    export SSH_AUTH_SOCK=$HOME/.1password/agent.sock
-fi
+# SSH Agent
+export SSH_AUTH_SOCK="$HOME/.ssh/proton-pass-agent.sock"
 
 # Less colors
 export LESS='-iFNR --use-color -Dd+r$Du+b'

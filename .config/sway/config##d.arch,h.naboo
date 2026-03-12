@@ -281,6 +281,8 @@ bar {
 
 exec_always --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
+exec --no-startup-id /usr/bin/pass-cli ssh-agent start --vault-name 'SSH Keys' --socket-path "$HOME/.ssh/proton-pass-agent.sock"
+
 exec $HOME/.config/sway/startup_applications.sh
 
 include /etc/sway/config.d/*
