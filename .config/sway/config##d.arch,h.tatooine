@@ -46,8 +46,6 @@ output $output_center {
         mode 3840x2160@239.996Hz
         pos 1920 0
         scale 2
-        render_bit_depth 10
-        hdr off
 }
 
 output $output_right {
@@ -258,9 +256,6 @@ bindsym $mod+Ctrl+l exec pass-cli ssh-agent load --vault-name 'SSH Keys'
 
 # turn off headset lights
 bindsym $mod+Ctrl+h exec headsetcontrol -l 0
-
-# toggle hdr
-bindsym $mod+Shift+o exec swaymsg 'output $output_center hdr toggle'
 
 # +-----------------------+
 # | WORKSPACE ASSIGNMENTS |
