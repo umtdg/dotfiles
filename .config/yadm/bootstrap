@@ -206,17 +206,26 @@ function configure_env() {
 function configure_pam() {
   log -i 'Configure pam_gnome_keyring.so'
 
-  declare pam_file=/etc/pam.d/login
-  if grep -iq pam_gnome_keyring.so "$pam_file"; then
-    log -i "pam_gnome_keyring.so is already in $pam_file"
-    return
+  declare pam_login_file=/etc/pam.d/login
+  if grep -iq pam_gnome_keyring.so "$pam_login_file"; then
+    log -i "pam_gnome_keyring.so is already in $pam_login_file"
+  else
+    {
+      echo
+      echo 'auth       optional     pam_gnome_keyring.so'
+      echo 'session    optional     pam_gnome_keyring.so auto_start'
+    } | sudo tee -a "$pam_login_file"
   fi
 
-  {
-    echo
-    echo 'auth       optional     pam_gnome_keyring.so'
-    echo 'session    optional     pam_gnome_keyring.so auto_start'
-  } | sudo tee -a "$pam_file"
+  declare pam_passwd_file=/etc/pam.d/passwd
+  if grep -iq pam_gnome_keyring.so "$pam_passwd_file"; then
+    log -i "pam_gnome_keyring.so is already in $pam_passwd_file"
+  else
+    {
+      echo
+      echo 'password    include     pam_gnome_keyring.so'
+    } | sudo tee -a "$pam_passwd_file"
+  fi
 }
 
 function configure_mnt() {
