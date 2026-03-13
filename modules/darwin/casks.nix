@@ -9,9 +9,8 @@ _:
   "discord"
 
   # Utility Tools
-  "1password"
   "proton-drive"
-  "proton-mail"
+  "proton-mail-bridge"
   "proton-pass"
   "protonvpn"
   "thunderbird"
