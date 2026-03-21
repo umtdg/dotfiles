@@ -43,7 +43,7 @@ in
     enable = true;
     username = user;
     entries = [
-      { path = "${pkgs.alacritty}/Applications/Alacritty.app/"; }
+      { path = "~/Applications/Home Manager Apps/Alacritty.app"; }
       { path = "/Applications/Firefox.app"; }
       { path = "/Applications/Spotify.app"; }
       { path = "/Applications/WhatsApp.app"; }
