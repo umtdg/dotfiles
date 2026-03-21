@@ -32,6 +32,7 @@ with pkgs; [
   nodejs_24
   pnpm
   python3
+  rust-analyzer
   rustc
   tree-sitter
   virtualenv
