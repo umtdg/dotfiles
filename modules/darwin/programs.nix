@@ -30,10 +30,6 @@
 
   git = {
     settings = {
-      user = {
-        signingKey = "7ACF523C6B63264D";
-      };
-
       gpg = {
         program = "${pkgs.gnupg}/bin/gpg";
       };
