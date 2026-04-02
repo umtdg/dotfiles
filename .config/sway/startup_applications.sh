@@ -3,6 +3,7 @@
 sleep 1
 
 swaymsg 'exec copyq'
+swaymsg 'exec quark'
 
 swaymsg 'workspace 2; exec alacritty' && sleep 1
 swaymsg 'exec spotify-launcher' && sleep 1
