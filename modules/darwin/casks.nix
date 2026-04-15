@@ -2,7 +2,7 @@ _:
 
 [
   # Development Tools
-  "claude-code"
+  "copilot-cli"
   "docker-desktop"
 
   # Communication Tools
