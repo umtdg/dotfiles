@@ -34,6 +34,7 @@ with pkgs; [
   python3
   rust-analyzer
   rustc
+  rustfmt
   tree-sitter
   virtualenv
   watchman
