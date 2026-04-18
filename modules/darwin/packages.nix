@@ -19,6 +19,7 @@ with pkgs; [
   wget
 
   # Development
+  actionlint
   cargo
   ccache
   cmake
