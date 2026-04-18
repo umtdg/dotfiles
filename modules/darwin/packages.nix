@@ -25,6 +25,7 @@ with pkgs; [
   docker
   docker-compose
   fzf
+  gh
   jdk21_headless
   lazygit
   neovim
