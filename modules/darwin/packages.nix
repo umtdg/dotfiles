@@ -20,6 +20,7 @@ with pkgs; [
 
   # Development
   actionlint
+  awscli2
   cargo
   ccache
   cmake
