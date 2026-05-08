@@ -32,6 +32,7 @@ with pkgs; [
   lazygit
   neovim
   ninja
+  nixfmt
   nodejs_24
   pnpm
   python3
