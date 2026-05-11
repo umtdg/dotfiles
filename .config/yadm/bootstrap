@@ -258,7 +258,7 @@ function configure_fstab() {
     {
       echo
       echo '# Windows'
-      echo 'UUID=4E023FFA023FE61D /mnt/windows   ntfs rw,relatime,nofail,exec,x-gvfs-show,uid=1000,gid=1000,umask=022 0 0'
+      echo 'UUID=EA6409EA6409BA79 /mnt/windows   ntfs rw,relatime,nofail,exec,x-gvfs-show,uid=1000,gid=1000,umask=022 0 0'
     } | sudo tee -a /etc/fstab
   fi
 }
