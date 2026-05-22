@@ -1,10 +1,6 @@
 _:
 
 [
-  # Development Tools
-  "copilot-cli"
-  "docker-desktop"
-
   # Communication Tools
   "discord"
 

@@ -13,6 +13,7 @@ with pkgs; [
   jq
   noto-fonts
   noto-fonts-color-emoji
+  obsidian
   openssh
   proton-pass-cli
   ripgrep
@@ -30,11 +31,14 @@ with pkgs; [
   gh
   jdk21_headless
   lazygit
+  ollama
   neovim
   ninja
   nixfmt
   nodejs_24
   pnpm
+  postgresql_17
+  postgresql17Packages.pgvector
   python3
   rust-analyzer
   rustc
@@ -42,6 +46,7 @@ with pkgs; [
   tree-sitter
   virtualenv
   watchman
+  zed-editor
 
   # Terminal
   alacritty
