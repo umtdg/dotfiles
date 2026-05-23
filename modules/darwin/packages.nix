@@ -1,6 +1,7 @@
 { pkgs }:
 
-with pkgs; [
+with pkgs;
+[
   # General Packages
   btop
   # coreutils
@@ -22,7 +23,6 @@ with pkgs; [
   # Development
   actionlint
   awscli2
-  cargo
   ccache
   cmake
   docker
@@ -40,9 +40,7 @@ with pkgs; [
   postgresql_17
   postgresql17Packages.pgvector
   python3
-  rust-analyzer
-  rustc
-  rustfmt
+  rustup
   tree-sitter
   virtualenv
   watchman
