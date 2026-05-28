@@ -45,6 +45,8 @@ with pkgs;
   virtualenv
   watchman
   zed-editor
+  zig
+  zls
 
   # Terminal
   alacritty
