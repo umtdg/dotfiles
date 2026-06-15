@@ -14,21 +14,17 @@ with pkgs;
   jq
   noto-fonts
   noto-fonts-color-emoji
-  obsidian
   openssh
   proton-pass-cli
   ripgrep
   wget
 
   # Development
-  actionlint
-  awscli2
   ccache
   cmake
   docker
   docker-compose
   fzf
-  gh
   jdk21_headless
   lazygit
   ollama
@@ -37,14 +33,10 @@ with pkgs;
   nixfmt
   nodejs_24
   pnpm
-  postgresql_17
-  postgresql17Packages.pgvector
   python3
   rustup
   tree-sitter
-  virtualenv
   watchman
-  zed-editor
   zig
   zls
 
