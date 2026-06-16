@@ -15,9 +15,11 @@ with pkgs; [
     lazygit
     neovim
     nodejs_24
+    ollama
     python3
     rustc
     tree-sitter
+    uv
     virtualenv
 
     # Terminal
