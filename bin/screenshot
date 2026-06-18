@@ -15,7 +15,14 @@ function get_focused_window() {
 function screenshot() {
   case "$1" in
     select)
+      wayfreeze --hide-cursor &
+      declare pid=$!
+
+      sleep 0.1
+
       grim -g "$(slurp)" -
+
+      kill "$pid"
       ;;
     full)
       grim -
