@@ -36,6 +36,7 @@ with pkgs;
   python3
   rustup
   tree-sitter
+  uv
   watchman
   zig
   zls
