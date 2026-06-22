@@ -25,6 +25,7 @@ with pkgs;
   docker
   docker-compose
   fzf
+  git-lfs
   jdk21_headless
   lazygit
   ollama
