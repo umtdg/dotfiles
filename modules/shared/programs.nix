@@ -197,6 +197,11 @@ in
         identitiesOnly = true;
         identityFile = "~/.ssh/id_arch_aur.pub";
       };
+      "hf.co" = {
+        user = "git";
+        identitiesOnly = true;
+        identityFile = "~/.ssh/id_huggingface.pub";
+      };
     };
   };
 
