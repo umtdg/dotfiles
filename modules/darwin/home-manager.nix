@@ -19,7 +19,7 @@ in
     enable = true;
     casks = pkgs.callPackage ./casks.nix {};
     onActivation = {
-      autoUpdate = false;
+      autoUpdate = true;
       upgrade = true;
       cleanup = "uninstall";
     };

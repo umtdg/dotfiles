@@ -21,16 +21,17 @@ with pkgs;
 
   # Development
   ccache
+  claude-code
   cmake
   fzf
   git-lfs
   jdk21_headless
   lazygit
-  ollama
   neovim
   ninja
   nixfmt
   nodejs_24
+  ollama
   pnpm
   python3
   rustup
