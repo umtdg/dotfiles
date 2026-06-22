@@ -13,6 +13,9 @@
 [url "ssh://aur@aur.archlinux.org/"]
 	insteadOf = "aur:"
 
+[url "git@hf.co:"]
+	insteadOf = "hf:"
+
 [color]
 	ui = true
 	diff = always
