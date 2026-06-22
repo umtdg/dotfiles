@@ -18,6 +18,11 @@ in
   homebrew = {
     enable = true;
     casks = pkgs.callPackage ./casks.nix {};
+    onActivation = {
+      autoUpdate = false;
+      upgrade = true;
+      cleanup = "uninstall";
+    };
   };
 
   home-manager = {

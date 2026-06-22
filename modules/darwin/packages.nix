@@ -22,8 +22,6 @@ with pkgs;
   # Development
   ccache
   cmake
-  docker
-  docker-compose
   fzf
   git-lfs
   jdk21_headless

@@ -5,7 +5,6 @@ _:
   "discord"
 
   # Utility Tools
-  "docker-desktop"
   "proton-drive"
   "proton-mail-bridge"
   "proton-pass"
