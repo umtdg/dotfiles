@@ -71,7 +71,6 @@ fi
 alias df='df -h'
 alias du='du -h'
 alias vi='vim'
-alias emacs='vim'
 alias ls='ls --color=auto'
 alias l='ls -lh --color=auto'
 alias ll='ls -lhA --color=auto'
