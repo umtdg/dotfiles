@@ -3,6 +3,7 @@ base-devel
 btrfs-progs
 ccache
 git
+git-lfs
 gnupg
 ntfs-3g
 openssh

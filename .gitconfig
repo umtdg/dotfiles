@@ -42,3 +42,9 @@
 	forceSignAnnotated = false
 [hooks "pre-commit"]
 	enabled = true
+
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
