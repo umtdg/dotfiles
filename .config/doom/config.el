@@ -74,3 +74,19 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+(defvar +project-specific-configs-alist
+  '(("/mnt/ssd500/btrfs/work/ulaketl/" . "ulaketl.el"))
+  "Project root -> per-project configuration under $DOOMDIR/projects/.")
+
+(dolist (entry +project-specific-configs-alist)
+  (cl-destructuring-bind (dir . file) entry
+    (let* ((dir (expand-file-name dir))
+            (path (concat doom-user-dir "projects/" file)))
+         (when (file-exists-p path)
+           (let ((vars (with-temp-buffer
+                         (insert-file-contents path)
+                         (read (current-buffer))))
+                 (class (intern (concat "+project-class-" dir))))
+             (dir-locals-set-class-variables class vars)
+             (dir-locals-set-directory-class dir class))))))
