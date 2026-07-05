@@ -176,31 +176,43 @@ in
   ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "github.com" = {
-        user = "git";
-        identitiesOnly = true;
-        identityFile = "~/.ssh/id_github.pub";
+        User = "git";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_github.pub";
       };
       "gitlab.com" = {
-        user = "git";
-        identitiesOnly = true;
-        identityFile = "~/.ssh/id_gitlab.pub";
+        User = "git";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_gitlab.pub";
       };
       "gitlab.archlinux.org" = {
-        user = "git";
-        identitiesOnly = true;
-        identityFile = "~/.ssh/id_arch_gitlab.pub";
+        User = "git";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_arch_gitlab.pub";
       };
       "aur.archlinux.org" = {
-        user = "git";
-        identitiesOnly = true;
-        identityFile = "~/.ssh/id_arch_aur.pub";
+        User = "git";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_arch_aur.pub";
       };
       "hf.co" = {
-        user = "git";
-        identitiesOnly = true;
-        identityFile = "~/.ssh/id_huggingface.pub";
+        User = "git";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_huggingface.pub";
+      };
+      "pve.lan" = {
+        Hostname = "192.168.1.40";
+        User = "root";
+        PasswordAuthentication = true;
+        PreferredAuthentications = ["password"];
+      };
+      "pve.remote" = {
+        Hostname = "10.10.10.1";
+        User = "root";
+        PasswordAuthentication = true;
+        PreferredAuthentications = ["password"];
       };
     };
   };
