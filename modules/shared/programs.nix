@@ -206,13 +206,31 @@ in
         Hostname = "192.168.1.40";
         User = "root";
         PasswordAuthentication = true;
-        PreferredAuthentications = ["password"];
+        PreferredAuthentications = [ "password" ];
       };
       "pve.remote" = {
         Hostname = "10.10.10.1";
         User = "root";
         PasswordAuthentication = true;
-        PreferredAuthentications = ["password"];
+        PreferredAuthentications = [ "password" ];
+      };
+      "pve.vm.wireguard" = {
+        Hostname = "10.10.10.3";
+        User = "ubuntu";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_proxmox_vm.pub";
+      };
+      "pve.vm.k8s" = {
+        Hostname = "10.10.10.2";
+        User = "ubuntu";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_proxmox_vm.pub";
+      };
+      "pve.vm.kubernetes" = {
+        Hostname = "10.10.10.2";
+        User = "ubuntu";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_proxmox_vm.pub";
       };
     };
   };
@@ -245,8 +263,15 @@ in
 
   vim = {
     enable = true;
-    plugins = with pkgs.vimPlugins; [ vim-airline vim-airline-themes vim-startify vim-tmux-navigator ];
-    settings = { ignorecase = true; };
+    plugins = with pkgs.vimPlugins; [
+      vim-airline
+      vim-airline-themes
+      vim-startify
+      vim-tmux-navigator
+    ];
+    settings = {
+      ignorecase = true;
+    };
     extraConfig = ''
       "" General
       set number
