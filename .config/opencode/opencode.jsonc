@@ -3,7 +3,7 @@
   "permission": {},
   "lsp": true,
   "formatter": true,
-  "model": "openrouter/moonshotai/kimi-k2.7-code",
+  "model": "openrouter/deepseek/deepseek-v4-pro",
   "agent": {
     "build": {
       "mode": "primary",
