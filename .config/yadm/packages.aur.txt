@@ -3,8 +3,6 @@ oh-my-zsh-git
 proton-pass-bin
 proton-pass-cli-bin
 sddm-theme-sugar-candy-git
-vmware-keymaps
-vmware-workstation
 wayfreeze-git
 zsh-fzf-plugin-git
 zsh-theme-powerlevel10k

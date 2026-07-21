@@ -116,7 +116,7 @@ function configure_gtk_theme() {
   local theme='Breeze-Dark'
 
   log -i "Changing Adwaita theme to $theme"
-  "$HOME/bin/adwaita_theme.sh" -f -t "$theme"
+  "$HOME/bin/adwaita_theme" -f -t "$theme"
 
   log -i 'Changing gtk-theme via gsettings'
   gsettings set org.gnome.desktop.interface gtk-theme "$theme"
@@ -162,15 +162,6 @@ function configure_docker() {
 }
 
 function configure_services() {
-  log -i "Starting vmware-networks-configuration service"
-  sudo systemctl start vmware-networks-configuration.service
-
-  log -i "Enabling and starting vmware-networks service"
-  sudo systemctl enable --now vmware-networks.service
-
-  log -i "Enabling and starting Vmware vmware-usbarbitrator"
-  sudo systemctl enable --now vmware-usbarbitrator.service
-
   log -i "Enabling and starting pipewire service"
   systemctl --user enable --now pipewire
 
@@ -241,8 +232,8 @@ function configure_mnt() {
     sudo mkdir -pv /mnt/{localdisk,windows}
 
     log -i 'Setting ownership of ntfs/btrfs mount points'
-    sudo chown -$ "$USER:$USER" /mnt/localdisk
-    sudo chown -$ "$USER:$USER" /mnt/windows
+    sudo chown -R "$USER:$USER" /mnt/localdisk
+    sudo chown -R "$USER:$USER" /mnt/windows
   fi
 }
 

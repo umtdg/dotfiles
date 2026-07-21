@@ -1,6 +1,0 @@
-customCommands:
-  - key: 'F'
-    command: 'git fetch --prune --all'
-    context: 'localBranches'
-    description: 'Fetch with prune'
-    output: log

@@ -1,24 +1,28 @@
-/* Confirm Dialog */
+/*
+ * Confirm Dialog
+ *
+ * vim: ts=2 sts=2 sw=2 et
+ */
 
-@import "styles/colors.rasi"
+@import "colors.rasi"
 
 * {
-    background-color:       @background;
-    text-color:             @foreground;
-	font:				 	"FantasqueSansMono Nerd Font 12";
+    background-color: @background;
+    text-color: @foreground;
+    font: "FantasqueSansMono Nerd Font 12";
 }
 
 window {
-    width:      			225px;
-    padding:    			25px;
-    border:					1px;
-    border-radius:          0px;
-    border-color:           @border;
-    location:               center;
-    y-offset:               -2em;
+    width: 225px;
+    padding: 25px;
+    border: 1px;
+    border-radius: 0px;
+    border-color: @border;
+    location: center;
+    y-offset: -2em;
 }
 
 entry {
-    expand: 				true;
-    text-color:				@border;
+    expand: true;
+    text-color: @border;
 }

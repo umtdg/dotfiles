@@ -91,7 +91,7 @@ for gtk in "${!gtk_dirs[@]}"; do
   if [ -e "$config_gtk_dir" ] && [ ! -d "$config_gtk_dir" ]; then
     [ "$force" = 'no' ] && continue
 
-    log -i "Remove existing $config_gtk_dir and creating as directory"
+    echo "Remove existing $config_gtk_dir and creating as directory"
     rm -rf "$config_gtk_dir"
     mkdir -p "$config_gtk_dir"
   fi

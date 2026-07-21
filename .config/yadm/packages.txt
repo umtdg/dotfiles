@@ -81,6 +81,7 @@ btop
 calc
 copyq
 curl
+fd
 ffmpeg
 firefox
 mlocate
@@ -104,7 +105,6 @@ zita-convolver
 
 # terminal + shell
 alacritty
-thefuck
 zsh
 zsh-autosuggestions
 zsh-syntax-highlighting

@@ -1,3 +1,5 @@
+/* powermenu colors */
+
 * {
   background: #3B4252FF;
   foreground: #FFFFFFCC;

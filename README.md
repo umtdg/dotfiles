@@ -51,9 +51,6 @@ will also configure:
 - VIM: Runs `vim '+PlugUpdate' '+PlugClean!' '+PlugUpdate' '+qall'` to initialize `vim-plug` and install plugins
 - Nvim: Clone [my Neovim config](https://github.com/umtdg/nvim)
 - Services: Enables and starts the following services:
-    - `vmware-networks-configuration.service`
-    - `vmware-networks.service`
-    - `vmware-usbarbitrator.service`
     - `pipewire.service`
     - `pipewire-pulse.service`
     - `bluetooth.service`
@@ -77,12 +74,10 @@ will also configure:
 
 ## Helpful Scripts
 
-- `adwaita_theme.sh` - GTK-3/4 theme changer for Adwaita
+- `adwaita_theme` - GTK-3/4 theme changer for Adwaita
 - `end-sudo-session` - Force sudo to require password again
 - `fanc` - Fan control for Lenovo/IBM through `/proc/acpi/ibm/fan`
-- `ffmpeg_bulk_convert` - Bulk convert media files in directory while keeping the directory structure
 - `mountssd500` - Mount/Unmount an external drive with one NTFS and one BTRFS filesystem.
-- `mountvera` - Mount/Umount/List VeraCrypt containers in specified directory
 - `net_failover` - Continuously check network failures by pinging gateway address and use
   NetworkManager to disconnect and reconnect or send an arping to gateway
 - `randomhex` - Generate random string of given length using lowercase letters and numbers from `/dev/urandom`

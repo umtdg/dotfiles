@@ -5,7 +5,10 @@
  * Github  : @adi1090x
  * Twitter : @adi1090x
  *
+ * vim: ts=2 sts=2 sw=2 et
  */
+
+@import "colors.rasi"
 
 configuration {
   font: "Iosevka Nerd Font 12";
@@ -15,8 +18,6 @@ configuration {
   disable-history: false;
   sidebar-mode: false;
 }
-
-@import "styles/colors.rasi"
 
 window {
   transparency: "real";

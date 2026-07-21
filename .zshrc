@@ -42,29 +42,12 @@ fi
 
 # Custom aliases
 
-eval $(thefuck --alias)
-
 # Arch Linux specific
 if [[ "$distro" == 'arch' ]]; then
     # pacman/yay
     alias yeet="yay -Qq | fzf --multi --preview 'yay -Qi {1}' | xargs -rot yay -Rns"
     alias pls="yay -Slq | fzf --multi --preview 'yay -Sii {1}' | xargs -rot yay -S"
     alias pkgbysize=$'pacman -Qi | grep -E "^(Name|Installed)" | cut -f2 -d":" | paste -d " " - - | awk \'{ print $2 $3,$1 }\' | sort -rh | less'
-
-    alias cdld='cd ~/localdisk/Documents'
-    alias cdm="cd $MEGANZ"
-
-    # OpenVPN aliases
-    alias ovpnuc='openvpn3 session-start -c ulak'
-    alias ovpnud='openvpn3 session-manage -c ulak --disconnect'
-    alias ovpnur='openvpn3 session-manage -c ulak --restart'
-    alias ovpnl='openvpn3 sessions-list'
-
-    # VPN aliases
-    alias vpn='expressvpn'
-    alias vpnl='expressvpn list'
-    alias vpnc='expressvpn connect'
-    alias vpnd='expressvpn disconnect'
 fi
 
 # General aliases
@@ -84,7 +67,6 @@ alias tmux='tmux -u -2'
 alias top='btop'
 alias ssh_hosts="grep -iP -A1 '^Host\s+' ~/.ssh/config"
 alias osinfo='printf "'"%s %s"'" "$(grep "'"^NAME=.*$"'" /etc/os-release | xargs | cut -d"'"="'" -f2)" "$(uname -rm)"'
-alias sysinfo='neofetch --off'
 alias ps_by_mem="ps -eo pid,rss,comm= | awk '{proc[\$3]+=\$2} END {for (p in proc) {printf \"%-30s %10.2f MB\\n\", p, proc[p]/1024}}' | sort -k2nr | head -20"
 
 # Git aliases
@@ -109,10 +91,6 @@ alias nmccon='nmcli -a d wifi c'
 alias nmcup='nmcli c up'
 alias nmcdown='nmcli c down'
 alias nmcdel='nmcli c delete'
-
-# K8s aliases
-alias k8s='kubectl'
-alias mk8s='microk8s.kubectl'
 
 # Docker aliases
 alias dockup='sudo systemctl start docker.service'

@@ -17,7 +17,7 @@ function insert_path() {
     esac
 }
 
-distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
+# distro="$(grep '^ID=.*$' /etc/os-release | cut -d'=' -f2 | xargs)"
 
 # PATH
 insert_path "$HOME/bin"
@@ -25,9 +25,10 @@ insert_path "$HOME/.local/bin"
 insert_path "$HOME/.cargo/bin"
 insert_path "$HOME/.yarn/bin"
 
-# ccache needs to be prepended to be prioritized over usual gcc/clang
+# ccache needs to be prepended to be prioritized over system installed gcc/clang
 insert_path "/usr/lib/ccache/bin" 1
 
+# nix needs to be prepended to be prioritized over system installed packages
 insert_path "$HOME/.nix-profile/bin" 1
 
 # Auxiliary
@@ -48,7 +49,7 @@ export LESS_TERMCAP_us=$'\E[1;32m'
 export LESS_TERMCAP_ue=$'\E[0m'
 
 # Go env
-export GOPATH="$HOME/.go"
+export GOPATH="$HOME/go"
 export GOBIN="$GOPATH/bin"
 insert_path "$GOBIN"
 
@@ -59,9 +60,6 @@ export NNN_FIFO='/tmp/nnn.fifo'
 BLK="0b" CHR="0b" DIR="0c" EXE="0a" REG="00" HARDLINK="00" SYMLINK="0e" MISSING="00" ORPHAN="09" FIFO="0f" SOCK="0d" OTHER="00"
 export NNN_FCOLORS="$BLK$CHR$DIR$EXE$REG$HARDLINK$SYMLINK$MISSING$ORPHAN$FIFO$SOCK$OTHER"
 
-# Android
-export ANDROID_HOME="$HOME/.local/share/android/sdk"
-
-# Export PATH at the end to allow modification in multpile places
+# Export PATH at the end to allow modification in multiple places
 export PATH
 
