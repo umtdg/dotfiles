@@ -232,6 +232,12 @@ in
         IdentitiesOnly = true;
         IdentityFile = "~/.ssh/id_proxmox_vm.pub";
       };
+      "home.tatooine" = {
+        HostName = "10.9.0.2";
+        User = "skywalker";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_home_tatooine.pub";
+      };
     };
   };
 
