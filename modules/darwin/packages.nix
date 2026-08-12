@@ -22,7 +22,6 @@ with pkgs;
   # Development
   ccache
   clang-tools
-  claude-code
   cmake
   fzf
   git-lfs
@@ -32,7 +31,7 @@ with pkgs;
   ninja
   nixfmt
   nodejs_24
-  ollama
+  opencode
   pnpm
   python3
   rustup
