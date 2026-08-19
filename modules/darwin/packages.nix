@@ -34,6 +34,7 @@ with pkgs;
   opencode
   pnpm
   python3
+  qemu
   rustup
   tree-sitter
   uv

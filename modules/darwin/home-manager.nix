@@ -30,6 +30,9 @@ in
         packages = pkgs.callPackage ./packages.nix {};
         file = import ./files.nix { inherit user config pkgs; };
         stateVersion = "25.11";
+        sessionVariables = {
+          QEMU_EFI_AARCH64 = "${pkgs.qemu}/share/qemu/edk2-aarch64-code.fd";
+        };
       };
 
       programs = import ./programs.nix { inherit pkgs lib; };
