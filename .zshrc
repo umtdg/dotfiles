@@ -138,8 +138,8 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 # History options
 HISTFILE=~/.zsh_history
-HISTSIZE=5000
-SAVEHIST=20000000
+HISTSIZE=20000
+SAVEHIST=20000
 setopt share_history
 setopt extended_history
 setopt hist_expire_dups_first
@@ -210,4 +210,3 @@ ZSH_HIGHLIGHT_STYLES[bracket-level-3]=fg=magenta,bold
 ZSH_HIGHLIGHT_STYLES[bracket-level-4]=fg=yellow,bold
 ZSH_HIGHLIGHT_STYLES[bracket-level-5]=fg=cyan,bold
 ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]=standout
-
