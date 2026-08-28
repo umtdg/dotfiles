@@ -24,7 +24,9 @@ with pkgs;
   clang-tools
   cmake
   fzf
+  gh
   git-lfs
+  google-cloud-sdk
   jdk21_headless
   lazygit
   neovim
@@ -39,6 +41,7 @@ with pkgs;
   tree-sitter
   uv
   watchman
+  xorriso
   zig
   zls
 
