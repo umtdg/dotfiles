@@ -1,3 +1,5 @@
+set nocompatible
+
 " Options
 let mapleader = ' '
 
@@ -8,7 +10,9 @@ set mouse=a
 
 set noshowmode
 
-" TODO: Set clipboard to unnamedplus
+if has('clipboard')
+    set clipboard='unnamedplus'
+endif
 
 set breakindent
 
@@ -43,9 +47,12 @@ set hlsearch
 
 " tokyonight-night colors
 set termguicolors
-if empty(glob('~/.vim/colors/tokyonight-night.vim'))
-    silent !curl --create-dirs -fLo ~/.vim/colors/tokyonight-night.vim
-        \ https://raw.githubusercontent.com/folke/tokyonight.nvim/refs/heads/main/extras/vim/colors/tokyonight-night.vim
+
+let s:tokyonight_path = expand('~/.vim/colors/tokyonight-night.vim')
+if !filereadable(s:tokyonight_path)
+    silent execute '!curl --create-dirs -fLo '
+        \ . shellescape(s:tokyonight_path)
+        \ . ' https://raw.githubusercontent.com/folke/tokyonight.nvim/refs/heads/main/extras/vim/colors/tokyonight-night.vim'
 endif
 
 colorscheme tokyonight-night
@@ -59,11 +66,12 @@ nmap <C-j> <C-w><C-j>
 nmap <C-k> <C-w><C-k>
 nmap <C-l> <C-w><C-l>
 
-" Vim Plug Init - auto install and run :PlugInstall if there are missing plugins
-
-if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl --create-dirs -fLo ~/.vim/autoload/plug.vim
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" vim-plug
+let s:plug_path = expand('~/.vim/autoload/plug.vim')
+if !filereadable(s:plug_path)
+    silent execute '!curl --create-dirs -fLo '
+        \ . shellescape(s:plug_path)
+        \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 endif
 
 autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
@@ -78,12 +86,12 @@ Plug 'tpope/vim-fugitive'
 
 Plug 'scrooloose/syntastic'
 
-Plug 'preservim/nerdtree'
-
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+Plug 'vim-polyglot/vim-polyglot'
 
 call plug#end()
 
