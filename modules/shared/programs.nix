@@ -202,42 +202,6 @@ in
         IdentitiesOnly = true;
         IdentityFile = "~/.ssh/id_huggingface.pub";
       };
-      "pve.lan" = {
-        Hostname = "192.168.1.40";
-        User = "root";
-        PasswordAuthentication = true;
-        PreferredAuthentications = [ "password" ];
-      };
-      "pve.remote" = {
-        Hostname = "10.10.10.1";
-        User = "root";
-        PasswordAuthentication = true;
-        PreferredAuthentications = [ "password" ];
-      };
-      "pve.vm.wireguard" = {
-        Hostname = "10.10.10.3";
-        User = "ubuntu";
-        IdentitiesOnly = true;
-        IdentityFile = "~/.ssh/id_proxmox_vm.pub";
-      };
-      "pve.vm.k8s" = {
-        Hostname = "10.10.10.2";
-        User = "ubuntu";
-        IdentitiesOnly = true;
-        IdentityFile = "~/.ssh/id_proxmox_vm.pub";
-      };
-      "pve.vm.kubernetes" = {
-        Hostname = "10.10.10.2";
-        User = "ubuntu";
-        IdentitiesOnly = true;
-        IdentityFile = "~/.ssh/id_proxmox_vm.pub";
-      };
-      "home.tatooine" = {
-        HostName = "10.9.0.2";
-        User = "skywalker";
-        IdentitiesOnly = true;
-        IdentityFile = "~/.ssh/id_home_tatooine.pub";
-      };
     };
   };
 

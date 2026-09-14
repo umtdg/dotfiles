@@ -44,4 +44,30 @@
       };
     };
   };
+
+  ssh = {
+    settings = {
+      "pve.umtdg.com" = {
+        User = "root";
+        PasswordAuthentication = true;
+        PreferredAuthentications = [ "password" ];
+      };
+      "k8s.umtdg.com" = {
+        User = "ubuntu";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_proxmox_vm.pub";
+      };
+      "wg.umtdg.com" = {
+        User = "ubuntu";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_proxmox_vm.pub";
+      };
+      "tatooine.umtdg.com" = {
+        HostName = "10.9.0.2";
+        User = "skywalker";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_home_tatooine.pub";
+      };
+    };
+  };
 }
