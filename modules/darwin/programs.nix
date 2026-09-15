@@ -6,9 +6,18 @@
     settings = {
       terminal.shell.program = "${pkgs.zsh}/bin/zsh";
       font = {
-        normal = { family = "Iosevka"; style = "Regular"; };
-        italic = { family = "Iosevka"; style = "Italic"; };
-        bold = { family = "Iosevka"; style = "Bold"; };
+        normal = {
+          family = "Iosevka";
+          style = "Regular";
+        };
+        italic = {
+          family = "Iosevka";
+          style = "Italic";
+        };
+        bold = {
+          family = "Iosevka";
+          style = "Bold";
+        };
         size = 14;
       };
     };
@@ -51,6 +60,10 @@
         User = "root";
         PasswordAuthentication = true;
         PreferredAuthentications = [ "password" ];
+        SetEnv = {
+          # silences locale errors/warnings on some commands
+          "LC_CTYPE" = "en_US.UTF-8";
+        };
       };
       "k8s.umtdg.com" = {
         User = "ubuntu";
