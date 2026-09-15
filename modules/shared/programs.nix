@@ -243,122 +243,117 @@ in
       ignorecase = true;
     };
     extraConfig = ''
-      "" General
-      set number
-      set relativenumber
+    set nocompatible
 
-      set mouse=a
+    " Options
+    let mapleader = ' '
 
-      set noshowmode
+    set number
+    set relativenumber
 
-      set breakindent
+    set mouse=a
 
-      set undofile
+    set noshowmode
 
-      set ignorecase
-      set smartcase
+    if has('clipboard')
+        set clipboard='unnamedplus'
+    endif
 
-      set signcolumn=yes
+    set breakindent
 
-      set updatetime=250
-      set timeoutlen=300
+    set undofile
 
-      set splitright
-      set splitbelow
+    set ignorecase
+    set smartcase
 
-      set list
-      set listchars=tab::»\
-      set listchars=trail:·
-      set listchars=nbsp:␣
+    set signcolumn=yes
 
-      set cursorline
+    set updatetime=250
+    set timeoutlen=300
 
-      set scrolloff=10
-      s
+    set splitright
+    set splitbelow
 
-      " Dir stuff
-      set nobackup
-      set nowritebackup
-      set noswapfile
-      set backupdir=~/.config/vim/backups
-      set directory=~/.config/vim/swap
+    set list
+    set listchars=tab:»\ 
+    set listchars=trail:·
+    set listchars=nbsp:␣
 
-      " Relative line numbers for easy movement
-      set relativenumber
-      set rnu
+    set cursorline
 
-      "" Whitespace rules
-      set tabstop=8
-      set shiftwidth=2
-      set softtabstop=2
-      set expandtab
+    set scrolloff=10
 
-      "" Searching
-      set incsearch
-      set gdefault
+    set confirm
 
-      "" Statusbar
-      set nocompatible " Disable vi-compatibility
-      set laststatus=2 " Always show the statusline
-      let g:airline_theme='bubblegum'
-      let g:airline_powerline_fonts = 1
+    set sw=4 ts=4 sts=4 et ai
 
-      "" Local keys and such
-      let mapleader=","
-      let maplocalleader=" "
+    set incsearch
+    set hlsearch
 
-      "" Change cursor on mode
-      :autocmd InsertEnter * set cul
-      :autocmd InsertLeave * set nocul
+    " tokyonight-night colors
+    set termguicolors
 
-      "" File-type highlighting and configuration
-      syntax on
-      filetype on
-      filetype plugin on
-      filetype indent on
+    let s:tokyonight_path = expand('~/.vim/colors/tokyonight-night.vim')
+    if !filereadable(s:tokyonight_path)
+        silent execute '!curl --create-dirs -fLo '
+            \ . shellescape(s:tokyonight_path)
+            \ . ' https://raw.githubusercontent.com/folke/tokyonight.nvim/refs/heads/main/extras/vim/colors/tokyonight-night.vim'
+    endif
 
-      "" Paste from clipboard
-      nnoremap <Leader>, "+gP
+    colorscheme tokyonight-night
 
-      "" Copy from clipboard
-      xnoremap <Leader>. "+y
+    " Keymaps
 
-      "" Move cursor by display lines when wrapping
-      nnoremap j gj
-      nnoremap k gk
+    nmap <Esc> <cmd>nohlsearch<CR>
 
-      "" Map leader-q to quit out of window
-      nnoremap <leader>q :q<cr>
+    nmap <C-h> <C-w><C-h>
+    nmap <C-j> <C-w><C-j>
+    nmap <C-k> <C-w><C-k>
+    nmap <C-l> <C-w><C-l>
 
-      "" Move around split
-      nnoremap <C-h> <C-w>h
-      nnoremap <C-j> <C-w>j
-      nnoremap <C-k> <C-w>k
-      nnoremap <C-l> <C-w>l
+    " vim-plug
+    let s:plug_path = expand('~/.vim/autoload/plug.vim')
+    if !filereadable(s:plug_path)
+        silent execute '!curl --create-dirs -fLo '
+            \ . shellescape(s:plug_path)
+            \ . ' https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    endif
 
-      "" Easier to yank entire line
-      nnoremap Y y$
+    autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+        \| PlugInstall --sync | source $MYVIMRC
+    \| endif
 
-      "" Move buffers
-      nnoremap <tab> :bnext<cr>
-      nnoremap <S-tab> :bprev<cr>
+    call plug#begin()
 
-      "" Like a boss, sudo AFTER opening the file to write
-      cmap w!! w !sudo tee % >/dev/null
+    Plug 'tpope/vim-surround'
 
-      let g:startify_lists = [
-        \ { 'type': 'dir',       'header': ['   Current Directory '. getcwd()] },
-        \ { 'type': 'sessions',  'header': ['   Sessions']       },
-        \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      }
-        \ ]
+    Plug 'tpope/vim-fugitive'
 
-      let g:startify_bookmarks = [
-        \ '~/Projects',
-        \ '~/Documents',
-        \ ]
+    Plug 'scrooloose/syntastic'
 
-      let g:airline_theme='bubblegum'
-      let g:airline_powerline_fonts = 1
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+    Plug 'vim-polyglot/vim-polyglot'
+
+    call plug#end()
+
+    " vim-airline
+    let g:airline_theme='onedark'
+
+    " vim-surround
+    let g:surround_no_mappings = 0
+    nmap sd <Plug>Dsurround
+    nmap sr <Plug>Csurround
+    nmap sR <Plug>CSurround
+    nmap sa <Plug>Ysurround
+    nmap sA <Plug>YSurround
+    xmap sa <Plug>VSurround
+    xmap sA <Plug>VgSurround
+
+    " vim: sw=4 ts=4 sts=4 et
     '';
   };
 
