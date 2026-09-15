@@ -256,7 +256,7 @@ in
     set noshowmode
 
     if has('clipboard')
-        set clipboard='unnamedplus'
+        set clipboard=unnamedplus
     endif
 
     set breakindent
