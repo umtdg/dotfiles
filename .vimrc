@@ -11,7 +11,7 @@ set mouse=a
 set noshowmode
 
 if has('clipboard')
-    set clipboard='unnamedplus'
+    set clipboard=unnamedplus
 endif
 
 set breakindent
@@ -30,9 +30,7 @@ set splitright
 set splitbelow
 
 set list
-set listchars=tab:»\ 
-set listchars=trail:·
-set listchars=nbsp:␣
+set listchars=tab:»\ ,trail:·,nbsp:␣
 
 set cursorline
 
