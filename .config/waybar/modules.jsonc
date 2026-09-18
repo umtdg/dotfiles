@@ -36,6 +36,7 @@
             "mode-mon-col": 3,
             "weeks-pos": "right",
             "on-scroll": 1,
+            "iso8601": true,
             "format": {
                 "months": "<span color=\"#E0AF68\"><b>{}</b></span>",
                 "days": "<span color=\"#A9B1D6\"><b>{}</b></span>",
@@ -43,10 +44,10 @@
                 "weekdays": "<span color=\"#7DCFFF\"><b>{}</b></span>",
                 "today": "<span color=\"#F7768E\"><b><u>{}</u></b></span>"
             },
-            "actions": {
-                "on-scroll-up": "shift_up",
-                "on-scroll-down": "shift_down",
-            },
+        },
+        "actions": {
+            "on-scroll-down": "shift_up",
+            "on-scroll-up": "shift_down",
         },
     },
 
