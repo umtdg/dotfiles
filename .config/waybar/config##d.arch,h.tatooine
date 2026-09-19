@@ -26,7 +26,7 @@
     ],
 
     "network": {
-        "interface": "wlp11s0",
+        "interface": "eno1",
         "interval": 3,
 
         "format-wifi": "   {essid} ({signalStrength}%)",
