@@ -20,7 +20,7 @@ xorg-setxkbmap
 
 # wayland
 wayland
-wlroots0.19
+wlroots0.20
 xorg-xwayland
 
 # audio
@@ -38,7 +38,7 @@ mesa
 vulkan-radeon
 
 # desktop
-blueberry
+bluetui
 breeze
 breeze-gtk
 breeze-icons
