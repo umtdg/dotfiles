@@ -22,6 +22,7 @@ with pkgs;
   # Development
   ccache
   clang-tools
+  claude-code
   cmake
   fzf
   gh
