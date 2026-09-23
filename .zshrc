@@ -101,6 +101,9 @@ alias dockpush='docker push'
 
 alias mount-backup='sudo mount -t nfs -o nfsvers=3,actimeo=60,nconnect=16,hard,async,fsc 192.168.1.40:/backup /mnt/backup'
 
+alias opencode-local='OPENCODE_CONFIG=$HOME/.config/opencode/local.jsonc opencode'
+alias ocl='OPENCODE_CONFIG=$HOME/.config/opencode/local.jsonc opencode'
+
 # ZSH functions (Found under ~/.zsh/functions)
 autoload -Uz incognito
 
