@@ -35,6 +35,11 @@
 
       export PATH
     '';
+
+    shellAliases = {
+      opencode-local="OPENCODE_CONFIG=$HOME/.config/opencode/local.jsonc opencode";
+      ocl="OPENCODE_CONFIG=$HOME/.config/opencode/local.jsonc opencode";
+    };
   };
 
   git = {

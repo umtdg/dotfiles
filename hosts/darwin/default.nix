@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, opencode, ... }:
 
 let
   user = "umtdg";
@@ -7,6 +7,15 @@ in
   imports = [
     ../../modules/darwin/home-manager.nix
     ../../modules/shared
+  ];
+
+  # TODO(umtdg): Remove when opencode v2 is in unstable nixpkgs
+  nixpkgs.overlays = [
+    (final: prev: {
+      opencode = opencode.packages.${prev.stdenv.hostPlatform.system}.opencode.overrideAttrs (_: {
+        postInstall = ""; # Remove when #50408 is fixed
+      });
+    })
   ];
 
   nix = {

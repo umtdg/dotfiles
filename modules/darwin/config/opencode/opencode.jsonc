@@ -1,0 +1,68 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  "model": "openrouter/deepseek/deepseek-v4-pro",
+
+  "agent": {
+    "explore": {
+      "model": "openrouter/deepseek/deepseek-v4-flash",
+      "steps": 8,
+      "permissions": [{
+        "action": "subagent",
+        "resource": "*",
+        "effect": "deny"
+      }]
+    },
+
+    "compaction": {
+      "model": "openrouter/deepseek/deepseek-v4-flash"
+    },
+
+    "summary": {
+      "model": "openrouter/deepseek/deepseek-v4-flash"
+    },
+
+    "title": {
+      "model": "openrouter/deepseek/deepseek-v4-flash"
+    }
+  },
+
+  "provider": {
+    "llamacpp": {
+      "name": "llama.cpp",
+      "npm": "@ai-sdk/openai-compatible",
+
+      "api": "http://127.0.0.1:8080/v1",
+
+      "options": {
+        "baseURL": "http://127.0.0.1:8080/v1"
+      },
+
+      "models": {
+        "qwen3.8-27b-128k": {
+          "name": "Qwen3.8 27B Q6_K 128K",
+
+          "attachment": true,
+
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+
+        "qwen3.8-27b-256k": {
+          "name": "Qwen3.8 27B Q6_K 256K",
+
+          "attachment": true,
+
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          }
+        }
+      }
+    }
+  },
+
+  "plugins": ["opencode-claude-auth-v2@latest"]
+}

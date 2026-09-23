@@ -23,6 +23,9 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
+
+    # TODO(umtdg): Remove when opencode v2 is in unstable nixpkgs
+    opencode.url = "github:anomalyco/opencode/v2.0.15";
   };
 
   outputs =
@@ -35,6 +38,7 @@
       homebrew-cask,
       home-manager,
       nixpkgs,
+      opencode,
     }@inputs:
     let
       homeConfigurationUsers = [ "ulakbulut" ];

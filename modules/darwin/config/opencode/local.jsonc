@@ -1,0 +1,41 @@
+{
+  "model": "llamacpp/qwen3.8-27b-256k",
+
+  "agents": {
+    "explore": {
+      "model": "llamacpp/qwen3.8-27b-256k"
+    },
+
+    "compaction": {
+      "model": "llamacpp/qwen3.8-27b-256k"
+    },
+
+    "summary": {
+      "model": "llamacpp/qwen3.8-27b-256k"
+    },
+
+    "title": {
+      "model": "llamacpp/qwen3.8-27b-256k"
+    }
+  },
+
+  "experimental": {
+    "policies": [
+      {
+        "action": "provider.use",
+        "resource": "*",
+        "effect": "deny"
+      },
+      {
+        "action": "provider.use",
+        "resource": "llamacpp",
+        "effect": "allow"
+      },
+      {
+        "action": "permission",
+        "resource": "websearch:*",
+        "effect": "deny"
+      }
+    ]
+  }
+}
