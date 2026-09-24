@@ -91,6 +91,11 @@
         IdentitiesOnly = true;
         IdentityFile = "~/.ssh/id_gitea_2.pub";
       };
+      "git.umtdg.com" = {
+        User = "git";
+        IdentitiesOnly = true;
+        IdentityFile = "~/.ssh/id_home_gitea.pub";
+      };
     };
   };
 }
