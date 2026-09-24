@@ -20,14 +20,6 @@ in
       opencode = opencode.packages.${prev.stdenv.hostPlatform.system}.opencode.overrideAttrs (_: {
         postInstall = ""; # Remove when #50408 is fixed
       });
-
-      claude-code =
-        if lib.versionOlder prev.claude-code.version "2.1.280" then
-          prev.claude-code.override {
-            manifest = lib.importJSON ../../overlays/claude-code/manifest.zst.json;
-          }
-        else
-          prev.claude-code;
     })
   ];
 
