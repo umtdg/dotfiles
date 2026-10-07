@@ -119,7 +119,9 @@ button:hover {
 }
 
 /* idle_inhibitor */
-#idle_inhibitor { }
+#idle_inhibitor {
+    color: #E0AF68;
+}
 
 /* tray */
 #tray { }
