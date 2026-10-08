@@ -25,7 +25,10 @@
     };
 
     # TODO(umtdg): Remove when opencode v2 is in unstable nixpkgs
-    opencode.url = "github:anomalyco/opencode/v2.0.15";
+    opencode = {
+      url = "github:anomalyco/opencode/v2.0.15";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
