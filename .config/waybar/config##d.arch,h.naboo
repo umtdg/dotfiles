@@ -22,6 +22,7 @@
         "network",
         "backlight",
         "pulseaudio",
+        "idle_inhibitor",
         "battery#bat0",
         "clock",
     ],

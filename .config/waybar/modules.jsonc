@@ -21,6 +21,8 @@
             "activated": "",
             "deactivated": "",
         },
+        "start-activated": false,
+        "timeout": 0,
     },
 
     "tray": {

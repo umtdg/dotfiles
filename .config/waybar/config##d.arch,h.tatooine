@@ -136,11 +136,6 @@
         "format-icons": [""],
         "tooltip": false,
     },
-
-    "idle_inhibitor": {
-        "start-activated": false,
-        "timeout": 0,
-    },
 }
 
 // vim: ft=jsonc sw=4 et
