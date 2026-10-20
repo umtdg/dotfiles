@@ -213,7 +213,7 @@ in
     focusEvents = true;
     keyMode = "vi";
     extraConfig = ''
-      set -g terminal-features 'xterm-256color:RGB'
+      set -as terminal-features ',xterm-256color:RGB'
       set -g renumber-windows on
 
       set -g status-right ' #{?client_prefix,#[reverse]Locked#[noreverse] ,}"#{=21:pane_title}" %H:%M %d-%b-%y'
