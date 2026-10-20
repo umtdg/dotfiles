@@ -24,6 +24,7 @@ insert_path "$HOME/bin"
 insert_path "$HOME/.local/bin"
 insert_path "$HOME/.cargo/bin"
 insert_path "$HOME/.yarn/bin"
+insert_path "$HOME/.local/share/pnpm/bin"
 
 # ccache needs to be prepended to be prioritized over system installed gcc/clang
 insert_path "/usr/lib/ccache/bin" 1
