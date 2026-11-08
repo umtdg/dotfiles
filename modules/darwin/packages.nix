@@ -30,6 +30,7 @@ with pkgs;
   google-cloud-sdk
   jdk21_headless
   lazygit
+  lima
   neovim
   ninja
   nixfmt
