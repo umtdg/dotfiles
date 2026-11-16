@@ -59,6 +59,17 @@
             "context": 262144,
             "output": 32768
           }
+        },
+
+        "qwen3.8-27b-512k": {
+          "name": "Qwen3.8 27B Q4_K 512K",
+
+          "attachment":  true,
+
+          "limit": {
+            "context": "524288",
+            "output": 32768
+          }
         }
       }
     }
