@@ -67,7 +67,7 @@
           "attachment":  true,
 
           "limit": {
-            "context": "524288",
+            "context": 524288,
             "output": 32768
           }
         }
